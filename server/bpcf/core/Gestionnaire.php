@@ -13,10 +13,13 @@ class Gestionnaire {
 	 * @return Gestionnaire
 	 */
 	public static function getGestionnaire($class = null){
-		$class = ''.firstchartoupper($class);
+		$class = ucfirst($class);
 		if(!isset(self::$_instance[$class])){
 			if(!class_exists($class)){
-				return false;
+                $class = 'Model_'.ucfirst($class);
+                if(!class_exists($class)){
+                    return false;
+                }
 			}
 			self::$_instance[$class] = new Gestionnaire($class);
 		}

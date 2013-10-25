@@ -41,7 +41,7 @@ else {//on est en prod
 	define('FORCE_DEBUG', FALSE);
 	define('HOST_OF_SITE', 'http://'.$_SERVER['SERVER_NAME']);
         
-        define('BPCF', 'bpcf');
+        define('BPCF', './bpcf');
 }
 
 define('DEFAULT_CONTROLLER', 'default');

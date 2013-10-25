@@ -18,7 +18,8 @@ class Controller_Lumiere extends Controller {
      */
     public function allumerPiece() {
        $pieceNom = $_GET['piece']; // nom de la piece
-       $piece = Gestionnaire::getGestionnaire('Model_Piece')->getOneOf( array( 'nom' => $pieceNom ) );
+       $gesPiece = Gestionnaire::getGestionnaire("piece");
+       $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
        if( $piece instanceof Model_Piece ) {
            if( $piece->aLumiere() ) {
                $piece->setLumiereAllumee();
