@@ -10,7 +10,7 @@
  *
  * @author Loïc
  */
-class Lumiere extends Controller {
+class Controller_Lumiere extends Controller {
     
     /**
      * allume la lumiere dans une piece

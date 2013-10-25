@@ -31,15 +31,15 @@ class SQL {
 	public function exec($requete){
 		$this->setLastQuery($requete);
 		$this->nb_query++;
-		//on fait la connexion ‡ mysql
-		mysql_connect(MYSQL_SERVER,  MYSQL_USER, MYSQL_PWD);
-		mysql_select_db(MYSQL_DB);
+		//on fait la connexion ÔøΩ mysqli
+		$link = mysqli_connect(MYSQL_SERVER,  MYSQL_USER, MYSQL_PWD);
+		mysqli_select_db($link, MYSQL_DB);
 		
 		$this->setLastError();
 		//on fait la requete
-		$rep = mysql_query($requete);
+		$rep = mysqli_query($link, $requete);
 		//debug($rep);
-		$this->setLastError(mysql_error());
+		$this->setLastError(mysqli_error($link));
 		if($this->last_sql_error != ''){
 			//echo $this->last_sql_error;
 			$this->nb_sql_errors++;
@@ -49,44 +49,44 @@ class SQL {
 		$row = false;
 		if(strtoupper(substr($requete, 0, 6)) == 'SELECT') {
 			if(!is_null($rep) && !empty($rep)) {
-			/*	if(mysql_num_rows($rep) > 1) {
-					while($res = mysql_fetch_assoc($rep)){
+			/*	if(mysqli_num_rows($rep) > 1) {
+					while($res = mysqli_fetch_assoc($rep)){
 						$row[] = $res;
 					}
 				}
 				else {
-					$row = mysql_fetch_assoc($rep);
+					$row = mysqli_fetch_assoc($rep);
 				}
 				*/
-				while($res = mysql_fetch_assoc($rep)){
+				while($res = mysqli_fetch_assoc($rep)){
 					$row[] = $res;
 				}
 			}
 		}
 		elseif(strtoupper(substr($requete, 0, 6)) == 'INSERT') {
-			$row = mysql_insert_id();
+			$row = mysqli_insert_id($link);
 		}
 
-		//on se dÈconnecte
-		mysql_close();
+		//on se dÔøΩconnecte
+		mysqli_close($link);
 		//on retourne le tableau de r√©sultat
 		return $row;
 	}
 	
-	//execution de requete SQL reserve ‡ l'administration
+	//execution de requete SQL reserve ÔøΩ l'administration
 	public function exec2($requete){
 		$this->setLastQuery($requete);
 		$this->nb_adm_query++;
 		
-		//on fait la connexion √† mysql
-		mysql_connect(MYSQL_SERVER,  MYSQL_USER, MYSQL_PWD);
-		mysql_select_db(MYSQL_DB);
+		//on fait la connexion √† mysqli
+		$link = mysqli_connect(MYSQL_SERVER,  MYSQL_USER, MYSQL_PWD);
+		mysqli_select_db($link, MYSQL_DB);
 		
 		$this->setLastError();
 		//on fait la requete
-		$rep = mysql_query($requete);
+		$rep = mysqli_query($link, $requete);
 		//debug($rep);
-		$this->setLastError(mysql_error());
+		$this->setLastError(mysqli_error($link));
 		
 		if($this->last_sql_error != ''){
 			//echo $this->last_sql_error;
@@ -97,22 +97,22 @@ class SQL {
 		$row = false;
 		if(strtoupper(substr($requete, 0, 6)) == 'SELECT') {
 			if(!is_null($rep) && !empty($rep)) {
-				if(mysql_num_rows($rep) > 1) {
-					while($res = mysql_fetch_assoc($rep)){
+				if(mysqli_num_rows($rep) > 1) {
+					while($res = mysqli_fetch_assoc($rep)){
 						$row[] = $res;
 					}
 				}
 				else {
-					$row = mysql_fetch_assoc($rep);
+					$row = mysqli_fetch_assoc($rep);
 				}
 			}
 		}
 		elseif(strtoupper(substr($requete, 0, 6)) == 'INSERT') {
-			$row = mysql_insert_id();
+			$row = mysqli_insert_id($link);
 		}
 
 		//on se d√©connecte
-		mysql_close();
+		mysqli_close($link);
 		//on retourne le tableau de r√©sultat
 		return $row;
 	}

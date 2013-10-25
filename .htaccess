@@ -1,9 +1,0 @@
-Options +FollowSymLinks
-
-RewriteEngine on
-
-
-# rewrite rule pour controller/action/param
-RewriteRule ^([a-z]*)/([a-z]*)/([a-z0-9]*)$ server/index.php?controller=$1&action=$2&piece=$3 [L]
-# rewrite rule pour controller/action
-RewriteRule ^([a-z]*)/([a-z]*)$ server/index.php?controller=$1&action=$2 [L]
