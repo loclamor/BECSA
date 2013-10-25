@@ -27,7 +27,7 @@ class Controller_Lumiere extends Controller {
                $this->code = 200;
            }
            else {
-               $this->code = 444;
+               $this->code = 415;
            }
        }
        else {
@@ -49,7 +49,7 @@ class Controller_Lumiere extends Controller {
                $this->code = 200;
            }
            else {
-               $this->code = 444;
+               $this->code = 415;
            }
        }
        else {
