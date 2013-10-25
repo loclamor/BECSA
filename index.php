@@ -5,8 +5,9 @@
         <title></title>
     </head>
     <body>
-        <?php
-        // put your code here
-        ?>
+        <ul>
+            <li><a href="./client">Client BE CSA</a></li>
+            <li><a href="./server">Server BE CSA</a></li>
+        </ul>
     </body>
 </html>

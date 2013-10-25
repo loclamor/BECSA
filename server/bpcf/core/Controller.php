@@ -12,7 +12,7 @@
  */
 abstract class Controller {
 	
-	public $isJSON = false;
+	public $isJSON = true;
 	
 	public function getAction( $action ){
 		$action = firstchartolower( $action );

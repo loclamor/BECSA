@@ -13,6 +13,7 @@
 class Controller_Default extends Controller {
 	//put your code here
 	public function index() {
+        $this->isJSON = true;
 		$this->msg = "it...";
 	}
 }
