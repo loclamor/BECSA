@@ -16,7 +16,7 @@ class Controller_Lumiere extends Controller {
      * allume la lumiere dans une piece
      * @param $_GET['piece'] nom de la piece
      */
-    public function allumerPiece() {
+    public function allumer() {
        $pieceNom = $_GET['piece']; // nom de la piece
        $gesPiece = Gestionnaire::getGestionnaire("piece");
        $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
@@ -39,7 +39,7 @@ class Controller_Lumiere extends Controller {
      * eteind la lumiere dans une piece
      * @param $_GET['piece'] nom de la piece
      */
-    public function eteindrePiece() {
+    public function eteindre() {
        $pieceNom = $_GET['piece']; // nom de la piece
        $piece = Gestionnaire::getGestionnaire('Model_Piece')->getOneOf( array( 'nom' => $pieceNom ) );
        if( $piece instanceof Model_Piece ) {
