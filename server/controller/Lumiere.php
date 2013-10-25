@@ -1,0 +1,62 @@
+<?php
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+/**
+ * Description of Lumiere
+ *
+ * @author Loïc
+ */
+class Lumiere extends Controller {
+    
+    /**
+     * allume la lumiere dans une piece
+     * @param $_GET['piece'] nom de la piece
+     */
+    public function allumerPiece() {
+       $pieceNom = $_GET['piece']; // nom de la piece
+       $piece = Gestionnaire::getGestionnaire('Model_Piece')->getOneOf( array( 'nom' => $pieceNom ) );
+       if( $piece instanceof Model_Piece ) {
+           if( $piece->aLumiere() ) {
+               $piece->setLumiereAllumee();
+               $piece->enregistrer( array("lumiereAllumee") );
+               $this->code = 200;
+           }
+           else {
+               $this->code = 444;
+           }
+       }
+       else {
+           $this->code = 404;
+       }
+    }
+    
+    /**
+     * eteind la lumiere dans une piece
+     * @param $_GET['piece'] nom de la piece
+     */
+    public function eteindrePiece() {
+       $pieceNom = $_GET['piece']; // nom de la piece
+       $piece = Gestionnaire::getGestionnaire('Model_Piece')->getOneOf( array( 'nom' => $pieceNom ) );
+       if( $piece instanceof Model_Piece ) {
+           if( $piece->aLumiere() ) {
+               $piece->setLumiereEteinte();
+               $piece->enregistrer( array("lumiereAllumee") );
+               $this->code = 200;
+           }
+           else {
+               $this->code = 444;
+           }
+       }
+       else {
+           $this->code = 404;
+       }
+    }
+    
+    
+}
+
+?>

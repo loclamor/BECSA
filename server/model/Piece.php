@@ -9,6 +9,7 @@ class Model_Piece extends Entite {
     
     public $DB_table = 'piece';
     public $DB_equiv = array(
+        "id"             => "id",
         "nom"            => "nom",
         "aLumiere"       => "aLumiere",
         "lumiereAllumee" => "lumiereAllumee",
