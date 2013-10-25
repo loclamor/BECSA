@@ -12,6 +12,9 @@ $requete = "CREATE TABLE IF NOT EXISTS `".TABLE_PREFIX."piece`(
 	`voletOuvert` TINYINT NOT NULL DEFAULT '1',
 	PRIMARY KEY (`id`)
 )";
-mysqli_query($link, $requete);
+$res = mysqli_query($link, $requete);
+if( $res === false ) {
+    echo mysqli_error( $link );
+}
 
 mysqli_close($link);
