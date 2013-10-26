@@ -1,17 +1,9 @@
 <?php
 $code = $this->code;
 switch ($code) {
-    case 200:
+    case 202:
         $this->status = "success";
-        $this->message = "lumiere eteinte";
-        break;
-    case 404:
-        $this->status = "error";
-        $this->message = "piece non trouvee";
-        break;
-    case 444:
-        $this->status = "error";
-        $this->message = "pas de lumiere dans cette piece";
+        $this->message = "lumieres eteintes";
         break;
     default:
         $this->code = 520;
