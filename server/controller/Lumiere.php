@@ -36,6 +36,23 @@ class Controller_Lumiere extends Controller {
     }
     
     /**
+     * allume la lumiere dans toutes les pieces disposant de lumiere
+     */
+    public function allumerTout() {
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $pieces = $gesPiece->getOf(array('aLumiere' => 1));
+        foreach ($pieces as $piece) {
+            if ($piece instanceof Model_Piece) {
+                if ($piece->aLumiere()) {
+                    $piece->setLumiereAllumee();
+                    $piece->enregistrer(array("lumiereAllumee"));
+                }
+            }
+        }
+        $this->code = 202;
+    }
+    
+    /**
      * eteind la lumiere dans une piece
      * @param $_GET['piece'] nom de la piece
      */
@@ -55,6 +72,24 @@ class Controller_Lumiere extends Controller {
        else {
            $this->code = 404;
        }
+    }
+    
+    
+    /**
+     * éteind la lumiere dans toutes les pieces disposant de lumiere
+     */
+    public function eteindreTout() {
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $pieces = $gesPiece->getOf(array('aLumiere' => 1));
+        foreach ($pieces as $piece) {
+            if ($piece instanceof Model_Piece) {
+                if ($piece->aLumiere()) {
+                    $piece->setLumiereEteinte();
+                    $piece->enregistrer(array("lumiereAllumee"));
+                }
+            }
+        }
+        $this->code = 202;
     }
     
     
