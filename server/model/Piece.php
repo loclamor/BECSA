@@ -32,7 +32,7 @@ class Model_Piece extends Entite {
     }
     
     public function lumiereAllumee() {
-        return ( $this->lumiereStatus == 1 );
+        return ( $this->lumiereAllumee == 1 );
     }
     
     public function aVolet() {
@@ -69,5 +69,16 @@ class Model_Piece extends Entite {
     
     public function setVoletFerme() {
         $this->voletOuvert = false;
+    }
+    
+    public function getState() {
+        return array(
+            "id" => $this->id,
+            "nom" => $this->getNom(),
+            "aLumiere" => $this->aLumiere(),
+            "lumiereAllumee" => $this->lumiereAllumee(),
+            "aVolet" => $this->aVolet(),
+            "voletOuvert" => $this->voletOuvert()
+        );
     }
 }
