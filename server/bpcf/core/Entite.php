@@ -123,6 +123,9 @@ class Entite {
 			$requete .= '('.implode(', ',$column).') VALUES('.implode(', ',$values).')';
 			$insertID = SQL::getInstance()->exec2($requete);
 			$this->id = $insertID;
+            if(array_key_exists('id', $this->DB_equiv)){
+				$this->loadFromDB($this->DB_equiv['id'],$this->id);
+			}
 			return $insertID;
 		}
 	}
