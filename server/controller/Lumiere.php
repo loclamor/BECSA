@@ -23,6 +23,7 @@ class Controller_Lumiere extends Controller {
     public function allumer() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $piece = null;
+        $this->piece = null;
         if( isset($_GET['piece']) and !empty($_GET['piece']) ){
             $pieceNom = $_GET['piece']; // nom de la piece
             $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
@@ -39,9 +40,11 @@ class Controller_Lumiere extends Controller {
                 $piece->setLumiereAllumee();
                 $piece->enregistrer( array("lumiereAllumee") );
                 $this->code = 200;
+                $this->piece = $piece->getState();
             }
             else {
                 $this->code = 415;
+                $this->piece = $piece->getState();
             }
         }
         else {
@@ -55,12 +58,14 @@ class Controller_Lumiere extends Controller {
     public function allumerTout() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aLumiere' => 1));
+        $this->pieces = array();
         foreach ($pieces as $piece) {
             if ($piece instanceof Model_Piece) {
                 if ($piece->aLumiere()) {
                     $piece->setLumiereAllumee();
                     $piece->enregistrer(array("lumiereAllumee"));
                 }
+                $this->pieces[] = $piece->getState();
             }
         }
         $this->code = 202;
@@ -75,6 +80,7 @@ class Controller_Lumiere extends Controller {
     public function eteindre() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $piece = null;
+        $this->piece = null;
         if( isset($_GET['piece']) and !empty($_GET['piece']) ){
             $pieceNom = $_GET['piece']; // nom de la piece
             $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
@@ -91,9 +97,11 @@ class Controller_Lumiere extends Controller {
                 $piece->setLumiereEteinte();
                 $piece->enregistrer( array("lumiereAllumee") );
                 $this->code = 200;
+                $this->piece = $piece->getState();
             }
             else {
                 $this->code = 415;
+                $this->piece = $piece->getState();
             }
         }
         else {
@@ -108,12 +116,14 @@ class Controller_Lumiere extends Controller {
     public function eteindreTout() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aLumiere' => 1));
+        $this->pieces = array();
         foreach ($pieces as $piece) {
             if ($piece instanceof Model_Piece) {
                 if ($piece->aLumiere()) {
                     $piece->setLumiereEteinte();
                     $piece->enregistrer(array("lumiereAllumee"));
                 }
+                $this->pieces[] = $piece->getState();
             }
         }
         $this->code = 202;

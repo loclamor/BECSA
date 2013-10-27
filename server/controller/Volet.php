@@ -19,8 +19,9 @@ class Controller_Volet extends Controller {
      * @param $_GET['id'] id de la piece
      */
     public function ouvrir() {
-       $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
         $piece = null;
+        $this->piece = null;
         if( isset($_GET['piece']) and !empty($_GET['piece']) ){
             $pieceNom = $_GET['piece']; // nom de la piece
             $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
@@ -37,9 +38,11 @@ class Controller_Volet extends Controller {
                 $piece->setVoletOuvert();
                 $piece->enregistrer( array("voletOuvert") );
                 $this->code = 200;
+                $this->piece = $piece->getState();
             }
             else {
                 $this->code = 415;
+                $this->piece = $piece->getState();
             }
         }
         else {
@@ -53,12 +56,14 @@ class Controller_Volet extends Controller {
     public function ouvrirTout() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aVolet' => 1));
+        $this->pieces = array();
         foreach ($pieces as $piece) {
             if ($piece instanceof Model_Piece) {
                 if ($piece->aVolet()) {
                     $piece->setVoletOuvert();
                     $piece->enregistrer(array("voletOuvert"));
                 }
+                $this->pieces[] = $piece->getState();
             }
         }
         $this->code = 202;
@@ -71,8 +76,9 @@ class Controller_Volet extends Controller {
      * @param $_GET['id'] id de la piece
      */
     public function fermer() {
-       $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
         $piece = null;
+        $this->piece = null;
         if( isset($_GET['piece']) and !empty($_GET['piece']) ){
             $pieceNom = $_GET['piece']; // nom de la piece
             $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
@@ -89,9 +95,11 @@ class Controller_Volet extends Controller {
                 $piece->setVoletFerme();
                 $piece->enregistrer( array("voletOuvert") );
                 $this->code = 200;
+                $this->piece = $piece->getState();
             }
             else {
                 $this->code = 415;
+                $this->piece = $piece->getState();
             }
         }
         else {
@@ -106,12 +114,14 @@ class Controller_Volet extends Controller {
     public function fermerTout() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aVolet' => 1));
+        $this->pieces = array();
         foreach ($pieces as $piece) {
             if ($piece instanceof Model_Piece) {
                 if ($piece->aLumiere()) {
                     $piece->setVoletFerme();
                     $piece->enregistrer(array("voletOuvert"));
                 }
+                $this->pieces[] = $piece->getState();
             }
         }
         $this->code = 202;
