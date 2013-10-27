@@ -5,6 +5,10 @@ switch ($code) {
         $this->status = "success";
         $this->message = "lumiere eteinte";
         break;
+    case 400:
+        $this->status = "error";
+        $this->message = "parametre incorrect";
+        break;
     case 404:
         $this->status = "error";
         $this->message = "piece non trouvee";

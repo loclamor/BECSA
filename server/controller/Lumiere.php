@@ -12,27 +12,41 @@
  */
 class Controller_Lumiere extends Controller {
     
+    //TODO : allumer/eteindre ouvrir/fermer acceptent aussi l'ID en plus du nom de la piece
+    
     /**
      * allume la lumiere dans une piece
      * @param $_GET['piece'] nom de la piece
+     * or
+     * @param $_GET['id'] id de la piece
      */
     public function allumer() {
-       $pieceNom = $_GET['piece']; // nom de la piece
-       $gesPiece = Gestionnaire::getGestionnaire("piece");
-       $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
-       if( $piece instanceof Model_Piece ) {
-           if( $piece->aLumiere() ) {
-               $piece->setLumiereAllumee();
-               $piece->enregistrer( array("lumiereAllumee") );
-               $this->code = 200;
-           }
-           else {
-               $this->code = 415;
-           }
-       }
-       else {
-           $this->code = 404;
-       }
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $piece = null;
+        if( isset($_GET['piece']) and !empty($_GET['piece']) ){
+            $pieceNom = $_GET['piece']; // nom de la piece
+            $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
+        }
+        elseif ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $pieceId = $_GET['id']; // nom de la piece
+            $piece = $gesPiece->getOne( $pieceId );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $piece instanceof Model_Piece ) {
+            if( $piece->aLumiere() ) {
+                $piece->setLumiereAllumee();
+                $piece->enregistrer( array("lumiereAllumee") );
+                $this->code = 200;
+            }
+            else {
+                $this->code = 415;
+            }
+        }
+        else {
+            $this->code = 404;
+        }
     }
     
     /**
@@ -55,23 +69,36 @@ class Controller_Lumiere extends Controller {
     /**
      * eteind la lumiere dans une piece
      * @param $_GET['piece'] nom de la piece
+     * or
+     * @param $_GET['id'] id de la piece
      */
     public function eteindre() {
-       $pieceNom = $_GET['piece']; // nom de la piece
-       $piece = Gestionnaire::getGestionnaire('Model_Piece')->getOneOf( array( 'nom' => $pieceNom ) );
-       if( $piece instanceof Model_Piece ) {
-           if( $piece->aLumiere() ) {
-               $piece->setLumiereEteinte();
-               $piece->enregistrer( array("lumiereAllumee") );
-               $this->code = 200;
-           }
-           else {
-               $this->code = 415;
-           }
-       }
-       else {
-           $this->code = 404;
-       }
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $piece = null;
+        if( isset($_GET['piece']) and !empty($_GET['piece']) ){
+            $pieceNom = $_GET['piece']; // nom de la piece
+            $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
+        }
+        elseif ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $pieceId = $_GET['id']; // nom de la piece
+            $piece = $gesPiece->getOne( $pieceId );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $piece instanceof Model_Piece ) {
+            if( $piece->aLumiere() ) {
+                $piece->setLumiereEteinte();
+                $piece->enregistrer( array("lumiereAllumee") );
+                $this->code = 200;
+            }
+            else {
+                $this->code = 415;
+            }
+        }
+        else {
+            $this->code = 404;
+        }
     }
     
     

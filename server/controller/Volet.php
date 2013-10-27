@@ -15,24 +15,36 @@ class Controller_Volet extends Controller {
     /**
      * ouvre les volets d'une piece
      * @param $_GET['piece'] nom de la piece
+     * or
+     * @param $_GET['id'] id de la piece
      */
     public function ouvrir() {
-       $pieceNom = $_GET['piece']; // nom de la piece
        $gesPiece = Gestionnaire::getGestionnaire("piece");
-       $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
-       if( $piece instanceof Model_Piece ) {
-           if( $piece->aVolet() ) {
-               $piece->setVoletOuvert();
-               $piece->enregistrer( array("voletOuvert") );
-               $this->code = 200;
-           }
-           else {
-               $this->code = 415;
-           }
-       }
-       else {
-           $this->code = 404;
-       }
+        $piece = null;
+        if( isset($_GET['piece']) and !empty($_GET['piece']) ){
+            $pieceNom = $_GET['piece']; // nom de la piece
+            $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
+        }
+        elseif ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $pieceId = $_GET['id']; // nom de la piece
+            $piece = $gesPiece->getOne( $pieceId );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $piece instanceof Model_Piece ) {
+            if( $piece->aVolet() ) {
+                $piece->setVoletOuvert();
+                $piece->enregistrer( array("voletOuvert") );
+                $this->code = 200;
+            }
+            else {
+                $this->code = 415;
+            }
+        }
+        else {
+            $this->code = 404;
+        }
     }
     
     /**
@@ -55,23 +67,36 @@ class Controller_Volet extends Controller {
     /**
      * ferme les volets d'une piece
      * @param $_GET['piece'] nom de la piece
+     * or
+     * @param $_GET['id'] id de la piece
      */
     public function fermer() {
-       $pieceNom = $_GET['piece']; // nom de la piece
-       $piece = Gestionnaire::getGestionnaire('Model_Piece')->getOneOf( array( 'nom' => $pieceNom ) );
-       if( $piece instanceof Model_Piece ) {
-           if( $piece->aVolet() ) {
-               $piece->setVoletFerme();
-               $piece->enregistrer( array("voletOuvert") );
-               $this->code = 200;
-           }
-           else {
-               $this->code = 415;
-           }
-       }
-       else {
-           $this->code = 404;
-       }
+       $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $piece = null;
+        if( isset($_GET['piece']) and !empty($_GET['piece']) ){
+            $pieceNom = $_GET['piece']; // nom de la piece
+            $piece = $gesPiece->getOneOf( array( 'nom' => $pieceNom ) );
+        }
+        elseif ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $pieceId = $_GET['id']; // nom de la piece
+            $piece = $gesPiece->getOne( $pieceId );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $piece instanceof Model_Piece ) {
+            if( $piece->aVolet() ) {
+                $piece->setVoletFerme();
+                $piece->enregistrer( array("voletOuvert") );
+                $this->code = 200;
+            }
+            else {
+                $this->code = 415;
+            }
+        }
+        else {
+            $this->code = 404;
+        }
     }
     
     
