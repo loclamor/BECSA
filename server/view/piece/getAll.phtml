@@ -2,19 +2,19 @@
 $code = $this->code;
 $retour = array();
 switch ($code) {
-    case 201:
+    case 202:
         $this->status = "success";
-        $this->message = "piece cree";
+        $this->message = "pieces trouvees";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
             "message" => $this->message,
-            "piece" => $this->piece->getState()
+            "pieces" => $this->pieces
             );
         break;
-    case 400:
+    case 404:
         $this->status = "error";
-        $this->message = "parametre incorrect";
+        $this->message = "pas de pieces";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
