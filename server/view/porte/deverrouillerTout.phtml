@@ -1,0 +1,20 @@
+<?php
+$code = $this->code;
+switch ($code) {
+    case 202:
+        $this->status = "success";
+        $this->message = "portes deverrouillees";
+        break;
+    default:
+        $this->code = 520;
+        $this->status = "error";
+        $this->message = "une erreur est survenue";
+        break;
+}
+
+echo json_encode( array( 
+    "status" => $this->status,
+    "code" => $this->code,
+    "message" => $this->message,
+    "pieces" => $this->pieces
+    ) );

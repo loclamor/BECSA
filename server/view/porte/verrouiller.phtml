@@ -1,0 +1,32 @@
+<?php
+$code = $this->code;
+switch ($code) {
+    case 200:
+        $this->status = "success";
+        $this->message = "porte verrouillee";
+        break;
+    case 400:
+        $this->status = "error";
+        $this->message = "parametre incorrect";
+        break;
+    case 404:
+        $this->status = "error";
+        $this->message = "piece non trouvee";
+        break;
+    case 415:
+        $this->status = "error";
+        $this->message = "pas de porte dans cette piece";
+        break;
+    default:
+        $this->code = 520;
+        $this->status = "error";
+        $this->message = "une erreur est survenue";
+        break;
+}
+
+echo json_encode( array( 
+    "status" => $this->status,
+    "code" => $this->code,
+    "message" => $this->message,
+    "piece" => $this->piece
+    ) );

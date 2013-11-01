@@ -14,7 +14,9 @@ class Model_Piece extends Entite {
         "aLumiere"       => "aLumiere",
         "lumiereAllumee" => "lumiereAllumee",
         "aVolet"         => "aVolet",
-        "voletOuvert"    => "voletOuvert"
+        "voletOuvert"    => "voletOuvert",
+        "aPorte"         => "aPorte",
+        "porteVerrouillee"    => "porteVerrouillee"
     );
     
     public $nom;
@@ -22,6 +24,8 @@ class Model_Piece extends Entite {
     public $lumiereAllumee;
     public $aVolet;
     public $voletOuvert;
+    public $aPorte;
+    public $porteVerrouillee;
     
     public function getNom() {
         return $this->nom;
@@ -43,6 +47,14 @@ class Model_Piece extends Entite {
         return ( $this->voletOuvert == 1 );
     }
     
+    public function aPorte() {
+        return ( $this->aPorte == 1 );
+    }
+    
+    public function porteVerrouillee() {
+        return ( $this->porteVerrouillee == 1 );
+    }
+    
     public function setNom( $nom ) {
         $this->nom = $nom;
     }
@@ -59,7 +71,7 @@ class Model_Piece extends Entite {
         $this->lumiereAllumee = false;
     }
     
-     public function setAVolet( $status ) {
+    public function setAVolet( $status ) {
         $this->aVolet = ( $status?1:0 );
     }
     
@@ -71,6 +83,18 @@ class Model_Piece extends Entite {
         $this->voletOuvert = false;
     }
     
+    public function setAPorte( $status ) {
+        $this->aPorte = ( $status?1:0 );
+    }
+    
+    public function setPorteVerrouillee() {
+        $this->porteVerrouillee = true;
+    }
+    
+    public function setPorteDeverrouillee() {
+        $this->porteVerrouillee = false;
+    }
+    
     public function getState() {
         return array(
             "id" => $this->id,
@@ -78,7 +102,9 @@ class Model_Piece extends Entite {
             "aLumiere" => $this->aLumiere(),
             "lumiereAllumee" => $this->lumiereAllumee(),
             "aVolet" => $this->aVolet(),
-            "voletOuvert" => $this->voletOuvert()
+            "voletOuvert" => $this->voletOuvert(),
+            "aPorte" => $this->aPorte(),
+            "porteVerrouillee" => $this->porteVerrouillee()
         );
     }
 }
