@@ -1,0 +1,6 @@
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Release\ReconnaissanceVocale.exe.config
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Release\Grammaire.xml
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Release\ReconnaissanceVocale.exe
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Release\ReconnaissanceVocale.pdb
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\obj\Release\ReconnaissanceVocale.exe
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\obj\Release\ReconnaissanceVocale.pdb

@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<grammar version="1.0" xml:lang="fr-FR" mode="voice" tag-format="semantics-ms/1.0"
+root="REQUEST" xmlns="http://www.w3.org/2001/06/grammar">
+  <rule id="REQUEST" scope="public">
+    <ruleref special="GARBAGE" />
+    <one-of>
+      <item>
+        <one-of>
+          <item>quitter</item>
+        </one-of>
+        <tag>$.REQUEST={}; $.REQUEST._value="QUITTER";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>allumer</item>
+          <item>allume</item>
+          <item>mettre</item>
+          <item>lumière</item>
+          <item>éclairer</item>
+        </one-of>
+        <ruleref uri="#PIECE" />
+        <tag>$.PIECE=$PIECE;$.REQUEST={}; $.REQUEST._value="LUMIERE-1";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>éteindre</item>
+          <item>enlever</item>
+          <item>éteins</item>
+          <item>enlève</item>
+        </one-of>
+        <ruleref uri="#PIECE" />
+        <tag>$.PIECE=$PIECE; $.REQUEST={}; $.REQUEST._value="LUMIERE-0";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>ouvrir</item>
+          <item>ouvre</item>
+        </one-of>
+        <ruleref uri="#PIECE" />
+        <tag>$.PIECE=$PIECE; $.REQUEST={}; $.REQUEST._value="VOLET-1";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>ferme</item>
+          <item>fermer</item>
+        </one-of>
+        <ruleref uri="#PIECE" />
+        <tag>$.PIECE=$PIECE; $.REQUEST={}; $.REQUEST._value="VOLET-0";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>verrouiller</item>
+          <item>verrouille</item>
+          <item>bloquer</item>
+          <item>bloque</item>
+        </one-of>
+        <ruleref uri="#PIECE" />
+        <tag>$.PIECE=$PIECE; $.REQUEST={}; $.REQUEST._value="VERROUILLE-1";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>deverrouiller</item>
+          <item>deverouille</item>
+          <item>debloquer</item>
+          <item>debloque</item>
+        </one-of>
+        <ruleref uri="#PIECE" />
+        <tag>$.PIECE=$PIECE; $.REQUEST={}; $.REQUEST._value="VERROUILLE-0";</tag>
+      </item>
+    </one-of>
+    <ruleref special="GARBAGE" />
+  </rule>
+  <rule id="PIECE" scope="public">
+    <one-of>
+      <item>
+        <one-of>
+          <item>salon</item>
+          <item>salle à manger</item>
+          <item>salle principale</item>
+          <item>salle de vie</item>
+        </one-of>
+        <tag>$._value = "SALON";</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>cuisine</item>
+          <item>manger</item>
+        </one-of>
+        <tag>$._value = 'CUISINE';</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>entrée</item>
+        </one-of>
+        <tag>$._value = 'ENTREE';</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>chambre</item>
+        </one-of>
+        <tag>$._value = 'CHAMBRE';</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>salle de bain</item>
+          <item>salle d'eau</item>
+        </one-of>
+        <tag>$._value = 'BAIN';</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>toilette</item>
+          <item>WC</item>
+        </one-of>
+        <tag>$._value = 'WC';</tag>
+      </item>
+      <item>
+        <one-of>
+          <item>partout</item>
+          <item>tout</item>
+        </one-of>
+        <tag>$._value = 'TOUT';</tag>
+      </item>
+    </one-of>
+  </rule>
+</grammar>
