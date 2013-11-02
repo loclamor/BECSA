@@ -1,0 +1,7 @@
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Debug\ReconnaissanceVocale.exe.config
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Debug\ReconnaissanceVocale.exe
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Debug\ReconnaissanceVocale.pdb
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\obj\Debug\ReconnaissanceVocale.exe
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\obj\Debug\ReconnaissanceVocale.pdb
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\bin\Debug\Grammaire.xml
+C:\Dev\Visual Studio\ReconnaissanceVocale\ReconnaissanceVocale\obj\Debug\ReconnaissanceVocale.csprojResolveAssemblyReference.cache
