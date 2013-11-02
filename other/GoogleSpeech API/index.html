@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo</title>
+</head>
+<body>
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="sr.js"></script>
+    <script>
+	
+		var record = false;
+		var recognition = new webkitSpeechRecognition();
+		recognition.lang = "fr";
+		recognition.onresult = function (event) {
+			recognition.stop();
+			record = false;
+			console.log('Résultat de la reconnaissance :');
+			var text = '';
+			for (var i = event.resultIndex; i < event.results.length; ++i) {
+				if (event.results[i].isFinal) {
+					console.log(event.results[i][0].transcript);
+					text += event.results[i][0].transcript;
+				}
+			}
+			document.getElementById("textField1").value = text;
+		};
+		
+		function startRecognition() {
+			if(!record) {
+				console.log('Debut enregistrement.');
+				recognition.start();
+			}
+			else {
+				console.log('Fin enregistrement.');
+				recognition.stop();
+			}
+			record = !record;
+		}
+	</script>
+	Only work on a server (localhost or other in url, not file://)<BR>.
+	<input type="button" value="Record" onclick="startRecognition();" >
+	<input id="textField1" type="text" value="0" align="right" size="13"/><br>
+</body>
+</html>
