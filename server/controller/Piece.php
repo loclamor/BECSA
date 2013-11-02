@@ -65,7 +65,10 @@ class Controller_Piece extends Controller {
         }
     }
     
-    public function getAll() {
+    /**
+     * liste toutes les pieces
+     */
+    public function lister() {
         $pieces = Gestionnaire::getGestionnaire("piece")->getAll();
         $this->pieces = array();
         if( $pieces ){

@@ -5,6 +5,10 @@ switch ($code) {
         $this->status = "success";
         $this->message = "portes verrouillees";
         break;
+    case 404:
+        $this->status = "error";
+        $this->message = "pas de pieces trouvees";
+        break;
     default:
         $this->code = 520;
         $this->status = "error";

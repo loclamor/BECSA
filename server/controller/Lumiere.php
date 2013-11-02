@@ -59,16 +59,21 @@ class Controller_Lumiere extends Controller {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aLumiere' => 1));
         $this->pieces = array();
-        foreach ($pieces as $piece) {
-            if ($piece instanceof Model_Piece) {
-                if ($piece->aLumiere()) {
-                    $piece->setLumiereAllumee();
-                    $piece->enregistrer(array("lumiereAllumee"));
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    if ($piece->aLumiere()) {
+                        $piece->setLumiereAllumee();
+                        $piece->enregistrer(array("lumiereAllumee"));
+                    }
+                    $this->pieces[] = $piece->getState();
                 }
-                $this->pieces[] = $piece->getState();
             }
+            $this->code = 202;
         }
-        $this->code = 202;
+        else {
+            $this->code = 404;
+        }
     }
     
     /**
@@ -117,18 +122,42 @@ class Controller_Lumiere extends Controller {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aLumiere' => 1));
         $this->pieces = array();
-        foreach ($pieces as $piece) {
-            if ($piece instanceof Model_Piece) {
-                if ($piece->aLumiere()) {
-                    $piece->setLumiereEteinte();
-                    $piece->enregistrer(array("lumiereAllumee"));
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    if ($piece->aLumiere()) {
+                        $piece->setLumiereEteinte();
+                        $piece->enregistrer(array("lumiereAllumee"));
+                    }
+                    $this->pieces[] = $piece->getState();
                 }
-                $this->pieces[] = $piece->getState();
             }
+            $this->code = 202;
         }
-        $this->code = 202;
+        else {
+            $this->code = 404;
+        }
     }
     
+    /**
+     * liste toutes les pieces disposant de lumiere
+     */
+    public function lister() {
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $pieces = $gesPiece->getOf(array('aLumiere' => 1));
+        $this->pieces = array();
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    $this->pieces[] = $piece->getState();
+                }
+            }
+            $this->code = 202;
+        }
+        else {
+            $this->code = 404;
+        }
+    }
     
 }
 

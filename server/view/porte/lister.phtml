@@ -1,0 +1,36 @@
+<?php
+$code = $this->code;
+$retour = array();
+switch ($code) {
+    case 202:
+        $this->status = "success";
+        $this->message = "pieces trouvees";
+        $retour = array( 
+            "status" => $this->status,
+            "code" => $this->code,
+            "message" => $this->message,
+            "pieces" => $this->pieces
+            );
+        break;
+    case 404:
+        $this->status = "error";
+        $this->message = "pas de pieces";
+        $retour = array( 
+            "status" => $this->status,
+            "code" => $this->code,
+            "message" => $this->message
+            );
+        break;
+    default:
+        $this->code = 520;
+        $this->status = "error";
+        $this->message = "une erreur est survenue";
+        $retour = array( 
+            "status" => $this->status,
+            "code" => $this->code,
+            "message" => $this->message
+            );
+        break;
+}
+
+echo json_encode( $retour );

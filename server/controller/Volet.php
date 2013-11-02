@@ -57,16 +57,21 @@ class Controller_Volet extends Controller {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aVolet' => 1));
         $this->pieces = array();
-        foreach ($pieces as $piece) {
-            if ($piece instanceof Model_Piece) {
-                if ($piece->aVolet()) {
-                    $piece->setVoletOuvert();
-                    $piece->enregistrer(array("voletOuvert"));
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    if ($piece->aVolet()) {
+                        $piece->setVoletOuvert();
+                        $piece->enregistrer(array("voletOuvert"));
+                    }
+                    $this->pieces[] = $piece->getState();
                 }
-                $this->pieces[] = $piece->getState();
             }
+            $this->code = 202;
         }
-        $this->code = 202;
+        else {
+            $this->code = 404;
+        }
     }
     
     /**
@@ -115,18 +120,37 @@ class Controller_Volet extends Controller {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aVolet' => 1));
         $this->pieces = array();
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    if ($piece->aLumiere()) {
+                        $piece->setVoletFerme();
+                        $piece->enregistrer(array("voletOuvert"));
+                    }
+                    $this->pieces[] = $piece->getState();
+                }
+            }
+            $this->code = 202;
+        }
+        else {
+            $this->code = 404;
+        }
+    }
+    
+    /**
+     * liste toutes les pieces disposant de volets
+     */
+    public function lister() {
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $pieces = $gesPiece->getOf(array('aVolet' => 1));
+        $this->pieces = array();
         foreach ($pieces as $piece) {
             if ($piece instanceof Model_Piece) {
-                if ($piece->aLumiere()) {
-                    $piece->setVoletFerme();
-                    $piece->enregistrer(array("voletOuvert"));
-                }
                 $this->pieces[] = $piece->getState();
             }
         }
         $this->code = 202;
     }
-    
     
 }
 

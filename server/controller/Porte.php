@@ -57,16 +57,21 @@ class Controller_Porte extends Controller {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aPorte' => 1));
         $this->pieces = array();
-        foreach ($pieces as $piece) {
-            if ($piece instanceof Model_Piece) {
-                if( $piece->aPorte() ) {
-                    $piece->setPorteDeverrouillee();
-                    $piece->enregistrer( array("porteVerrouillee") );
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    if( $piece->aPorte() ) {
+                        $piece->setPorteDeverrouillee();
+                        $piece->enregistrer( array("porteVerrouillee") );
+                    }
+                    $this->pieces[] = $piece->getState();
                 }
-                $this->pieces[] = $piece->getState();
             }
+            $this->code = 202;
         }
-        $this->code = 202;
+        else {
+            $this->code = 404;
+        }
     }
     
     /**
@@ -113,20 +118,44 @@ class Controller_Porte extends Controller {
      */
     public function verrouillerTout() {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
-        $pieces = $gesPiece->getOf(array('aVolet' => 1));
+        $pieces = $gesPiece->getOf(array('aPorte' => 1));
         $this->pieces = array();
-        foreach ($pieces as $piece) {
-            if ($piece instanceof Model_Piece) {
-                if( $piece->aPorte() ) {
-                    $piece->setPorteVerrouillee();
-                    $piece->enregistrer( array("porteVerrouillee") );
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    if( $piece->aPorte() ) {
+                        $piece->setPorteVerrouillee();
+                        $piece->enregistrer( array("porteVerrouillee") );
+                    }
+                    $this->pieces[] = $piece->getState();
                 }
-                $this->pieces[] = $piece->getState();
             }
+            $this->code = 202;
         }
-        $this->code = 202;
+        else {
+            $this->code = 404;
+        }
     }
     
+    /**
+     * liste toutes les pieces disposant de porte
+     */
+    public function lister() {
+        $gesPiece = Gestionnaire::getGestionnaire("piece");
+        $pieces = $gesPiece->getOf(array('aPorte' => 1));
+        $this->pieces = array();
+        if( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    $this->pieces[] = $piece->getState();
+                }
+            }
+            $this->code = 202;
+        }
+        else {
+            $this->code = 404;
+        }
+    }
     
 }
 
