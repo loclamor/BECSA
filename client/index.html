@@ -20,37 +20,37 @@
                 <section id="functions" class="col-xs-4">
                     <div class="row">
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="lumiere" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-adjust"></span><br/>Lumières
                             </button>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="volet" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-sound-dolby"></span><br/>Volets
                             </button>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="porte" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-home"></span><br/>Portes
                             </button>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="hifi" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-music"></span><br/>HiFi
                             </button>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="reveil" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-bell"></span><br/>Réveil
                             </button>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="itineraire" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-road"></span><br/>Itinéraire
                             </button>
                         </div>
                         <div class="col-lg-4 col-md-6 col-sm-6 function">
-                            <button type="button" class="btn btn-default btn-lg btn-block btn-function">
+                            <button type="button" data-function="meteo" class="btn btn-default btn-lg btn-block btn-function">
                                 <span class="glyphicon glyphicon-cloud"></span><br/>Météo
                             </button>
                         </div>
@@ -58,8 +58,8 @@
                 </section>
                 <section id="content" class="col-xs-8">
                     <fieldset>
-                        <legend>Bonjour</legend>
-                        <div>Pour commencer, choisissez une fonctionnalité.</div>
+                        <legend id="fctTitle"></legend>
+                        <div id="fctBody"></div>
                     </fieldset>
                 </section>
             </div>
