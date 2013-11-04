@@ -1,3 +1,5 @@
+var baseUrl = "../server/";
+
 $(document).ready(function(){
     main();
     /**

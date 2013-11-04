@@ -2,6 +2,15 @@ button.btn-function {
 	height: 100%;
 	width: 100%;
 }
+
+#fctBody .switcher {
+    border-bottom: 1px solid #e5e5e5;
+    margin-left : 10px;
+    margin-right : 10px;
+    margin-bottom : 10px;
+    padding-bottom: 5px;
+}
+
 @media (min-width: 1200px) {
 	#functions .function {
 		height: 100px;
