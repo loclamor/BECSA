@@ -1,7 +1,50 @@
-#functions .function {
-    float: left;
-    width: 110px;
-    height: 100px;
-    margin-right: 10px;
-    margin-bottom: 10px;
+button.btn-function {
+	height: 100%;
+	width: 100%;
+}
+@media (min-width: 1200px) {
+	#functions .function {
+		height: 100px;
+		padding-left: 10px;
+		padding-right: 5px;
+		margin-bottom: 10px;
+	}
+	#functions .function:nth-child(3n) {
+		padding-left: 5px;
+		padding-right: 10px;
+	}
+	#functions .function:nth-child(3n+1) {
+		padding-left: 15px;
+		padding-right: 0px;
+	}
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+	#functions .function {
+		height: 100px;
+		margin-bottom: 10px;
+	}
+	#functions .function:nth-child(2n) {
+		padding-left: 5px;
+		padding-right: 42px;
+	}
+	#functions .function:nth-child(2n+1) {
+		padding-left: 42px;
+		padding-right: 5px;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px) {
+	#functions .function {
+		height: 100px;
+		padding-left: 5px;
+		padding-right: 5px;
+		margin-bottom: 10px;
+	}
+}
+@media (max-width: 767px) {
+	#functions .function {
+		float: left;
+		width: 100%;
+		height: 75px;
+		margin-bottom: 5px;
+	}
 }
