@@ -57,3 +57,26 @@ button.btn-function {
 		margin-bottom: 5px;
 	}
 }
+
+#fctBody .row.switcher .nomElt span{
+    position: relative;
+    bottom: 10px;
+}
+
+/* icons on/off state */
+#fctBody .imgState {
+    height: 32px;
+    width: 32px;
+    display: inline-block;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+}
+/* icons for lumiere on/off */
+
+#fctBody.lumiere .imgState.on {
+    background-image: url("./img/lightbulb.png");
+}
+
+#fctBody.lumiere .imgState.off {
+    background-image: url("./img/lightbulb_off.png");
+}

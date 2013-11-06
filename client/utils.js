@@ -43,7 +43,7 @@ function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, sta
             '<div class="row switcher" id="onOffRow_' + eltId + '">'
                 + '<div class="col-xs-'+spanText+' nomElt">'
                     + '<div class="imgState '+state+'"></div>'
-                    + text
+                    + '<span>' + text + '</span>'
                 + '</div>'
                 + '<button type="button" data-loading-text="'+textOn+'..." id="' + name + 'On" class="btn btn-success col-xs-'+spanBtn+' onBtn_' + eltId + ' ' + hiddeOn + '">'
                     + textOn

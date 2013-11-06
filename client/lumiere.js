@@ -2,6 +2,8 @@ function lumiere() {
     $("#fctTitle").html("Lumières");
     var body = $("#fctBody");
     body.html("");
+    body.removeClass();
+    body.addClass("lumiere");
     addOnOffSwitcher( body, "all", "Toutes les lumières", "Allumer", "Eteindre",
         getControllerActionUrl("lumiere", "allumerTout"),
         getControllerActionUrl("lumiere", "eteindreTout"),
