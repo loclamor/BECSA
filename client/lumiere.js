@@ -28,7 +28,7 @@ function lumiere() {
  */
 function refreshPieceLumiere( piece ){
         //change imgState
-        var eltImgState = $("onOffRow_" + piece.id + " .imgState");
+        var eltImgState = $("#onOffRow_" + piece.id + " .imgState");
         if( !eltImgState.hasClass("no") ){
             eltImgState.removeClass( piece.lumiereAllumee ? "off" : "on" );
             eltImgState.addClass( piece.lumiereAllumee ? "on" : "off" );
