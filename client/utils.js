@@ -15,52 +15,49 @@ function getControllerActionUrl( controller, action, id ){
 /**
  * Add an On/Off switcher
  * @param {JQueryElement} elt the element where switcher is add
- * @param {String} name the name off the switcher
+ * @param {String} eltId the id of the element to switch (all or piece.id)
  * @param {String} text the text to show left of the switcher
  * @param {String} textOn the text for the left button (On)
  * @param {String} textOff the text for the right button (Off)
  * @param {String} urlOn
  * @param {String} urlOff
  * @param {String} state on|off|no
+ * @param {function} refreshPiece a function to refresh ONE piece : function refresh( Piece ){...}
  * @returns {void}
  */
-function addOnOffSwitcher( elt, name, text, textOn, textOff, urlOn, urlOff, state ){
+function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, state, refreshPiece ){
+    var name = "onOff_" + eltId;
     var hiddeOn = "", hiddeOff = "";
     var spanText = 9, spanBtn = 3;
-    if( state != "no" ) {
+    if( state !== "no" ) {
         if( state == "off")
             hiddeOff = "hidden"
         else 
             hiddeOn = "hidden"
     }
     else {
-        var spanText = 8, spanBtn = 2;
+        spanText = 8;
+        spanBtn = 2;
     }
     elt.append(
-            '<div class="row switcher">'
-                + '<div class="col-xs-'+spanText+'">' + text + '</div>'
-                + '<button type="button" data-loading-text="'+textOn+'..." id="' + name + 'On" class="btn btn-success col-xs-'+spanBtn+' ' + hiddeOn + '">'
+            '<div class="row switcher" id="onOffRow_' + eltId + '">'
+                + '<div class="col-xs-'+spanText+' nomElt">'
+                    + '<div class="imgState '+state+'"></div>'
+                    + text
+                + '</div>'
+                + '<button type="button" data-loading-text="'+textOn+'..." id="' + name + 'On" class="btn btn-success col-xs-'+spanBtn+' onBtn_' + eltId + ' ' + hiddeOn + '">'
                     + textOn
                 + '</button>'
-                + '<button type="button" data-loading-text="'+textOff+'..." id="' + name + 'Off" class="btn btn-danger col-xs-'+spanBtn+' ' + hiddeOff + '">'
+                + '<button type="button" data-loading-text="'+textOff+'..." id="' + name + 'Off" class="btn btn-danger offBtn_' + eltId + ' col-xs-'+spanBtn+' ' + hiddeOff + '">'
                     + textOff
                 + '</button>'
-//                + '<div class="btn-group col-xs-3" id="' + name + 'BtnGroup"data-toggle="buttons">'
-//                    + '<label class="btn btn-success" id="' + name + 'On" data-loading-text="Loading..." >'
-//                        + '<input type="radio" name="' + name + '" > ' + textOn
-//                    + '</label>'
-//                    + '<label class="btn btn-danger" id="' + name + 'Off" data-loading-text="Loading...">'
-//                        + '<input type="radio" name="' + name + '" > ' + textOff
-//                    +'</label>'
-//                + '</div>'
             + '</div>'
     );
-    //$('#' + name + 'BtnGroup').button()
     //attach events
     $('#' + name + 'On').on( "click", function(){
         $(this).button('loading');
         $.getJSON(urlOn, function( data ){
-            if( state != "no" ) {
+            if( state !== "no" && data.code < 300 ) {
                 $('#' + name + 'On').addClass("hidden");
                 $('#' + name + 'Off').removeClass("hidden");
                 $('#' + name + 'On').button("reset");
@@ -68,13 +65,14 @@ function addOnOffSwitcher( elt, name, text, textOn, textOff, urlOn, urlOff, stat
             else {
                 $('#' + name + 'On').button("reset");
             }
-            //TODO : refresh with new state (or use a param function ? ) 
+            //refresh
+            refresh( data );
         });
     });
     $('#' + name + 'Off').on( "click", function(){
         $(this).button('loading');
         $.getJSON(urlOff, function( data ){
-            if( state != "no" ) {
+            if( state !== "no" && data.code < 300 ) {
                 $('#' + name + 'Off').addClass("hidden");
                 $('#' + name + 'On').removeClass("hidden");
                 $('#' + name + 'Off').button("reset");
@@ -82,7 +80,26 @@ function addOnOffSwitcher( elt, name, text, textOn, textOff, urlOn, urlOff, stat
             else {
                 $('#' + name + 'Off').button("reset");
             }
-            //TODO : refresh with new state (or use a param function ? ) 
+            //refresh
+            refresh( data );
         });
     });
+    
+    function refresh( data ) {
+        if( eltId === "all" ){
+            if( data.pieces ){
+                //refresh all pieces
+                $.each( data.pieces, function( key, val ) {
+                    refreshPiece( val )
+                });
+            }
+        }
+        else {
+            if( data.piece ){
+                //refresh the piece
+                refreshPiece( data.piece )
+            }
+        }
+    }
 }
+
