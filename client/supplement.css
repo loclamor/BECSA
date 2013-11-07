@@ -63,6 +63,16 @@ button.btn-function {
     bottom: 10px;
 }
 
+#fctBody.recap .row.title {
+    text-align: center;
+}
+
+#fctBody.recap .row .col-xs-2{
+    height : 32px;
+    background-repeat: no-repeat;
+    background-position-x: center;
+}
+
 /* icons on/off state */
 #fctBody .imgState {
     height: 32px;
@@ -73,20 +83,26 @@ button.btn-function {
 }
 
 /* icons for lumiere on/off */
+#fctBody.recap .lumiere.on,
 #fctBody.lumiere .imgState.on {
     background-image: url("./img/lightbulb.png");
 }
 
+#fctBody.recap .lumiere.off,
 #fctBody.lumiere .imgState.off {
     background-image: url("./img/lightbulb_off.png");
 }
 
 /* icons for porte and volet on/off */
+#fctBody.recap .porte.on,
+#fctBody.recap .volet.on,
 #fctBody.porte .imgState.on,
 #fctBody.volet .imgState.on {
     background-image: url("./img/lock_open.png");
 }
 
+#fctBody.recap .porte.off,
+#fctBody.recap .volet.off,
 #fctBody.porte .imgState.off,
 #fctBody.volet .imgState.off {
     background-image: url("./img/lock.png");

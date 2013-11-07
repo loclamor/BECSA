@@ -32,6 +32,9 @@ $(document).ready(function(){
             case "meteo":
                 meteo();
             break;
+            case "recap":
+                recap();
+            break;
             default :
                 main();
         }
