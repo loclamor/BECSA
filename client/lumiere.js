@@ -21,6 +21,18 @@ function lumiere() {
             );
         });
     });
+    
+    auto_refresh = setInterval(
+        function (){
+            //refresh
+            $.getJSON( getControllerActionUrl("lumiere", "lister"), function( data ){
+                $.each( data.pieces, function( key, val ) {
+                    refreshPieceLumiere( val );
+                });
+            });
+        },
+        1000
+    ); // refresh every 1000 milliseconds
 }
 
 /**
@@ -29,19 +41,19 @@ function lumiere() {
  * @returns {void}
  */
 function refreshPieceLumiere( piece ){
-        //change imgState
-        var eltImgState = $("#onOffRow_" + piece.id + " .imgState");
-        if( !eltImgState.hasClass("no") ){
-            eltImgState.removeClass( piece.lumiereAllumee ? "off" : "on" );
-            eltImgState.addClass( piece.lumiereAllumee ? "on" : "off" );
-        }
-        
-        var eltBtnOn = $("#onOff_"+piece.id+"On");
-        var eltBtnOff = $("#onOff_"+piece.id+"Off");
-        if( eltBtnOn.hasClass("hidden") || eltBtnOff.hasClass("hidden") ){
-            eltBtnOn.removeClass("hidden");
-            eltBtnOff.removeClass("hidden");
-            eltBtnOn.addClass( piece.lumiereAllumee ? "hidden" : "" );
-            eltBtnOff.addClass( piece.lumiereAllumee ? "" : "hidden" );
-        }
+    //change imgState
+    var eltImgState = $("#onOffRow_" + piece.id + " .imgState");
+    if( !eltImgState.hasClass("no") ){
+        eltImgState.removeClass( piece.lumiereAllumee ? "off" : "on" );
+        eltImgState.addClass( piece.lumiereAllumee ? "on" : "off" );
     }
+
+    var eltBtnOn = $("#onOff_"+piece.id+"On");
+    var eltBtnOff = $("#onOff_"+piece.id+"Off");
+    if( eltBtnOn.hasClass("hidden") || eltBtnOff.hasClass("hidden") ){
+        eltBtnOn.removeClass("hidden");
+        eltBtnOff.removeClass("hidden");
+        eltBtnOn.addClass( piece.lumiereAllumee ? "hidden" : "" );
+        eltBtnOff.addClass( piece.lumiereAllumee ? "" : "hidden" );
+    }
+}

@@ -1,4 +1,5 @@
 var baseUrl = "../server/";
+var auto_refresh = 0;
 
 $(document).ready(function(){
     main();
@@ -6,6 +7,7 @@ $(document).ready(function(){
      * clic sur une fonction
      */
     $("button.btn-function").click(function(){
+        clearInterval(auto_refresh);
         $("button.btn-function").removeClass("active");
         $(this).addClass("active");
         switch ( $(this).data("function") ) {

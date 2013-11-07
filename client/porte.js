@@ -21,6 +21,18 @@ function porte() {
             );
         });
     });
+    
+    auto_refresh = setInterval(
+        function (){
+            //refresh
+            $.getJSON( getControllerActionUrl("porte", "lister"), function( data ){
+                $.each( data.pieces, function( key, val ) {
+                    refreshPieceLPorte( val );
+                });
+            });
+        },
+        1000
+    ); // refresh every 1000 milliseconds
 }
 
 /**
