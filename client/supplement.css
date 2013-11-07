@@ -67,6 +67,20 @@ button.btn-function {
     text-align: center;
 }
 
+#fctBody.recap .row {
+    border-bottom : 1px solid #DEDEDE;
+    margin-right: 15px;
+    margin-left: 15px;
+}
+
+#fctBody.recap .row .nom{
+    padding-top : 5px;
+}
+
+#fctBody.recap .row:nth-child(2n) {
+    background-color: #EFEFEF;
+}
+
 #fctBody.recap .row .col-xs-2{
     height : 32px;
     background-repeat: no-repeat;

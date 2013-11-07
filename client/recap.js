@@ -6,10 +6,10 @@ function recap() {
     body.addClass("recap");
     body.append(
         '<div class="row title">'
-            + '<div class="col-xs-3 nom" >Piece</div>'
-            + '<div class="col-xs-2 lumiere" >Lumiere</div>'
-            + '<div class="col-xs-2 volet" >Volet</div>'
-            + '<div class="col-xs-2 porte" >Porte</div>'
+            + '<div class="col-xs-3" >Piece</div>'
+            + '<div class="col-xs-2" >Lumiere</div>'
+            + '<div class="col-xs-2" >Volet</div>'
+            + '<div class="col-xs-2" >Porte</div>'
         + '</div>'
     );
     $.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
@@ -71,6 +71,5 @@ function refreshPiece( piece ){
     if( !eltPorte.hasClass("no") ){
         eltPorte.removeClass( piece.porteVerrouillee ? "on" : "off" );
         eltPorte.addClass( piece.porteVerrouillee ? "off" : "on" );
-        $("#fctBody").append("ref.porte<br>");
     }
 }
