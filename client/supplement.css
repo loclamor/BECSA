@@ -71,12 +71,23 @@ button.btn-function {
     margin-right: 10px;
     background-repeat: no-repeat;
 }
-/* icons for lumiere on/off */
 
+/* icons for lumiere on/off */
 #fctBody.lumiere .imgState.on {
     background-image: url("./img/lightbulb.png");
 }
 
 #fctBody.lumiere .imgState.off {
     background-image: url("./img/lightbulb_off.png");
+}
+
+/* icons for porte and volet on/off */
+#fctBody.porte .imgState.on,
+#fctBody.volet .imgState.on {
+    background-image: url("./img/lock_open.png");
+}
+
+#fctBody.porte .imgState.off,
+#fctBody.volet .imgState.off {
+    background-image: url("./img/lock.png");
 }
