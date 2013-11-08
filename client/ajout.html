@@ -1,0 +1,95 @@
+<div class="row">
+    <h3>Créer une pièce</h3>
+    <form class="form-horizontal well" role="form" method="POST" action="../server/?controller=piece&action=creer" id="creerPiece" >
+        <div class="form-group">
+            <label for="inputNom" class="col-sm-3 control-label">Nom</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="piece" id="inputNom" placeholder="nom">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="aLumiere" class="col-sm-3 control-label">Lumiere</label>
+            <div class="col-sm-9">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-success">
+                        <input type="radio" name="alumiere" id="aLumiere" value="true" checked="checked"> Oui
+                    </label>
+                    <label class="btn btn-danger">
+                        <input type="radio" name="alumiere" id="pasLumiere" value="false" > Non
+                    </label>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="aVolet" class="col-sm-3 control-label">Volet</label>
+            <div class="col-sm-9">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-success">
+                        <input type="radio" name="avolet" id="aVolet" value="true" checked="checked"> Oui
+                    </label>
+                    <label class="btn btn-danger">
+                        <input type="radio" name="avolet" id="pasVolet" value="false" > Non
+                    </label>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <label for="aPorte" class="col-sm-3 control-label">Porte verrouillable</label>
+            <div class="col-sm-9">
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-success">
+                        <input type="radio" name="aporte" id="aPorte" value="true" checked="checked"> Oui
+                    </label>
+                    <label class="btn btn-danger">
+                        <input type="radio" name="aporte" id="pasPorte" value="false" > Non
+                    </label>
+                </div>
+            </div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <button type="button" class="btn btn-default" id="btn-ajouter" data-loading-text="Ajout..." >Ajouter</button>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $("#aLumiere").parent("label").button('toggle');
+    $("#aVolet").parent("label").button('toggle');
+    $("#aPorte").parent("label").button('toggle');
+    $("#creerPiece #btn-ajouter").click(function() {
+        $(this).button('loading');
+        var pieceName = $("#creerPiece #inputNom").val();
+        if (pieceName == "") {
+            $("#creerPiece #inputNom").parent("div").parent("div").addClass("has-error");
+            $(this).button('reset');
+            return false;
+        }
+        var aLumiere = $("#creerPiece input[name=alumiere]:checked").val();
+        var aPorte = $("#creerPiece input[name=aporte]:checked").val();
+        var aVolet = $("#creerPiece input[name=avolet]:checked").val();
+
+        var postData = {
+            "piece": pieceName,
+            "alumiere": aLumiere,
+            "aporte": aPorte,
+            "avolet": aVolet
+        };
+
+        $.post("../server/?controller=piece&action=creer", postData, function(data) {
+            if (data.code == 201) {
+                //success
+            }
+            else {
+
+            }
+            $("#fctBody").html("");
+            $.get("./ajout.html", function(data) {
+                $("#fctBody").append(data);
+            });
+        }, "json");
+    });
+</script>

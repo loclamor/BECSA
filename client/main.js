@@ -35,6 +35,9 @@ $(document).ready(function(){
             case "recap":
                 recap();
             break;
+            case "param":
+                param();
+            break;
             default :
                 main();
         }

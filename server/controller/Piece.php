@@ -19,11 +19,13 @@ class Controller_Piece extends Controller {
             $nom = $_POST["piece"];
             $alumiere = ( isset($_POST['alumiere']) and !empty($_POST['alumiere'] ) ) ? ($_POST['alumiere'] == "true" or $_POST['alumiere'] === true) : false;
             $avolet = ( isset($_POST['avolet']) and !empty($_POST['avolet'] ) ) ? ($_POST['avolet'] == "true" or $_POST['avolet'] === true) : false;
+            $aporte = ( isset($_POST['aporte']) and !empty($_POST['aporte'] ) ) ? ($_POST['aporte'] == "true" or $_POST['avolet'] === true) : false;
             
             $piece = new Model_Piece();
             $piece->setNom( $nom );
             $piece->setALumiere( $alumiere );
             $piece->setAVolet( $avolet );
+            $piece->setAPorte( $aporte );
             $piece->enregistrer();
             
             $this->code = 201;
