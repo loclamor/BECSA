@@ -81,10 +81,10 @@
 
         $.post("../server/?controller=piece&action=creer", postData, function(data) {
             if (data.code == 201) {
-                //success
+                notify('success', data.message, "", 3000);
             }
             else {
-
+                notify('warning', data.message, "", 5000);
             }
             $("#fctBody").html("");
             $.get("./ajout.html", function(data) {

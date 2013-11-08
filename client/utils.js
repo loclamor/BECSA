@@ -65,6 +65,7 @@ function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, sta
             else {
                 $('#' + name + 'On').button("reset");
             }
+            notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
             //refresh
             refresh( data );
         });
@@ -80,6 +81,7 @@ function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, sta
             else {
                 $('#' + name + 'Off').button("reset");
             }
+            notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
             //refresh
             refresh( data );
         });
@@ -103,3 +105,30 @@ function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, sta
     }
 }
 
+/**
+ * display a notification in the notification bar 
+ * @param {String} type type of the message, in [success|info|warning|danger]
+ * @param {String} message message of the notification
+ * @param {String} title title of the notification
+ * @param {Int} timeout timeout in ms
+ * @returns {void}
+ */
+function notify( type, message, title, timeout ) {
+    var _timeout = 0;
+    var _title = "";
+    var notifbar = $("#notif-row");
+    if( timeout )
+        _timeout = timeout;
+    if( title && title !== "" )
+        _title = '<h4>' + title + '</h4>';
+    var notifbox = $('<div class="alert alert-' + type + ' fade in">'
+                + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
+                + _title
+                + message
+            + '</div>');
+    notifbar.append( notifbox );
+    //set timeout if needed
+    if( _timeout > 0 ) {
+        notifbox.slideDown(1000).delay(_timeout).queue(function() { $(this).slideUp(1000).alert("close"); });
+    }
+}

@@ -121,3 +121,14 @@ button.btn-function {
 #fctBody.volet .imgState.off {
     background-image: url("./img/lock.png");
 }
+
+/* notif-row */
+#notif-row {
+    position : absolute;
+    right: 2px;
+    top : 2px;
+}
+
+#notif-row .alert .close {
+    margin-left : 20px;
+}
