@@ -20,6 +20,9 @@ $(document).ready(function(){
             case "porte":
                 porte();
             break;
+			case "micro" :
+				micro();
+			break;
             case "hifi":
                 hifi();
             break;

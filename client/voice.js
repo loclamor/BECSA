@@ -1,3 +1,23 @@
+/**
+*
+*
+*/
+function micro() {
+	if(!record) {
+		console.log('Debut enregistrement.');
+		notify('info' , 'Que voulez-vous faire?',"",3000);
+		notify('info' , 'Allumer la salle de bain. <BR>Fermer les volets du salon. <BR>Déverrouiller la cuisine.',"Exemple de commande",10000);
+		recognition.start();
+	}
+	else {
+		console.log('Fin enregistrement.');
+		notify('info' , "Enregistrement annulé.","",3000);
+		recognition.stop();
+	}
+	record = !record;
+	refreshButton();
+}
+
 // TODO : COMMENT AND REFACTORING
 // WORK IN PROGRESS 
 
@@ -25,17 +45,17 @@ var jsonReconnaissance = {
 			],
 			"suite" : ["piece"]
 		},
-		"PORTE 1" : {
+		"PORTE 0" : {
 			"mots" :[
 				"verrouiller",
 				"verrouille"
 			],
 			"suite" : ["piece"]
 		},
-		"PORTE 0" : {
+		"PORTE 1" : {
 			"mots" :[
-				"deverrouille",
-				"deverrouiller"
+				"déverrouille",
+				"déverrouiller"
 			],
 			"suite" : ["piece"]
 		},
@@ -79,6 +99,7 @@ var jsonReconnaissance = {
 		"BAIN" : {
 			"mots" :[
 				"bain",
+				"salle de bain",
 				"eau" // Salle d'eau pour les vieux
 			],
 		"suite" : [] 
@@ -110,6 +131,7 @@ var jsonReconnaissance = {
 	}
 };
 
+console.log('micro added');
 // Permet de savoir si oui ou non on enregistre
 var record = false;
 // Moteur de reconnaissance vocale
@@ -148,98 +170,75 @@ recognition.onresult = function (event) {
 		notify('info' , "Je n\'ai rien entendu.","",3000);
 	}
 };
-		
-/**
-*
-*
-*/
-function micro() {
-	commandeVocale('Allumer la lumière dans la cuisine');
-			if(!record) {
-				console.log('Debut enregistrement.');
-				notify('info' , 'Que voulez-vous faire?',"",1000);
-				console.log(recognition.start());
-			}
-			else {
-				console.log('Fin enregistrement.');
-				notify('info' , "Enregistrement annulé.","",3000);
-				recognition.stop();
-			}
-			record = !record;
-			refreshButton();
-}
-
-function refreshButton() {
-	if(record) {
-		$("#btnMicro").attr("class", 'btn-function btnMicroOn');
-	}
-	else {
-		$("#btnMicro").attr("class", 'btn-function btnMicro');
-	}
-}
 
 function commandeVocale( phrase ) {
 	var commande = computeCommand( phrase );
-	var pieceId = retrouvePieceId(commande);
-	if(pieceId > -1) {
-		if(commande.indexOf('LUMIERE 1') > -1) {
-			var url = getControllerActionUrl("lumiere", "allumer", pieceId);
-		}
-		if(commande.indexOf('LUMIERE 0') > -1) {
-			var url = getControllerActionUrl("lumiere", "éteindre", pieceId);
-		}
-		if(commande.indexOf('PORTE 1') > -1) {
-			var url = getControllerActionUrl("porte", "deverrouiller", pieceId);
-		}
-		if(commande.indexOf('PORTE 0') > -1) {
-			var url = getControllerActionUrl("porte", "verrouiller", pieceId);
-		}
-		if(commande.indexOf('ACCES 1') > -1) {
-			if(commande.indexOf('PORTE') > -1) {
-				var url = getControllerActionUrl("porte", "deverrouiller", pieceId);
-			}
-			else if(commande.indexOf('VOLET') > -1) {
-				var url = getControllerActionUrl("volet", "ouvrir", pieceId);
-			}
-			else {
-			//TODO
-			}
-		}
-		if(commande.indexOf('ACCES 0') > -1) {
-			if(commande.indexOf('PORTE') > -1) {
-				var url = getControllerActionUrl("porte", "verrouiller", pieceId);
-			}
-			else if(commande.indexOf('VOLET') > -1) {
-				var url = getControllerActionUrl("volet", "fermer", pieceId);
-			}
-			else {
-			//TODO
-			}
-		}
-		console.log(url);
-		if(url){
-			$.getJSON(url, function( data ){
-				notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
-				//refresh
-				refresh( data );
-			});
-		}
-	}
-}
-
-function retrouvePieceId(commande) {
 	var commandeSplitted = commande.split(' ');
 	var pieceDansCommande = commandeSplitted[commandeSplitted.length-2];
-	var data = {"status":"success","code":202,"message":"pieces trouvees","pieces":[{"id":"1","nom":"cuisine","aLumiere":true,"lumiereAllumee":false,"aVolet":true,"voletOuvert":true,"aPorte":true,"porteVerrouillee":true},{"id":"2","nom":"salon","aLumiere":true,"lumiereAllumee":true,"aVolet":true,"voletOuvert":true,"aPorte":false,"porteVerrouillee":true},{"id":"3","nom":"entree","aLumiere":true,"lumiereAllumee":false,"aVolet":false,"voletOuvert":true,"aPorte":true,"porteVerrouillee":true},{"id":"4","nom":"cave","aLumiere":true,"lumiereAllumee":false,"aVolet":false,"voletOuvert":true,"aPorte":false,"porteVerrouillee":true},{"id":"5","nom":"couloir de la cave","aLumiere":true,"lumiereAllumee":false,"aVolet":false,"voletOuvert":true,"aPorte":false,"porteVerrouillee":true},{"id":"6","nom":"chambre","aLumiere":true,"lumiereAllumee":false,"aVolet":true,"voletOuvert":true,"aPorte":false,"porteVerrouillee":true},{"id":"7","nom":"chambre d\'amis","aLumiere":true,"lumiereAllumee":false,"aVolet":true,"voletOuvert":false,"aPorte":true,"porteVerrouillee":true},{"id":"8","nom":"salle &agrave; manger","aLumiere":true,"lumiereAllumee":false,"aVolet":true,"voletOuvert":true,"aPorte":true,"porteVerrouillee":true},{"id":"9","nom":"toilettes","aLumiere":true,"lumiereAllumee":false,"aVolet":false,"voletOuvert":true,"aPorte":false,"porteVerrouillee":true},{"id":"10","nom":"salle de bain","aLumiere":true,"lumiereAllumee":false,"aVolet":false,"voletOuvert":true,"aPorte":false,"porteVerrouillee":true}]};	
-	var id = -1;
+	var pieceId = -1;
 	$.getJSON( getControllerActionUrl("lumiere", "lister"), function( data ){
 		$.each( data.pieces, function( key, val ) {
+			console.log(pieceDansCommande + ' ' + val.nom);
+			console.log(jsonReconnaissance.piece[pieceDansCommande].mots);
+			console.log(jsonReconnaissance.piece[pieceDansCommande].mots.indexOf(val.nom));
 			if(jsonReconnaissance.piece[pieceDansCommande].mots.indexOf(val.nom) > -1) {
-				id =  val.id;
+				pieceId =  val.id;
 			}
 		})
+		if(pieceId > -1) {
+			if(commande.indexOf('LUMIERE 1') > -1) {
+				var url = getControllerActionUrl("lumiere", "allumer", pieceId);
+			}
+			if(commande.indexOf('LUMIERE 0') > -1) {
+				var url = getControllerActionUrl("lumiere", "eteindre", pieceId);
+			}
+			if(commande.indexOf('PORTE 1') > -1) {
+				var url = getControllerActionUrl("porte", "deverrouiller", pieceId);
+			}
+			if(commande.indexOf('PORTE 0') > -1) {
+				var url = getControllerActionUrl("porte", "verrouiller", pieceId);
+			}
+			if(commande.indexOf('ACCES 1') > -1) {
+				if(commande.indexOf('PORTE') > -1) {
+					var url = getControllerActionUrl("porte", "deverrouiller", pieceId);
+				}
+				else if(commande.indexOf('VOLET') > -1) {
+					var url = getControllerActionUrl("volet", "ouvrir", pieceId);
+				}
+				else {
+				//TODO
+				}
+			}
+			if(commande.indexOf('ACCES 0') > -1) {
+				if(commande.indexOf('PORTE') > -1) {
+					var url = getControllerActionUrl("porte", "verrouiller", pieceId);
+				}
+				else if(commande.indexOf('VOLET') > -1) {
+					var url = getControllerActionUrl("volet", "fermer", pieceId);
+				}
+				else {
+				//TODO
+				}
+			}
+			console.log(url);
+			if(url){
+				$.getJSON(url, function( data ){
+					notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
+				});
+			}
+		}
 	});
-	return id;
+}
+		
+
+
+function refreshButton() {
+	if(record) {
+		//$("#btnMicro").attr("class", 'btn-function btnMicroOn');
+	}
+	else {
+		//$("#btnMicro").attr("class", 'btn-function btnMicro');
+	}
 }
 
 /**
@@ -283,7 +282,7 @@ function computeCommand( phrase ) {
 *	@param typeIdRecherche types recherchés
 */
 function parsePhraseRecurrent(phrase, typeIdRecherche) {
-	console.log('parsePhraseRecurrent('+phrase+', '+typeIdRecherche+')');
+	//console.log('parsePhraseRecurrent('+phrase+', '+typeIdRecherche+')');
 	// Fin de la récurrence
 	if(phrase.length == 0) {
 		return '';
