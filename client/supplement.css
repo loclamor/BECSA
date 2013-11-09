@@ -87,6 +87,37 @@ button.btn-function {
     background-position: center;
 }
 
+/* micro button */
+.btnMicro {
+	width:40px;
+	height:40px;
+	background:#cc0000;
+	font:bold 13px Arial;
+	border-radius:50%;
+	border:none;
+	color:#fff;
+}
+
+.btnMicroOn {
+	width:40px;
+	height:40px;
+	background:#7CFC00;
+	font:bold 13px Arial;
+	border-radius:50%;
+	border:none;
+	color:#fff;
+}
+
+.btnMicroRecord {
+	width:40px;
+	height:40px;
+	background:#cc0000;
+	font:bold 13px Arial;
+	border-radius:50%;
+	border:none;
+	color:#fff;
+}
+
 /* icons on/off state */
 #fctBody .imgState {
     height: 32px;

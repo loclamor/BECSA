@@ -8,6 +8,7 @@
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap-theme.min.css">
         <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
+		<script src="./libs/googleSpeechRecognition/sr.js"></script>
         <script src="./main.js"></script>
         <script src="./lumiere.js"></script>
         <script src="./volet.js"></script>
@@ -15,13 +16,20 @@
         <script src="./recap.js"></script>
         <script src="./param.js"></script>
         <script src="./utils.js"></script>
+		<script src="./voice.js"></script>
+
         <link rel="stylesheet" href="./supplement.css">
     </head>
     <body>
         <div class="container">
             <header class="page-header">
-                <h1>Maison Intelligente</h1>
-                
+                <h1>Maison Intelligente
+				</h1>
+				<div class="btnMicro">
+				<button type="button" data-function="micro" id="btnMicro" class="btn-function btnMicro">
+					<img src="img/micro.png" alt="">
+				<!-- TODO : Réflechir à comment intégrer ce bouton à l'interface (apparence, localisation...)-->
+				</button></div> <-- Cliquez ici pour lancer une commande vocale (Exemple : "Allumer la lumière de la cuisine.")  
             </header>
             <div class="" id="notif-row"></div>
             <div class="row">
