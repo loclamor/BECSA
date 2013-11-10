@@ -1,6 +1,8 @@
+// TODO : COMMENT IN ENGLISH
+// WORK IN PROGRESS 
+
 /**
-*
-*
+* Commence ou stop une reconnaissance vocale
 */
 function micro() {
 	if(!record) {
@@ -19,10 +21,7 @@ function micro() {
 	refreshButton();
 }
 
-// TODO : COMMENT AND REFACTORING
-// WORK IN PROGRESS 
-
-var jsonReconnaissance = {
+var dictionnaireJSON = {
 	// TYPE A RECHERCHER 
 	"init" : {
 		// IDENTIFIANT DE L'ACTION (LUMIERE 1 : POUR ALLUMER LA LUMIERE)
@@ -103,37 +102,42 @@ var jsonReconnaissance = {
 	}
 };
 
-// Permet de savoir si oui ou non on enregistre
+// Vrai si on enregistre, daux sinon
 var record = false;
-// Moteur de reconnaissance vocale
+// Moteur reconnaissance vocale
 var recognition = new webkitSpeechRecognition();
 recognition.lang = "fr";
 
-// Fonction appelée en cas d'erreur de reconnaissance
+// Fonction appélée si la reconnaissance échoue
 recognition.onerror = function (event) {
 	console.log('Erreur : ');
 	console.log(event);
-	console.log('Fin enregistrement.');
 	recognition.stop();
 	record = false;
 	notify('error' , 'Erreur lors de la reconnaissance vocale.',"",3000);
 	refreshButton();
 };
 		
-// Fonction appélée en cas de réussite
+// Fonction appelée si la reconnaissance réussie
 recognition.onresult = function (event) {
+	// On arrête la reconnaissance par précaution
 	recognition.stop();
 	record = false;
+	// On rafraichit l'affichage
 	refreshButton();
+	// Si on a trouvé quelquechose
 	var trouve = false;
 	console.log('Résultat de la reconnaissance :');
-	var text = '';
+	// On parcour les résultats
 	for (var i = event.resultIndex; i < event.results.length; ++i) {
+		// Si on trouve la chaîne retenue
 		if (event.results[i].isFinal) {
 			trouve = true;
+			// On récupère la phrase
 			var sentence = event.results[i][0].transcript;
 			notify('info' , 'Vous avez demandé : ' + sentence + ".","",3000);
 			console.log(sentence);
+			// On la traite
 			commandeVocale(sentence);
 		}
 	}
@@ -142,30 +146,48 @@ recognition.onresult = function (event) {
 	}
 };
 
+/**
+* Permet d'effectuer les action correspondantes à la commande vocale
+* @param phrase Phrase à traiter
+*/
 function commandeVocale( phrase ) {
 	// On calcule la commande effectuée
 	var computedCommand = computeCommand( phrase );
+	// On récupère l'action à effectuer
 	var commande = computedCommand.commande;
+	// On récupèe les paramètres
 	var parametresCommande = computedCommand.parametres;
 	var piecesId = [];
+	// On simplifie les paramètres pour faciliter les comparaison
+	// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
 	parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
-	console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
-	$.getJSON( getControllerActionUrl("lumiere", "lister"), function( data ){
+	//console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
+	// On récupère la liste des pièces
+	$.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
+		//console.log(data);
+		// Pour chaque piece
 		$.each( data.pieces, function( key, val ) {
+			// On simplifie le nom pour faciliter la comparaison
 			var piece = simplifierPhrase(val.nom).split(' ');
+			// Passe à faux si la pièce ne correspond pas
 			var pieceReconnue = true;
-			console.log('Pieces disponible simplifiées : ' + piece.join(' '));
+			//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
+			// Pour chaque mot dans le nomde la piece
 			for(var i = 0; i < piece.length; i++) {
+				// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
 				if(parametresCommandes.indexOf(piece[i]) == -1) {
 					pieceReconnue = false;
 				}
 			}
+			// On garde la piece si son nom se trouve dans la phrase
 			if(pieceReconnue) {
 				piecesId.push(val.id);
 			}
 		})
-		console.log(piecesId);
+		//console.log(piecesId);
+		// Si il y a des pièce dans la phrase
 		if(piecesId != []) {
+			// Pour chacune, on applique la commande trouvée
 			for(var i = 0; i < piecesId.length; i++) {
 				var id = piecesId[i];
 				appliqueCommandeDansPiece(commande, id);
@@ -174,6 +196,11 @@ function commandeVocale( phrase ) {
 	});
 }
 
+/**
+*
+* @param commande Action à effectuer (voir dictionnaireJSON en début de code)
+* @param piece Id de la pièce ou s'applique l'action
+*/
 function appliqueCommandeDansPiece(commande, piece) {
 	if(commande.indexOf('LUMIERE 1') > -1) {
 		var url = getControllerActionUrl("lumiere", "allumer", piece);
@@ -209,7 +236,12 @@ function appliqueCommandeDansPiece(commande, piece) {
 		//TODO
 		}
 	}
-	console.log(url);
+	if(url){
+		$.getJSON(url, function( data ){
+			notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
+		});
+	}
+	// Rafraichit l'affichage
 	switch($("#fctBody").attr("class")) {
 		case "lumiere":
 			lumiere();
@@ -244,15 +276,12 @@ function appliqueCommandeDansPiece(commande, piece) {
 		default :
 			main();
 	}
-	if(url){
-		$.getJSON(url, function( data ){
-			notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
-		});
-	}
 }
 		
 
-
+/**
+* Rafraichit l'affichage du bouton
+*/
 function refreshButton() {
 	if(record) {
 		$("#btnMicro").attr("class", 'btn-function btn-micro-record');
@@ -263,20 +292,40 @@ function refreshButton() {
 }
 
 /**
-*	Permet de calculer l'action à effectuer à partir de la phrase en paramètre
-*	@param phrase Phrase de laquelle l'on doit deviner l'action à effectuer
+* Permet de calculer l'action à effectuer à partir de la phrase en paramètre
+* @param phrase Phrase de laquelle l'on doit deviner l'action à effectuer
+* @return commande {commande : Commande effectué, parametres : Paramètres de la commande (généralement le reste dela phrase)}
 */
 function computeCommand( phrase ) {
+	// Function parcourant le dictionnaireJson afin de trouver la commande demandée
+	parsePhraseRecurrent = function(phrase, typeIdRecherche, resultatParser) {
+		//console.log('parsePhraseRecurrent('+phrase+', '+typeIdRecherche+')');
+		// Fin de la récurrence
+		if(phrase.length == 0 || typeIdRecherche == []) {
+			return resultatParser;
+		}
+		// Fin de récurrence avec récupérationdu reste de la phrase
+		if(typeIdRecherche[0] == 'all') {
+			resultatParser.parametres += phrase.join(' ');
+			return resultatParser;
+		}
+		// Recurrence
+		// Pour chaque type dans laquelle on recherche une correspondance
+		for(var i = 0; i < typeIdRecherche.length; i++) {
+			// On récupère le premier mot
+			var mot = phrase[0];
+			// On récupère l'ID si cela correspond
+			var resultatRecherche = retrouverIdDepuisMotEtTypesDansJson(mot, typeIdRecherche[i]);
+			if(resultatRecherche) {
+				resultatParser.commande += resultatRecherche.id + ' ';
+				return parsePhraseRecurrent(phrase, resultatRecherche.suite, resultatParser);
+			}
+		}
+		return parsePhraseRecurrent(phrase.slice(1, phrase.lenght), typeIdRecherche, resultatParser);
+	};
 	// Nettoyage de la phrase et conversion en tableau
-	console.log("parsephrase( " + phrase + " )");
-	
-	phrase = phrase.toLowerCase();
-	phrase = phrase.replace("\n"," ");
-	phrase = phrase.replace("."," ");
-	phrase = phrase.replace(","," ");
-	phrase = phrase.replace("l'"," ");
-	phrase = phrase.replace(";"," ");
-	phrase = phrase.split(' ');
+	//console.log("parsephrase( " + phrase + " )");
+	phrase = phrase.toLowerCase().split(' ');;
 	
 	// Chaîne résultante de la recherhce de l'action
 	var resultatParser = '';
@@ -289,49 +338,28 @@ function computeCommand( phrase ) {
 		"commande" : "",
 		"parametres" : ""
 	};
+	// Construction de la commande
 	parsePhraseRecurrent(phrase, typeIdRecherche, resultatParser);
 	
 	// Affichage du résultat
-	if(resultatParser != '') {
-		console.log(resultatParser);
-	}
-	else {
-		console.log('AUCUNE CORRESPONDANCE');
-	}
+	// if(resultatParser != '') {
+		// console.log(resultatParser);
+	// }
+	// else {
+		// console.log('AUCUNE CORRESPONDANCE');
+	// }
 	return resultatParser;
 }
 
 /**
-*	Permet de parcourir la phrase et de calculer la commande par récurrence à partir des types recherchés
-*	@param phrase Phrase à partir de laquelle on doit calculer la commande
-*	@param typeIdRecherche types recherchés
+* Parcour le dictionnaire pour trouver l'action à effectuer
+* @param mot Mot dont on veut trouver la commande correspondante
+* @param type Type dans lequel on doit cherche la commande correspondante
 */
-function parsePhraseRecurrent(phrase, typeIdRecherche, resultatParser) {
-	//console.log('parsePhraseRecurrent('+phrase+', '+typeIdRecherche+')');
-	// Fin de la récurrence
-	if(phrase.length == 0 || typeIdRecherche == []) {
-		return resultatParser;
-	}
-	// Fin de récurrence avec récupérationdu reste de la phrase
-	if(typeIdRecherche[0] == 'all') {
-		resultatParser.parametres += phrase.join(' ');
-		return resultatParser;
-	}
-	for(var i = 0; i < typeIdRecherche.length; i++) {
-		var mot = phrase[0];
-		var resultatRecherche = retrouverIdDepuisMotEtTypesDansJson(mot, typeIdRecherche[i]);
-		if(resultatRecherche) {
-			resultatParser.commande += resultatRecherche.id + ' ';
-			return parsePhraseRecurrent(phrase, resultatRecherche.suite, resultatParser);
-		}
-	}
-	return parsePhraseRecurrent(phrase.slice(1, phrase.lenght), typeIdRecherche, resultatParser);
-}
-
 function retrouverIdDepuisMotEtTypesDansJson(mot, type) {
 	console.log('retrouverIdDepuisMotEtTypesDansJson('+mot+', '+type+')');
 	mot = mot.toLowerCase();
-	var jsonTmp = jsonReconnaissance[type];
+	var jsonTmp = dictionnaireJSON[type];
 	for(var id in jsonTmp) {
 		var mots = jsonTmp[id]['mots'];
 		if(mots.indexOf(mot) > -1) {
@@ -344,10 +372,17 @@ function retrouverIdDepuisMotEtTypesDansJson(mot, type) {
 	return false;
 }
 
+/**
+*
+* @param phrase Phrase à simplifier afin de transformer une chaîne de caractère
+*				pour eviter les erreurs de comparaison dues à des erreur d'orthogaphe et autres
+* @return Une chaîne simplifier (plus d'acents, plus de ponctuation, plus de lettre en doubles
+								 et de lettre non prononcées)
+*/
 function simplifierPhrase(phrase) {
-	var res = phrase;
+	var res = phrase.toLowerCase();
 	
-	// Supprimer les accents 
+	// Supprimer les accents (de finalclap.com)
 	var accent = [
         /[\300-\306]/g, /[\340-\346]/g, // A, a
         /[\310-\313]/g, /[\350-\353]/g, // E, e
