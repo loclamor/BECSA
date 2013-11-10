@@ -87,10 +87,18 @@ button.btn-function {
     background-position: center;
 }
 
-/* micro button */
-.btnMicro {
-	width:40px;
-	height:40px;
+/* micro button and header align */
+h1 {
+	line-height: 32px;
+	margin-left: 50px;
+}
+
+.btn-function.btn-micro {
+	width: 32px;
+	height: 32px;
+	float: left;
+	vertical-align: middle;
+	padding: 0px;
 	background:#cc0000;
 	font:bold 13px Arial;
 	border-radius:50%;
@@ -98,20 +106,13 @@ button.btn-function {
 	color:#fff;
 }
 
-.btnMicroOn {
-	width:40px;
-	height:40px;
-	background:#7CFC00;
-	font:bold 13px Arial;
-	border-radius:50%;
-	border:none;
-	color:#fff;
-}
-
-.btnMicroRecord {
-	width:40px;
-	height:40px;
-	background:#cc0000;
+.btn-function.btn-micro-record {
+	width: 32px;
+	height: 32px;
+	float: left;
+	vertical-align: middle;
+	padding: 0px;
+	background:#76ee00;
 	font:bold 13px Arial;
 	border-radius:50%;
 	border:none;
