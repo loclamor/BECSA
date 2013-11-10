@@ -168,59 +168,97 @@ function commandeVocale( phrase ) {
 		if(piecesId != []) {
 			for(var i = 0; i < piecesId.length; i++) {
 				var id = piecesId[i];
-				if(commande.indexOf('LUMIERE 1') > -1) {
-					var url = getControllerActionUrl("lumiere", "allumer", id);
-				}
-				if(commande.indexOf('LUMIERE 0') > -1) {
-					var url = getControllerActionUrl("lumiere", "eteindre", id);
-				}
-				if(commande.indexOf('PORTE 1') > -1) {
-					var url = getControllerActionUrl("porte", "deverrouiller", id);
-				}
-				if(commande.indexOf('PORTE 0') > -1) {
-					var url = getControllerActionUrl("porte", "verrouiller", id);
-				}
-				if(commande.indexOf('ACCES 1') > -1) {
-					if(commande.indexOf('PORTE') > -1) {
-						var url = getControllerActionUrl("porte", "deverrouiller", id);
-					}
-					else if(commande.indexOf('VOLET') > -1) {
-						var url = getControllerActionUrl("volet", "ouvrir", id);
-					}
-					else {
-					//TODO
-					}
-				}
-				if(commande.indexOf('ACCES 0') > -1) {
-					if(commande.indexOf('PORTE') > -1) {
-						var url = getControllerActionUrl("porte", "verrouiller", id);
-					}
-					else if(commande.indexOf('VOLET') > -1) {
-						var url = getControllerActionUrl("volet", "fermer", id);
-					}
-					else {
-					//TODO
-					}
-				}
-				console.log(url);
-				if(url){
-					$.getJSON(url, function( data ){
-						notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
-					});
-				}
+				appliqueCommandeDansPiece(commande, id);
 			}
 		}
 	});
+}
+
+function appliqueCommandeDansPiece(commande, piece) {
+	if(commande.indexOf('LUMIERE 1') > -1) {
+		var url = getControllerActionUrl("lumiere", "allumer", piece);
+	}
+	if(commande.indexOf('LUMIERE 0') > -1) {
+		var url = getControllerActionUrl("lumiere", "eteindre", piece);
+	}
+	if(commande.indexOf('PORTE 1') > -1) {
+		var url = getControllerActionUrl("porte", "deverrouiller", piece);
+	}
+	if(commande.indexOf('PORTE 0') > -1) {
+		var url = getControllerActionUrl("porte", "verrouiller", piece);
+	}
+	if(commande.indexOf('ACCES 1') > -1) {
+		if(commande.indexOf('PORTE') > -1) {
+			var url = getControllerActionUrl("porte", "deverrouiller", piece);
+		}
+		else if(commande.indexOf('VOLET') > -1) {
+			var url = getControllerActionUrl("volet", "ouvrir", piece);
+		}
+		else {
+		//TODO
+		}
+	}
+	if(commande.indexOf('ACCES 0') > -1) {
+		if(commande.indexOf('PORTE') > -1) {
+			var url = getControllerActionUrl("porte", "verrouiller", piece);
+		}
+		else if(commande.indexOf('VOLET') > -1) {
+			var url = getControllerActionUrl("volet", "fermer", piece);
+		}
+		else {
+		//TODO
+		}
+	}
+	console.log(url);
+	switch($("#fctBody").attr("class")) {
+		case "lumiere":
+			lumiere();
+		break;
+		case "volet":
+			volet();
+		break;
+		case "porte":
+			porte();
+		break;
+		case "micro" :
+			micro();
+		break;
+		case "hifi":
+			hifi();
+		break;
+		case "reveil":
+			reveil();
+		break;
+		case "itineraire":
+			itineraire();
+		break;
+		case "meteo":
+			meteo();
+		break;
+		case "recap":
+			recap();
+		break;
+		case "param":
+			param();
+		break;
+		default :
+			main();
+	}
+	if(url){
+		$.getJSON(url, function( data ){
+			notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
+		});
+	}
 }
 		
 
 
 function refreshButton() {
 	if(record) {
-		//$("#btnMicro").attr("class", 'btn-function btnMicroOn');
+		$("#btnMicro").attr("class", 'btn-function btn-micro-record');
 	}
 	else {
-		//$("#btnMicro").attr("class", 'btn-function btnMicro');
+		$("#btnMicro").attr("class", 'btn-function btn-micro');
 	}
 }
 
