@@ -8,6 +8,7 @@ function micro() {
 		notify('info' , 'Que voulez-vous faire?',"",3000);
 		notify('info' , 'Allumer la salle de bain. <BR>Fermer les volets du salon. <BR>Déverrouiller la cuisine.',"Exemple de commande",10000);
 		recognition.start();
+		//commandeVocale("allumer la cuisine");
 	}
 	else {
 		console.log('Fin enregistrement.');
@@ -34,7 +35,7 @@ var jsonReconnaissance = {
 				"allume"
 			],
 			// TYPES DANS LESQUEL EFFECTUER LA RECHERCHER POUR LA SUITE DE LA PHRASE
-			"suite" : ["piece"]
+			"suite" : ['all']
 		},
 		"LUMIERE 0" : {
 			"mots" :[
@@ -43,31 +44,28 @@ var jsonReconnaissance = {
 				"enlève",
 				"éteins"
 			],
-			"suite" : ["piece"]
+			"suite" : ['all']
 		},
 		"PORTE 0" : {
 			"mots" :[
 				"verrouiller",
 				"verrouille"
 			],
-			"suite" : ["piece"]
+			"suite" : ['all']
 		},
 		"PORTE 1" : {
 			"mots" :[
 				"déverrouille",
 				"déverrouiller"
 			],
-			"suite" : ["piece"]
+			"suite" : ['all']
 		},
 		"ACCES 1" : {
 			"mots" :[
 				"ouvrir",
 				"ouvre"
 			],
-			"suite" : [
-				"porteOuVolet",
-				"piece"
-			]
+			"suite" : ["porteOuVolet"]
 		},
 		"ACCES 0" : {
 			"mots" :[
@@ -75,10 +73,7 @@ var jsonReconnaissance = {
 				"ferme"
 			],
 			// Plusieurs entrées dans suite indique que l'on effectuera la recherche dans la suite de la phrase dans ces types
-			"suite" : [ 
-				"porteOuVolet",
-				"piece"
-			]
+			"suite" : ["porteOuVolet"]
 		},
 		"MAP GOTO" : {
 			"mots" : [
@@ -88,36 +83,13 @@ var jsonReconnaissance = {
 			"suite" : ['all'] // Indique que l'on garde la reste de la phrase
 		}
 	},
-	"piece" : {
-		"SALON" : {
-			"mots" :[
-				"salon",
-				"manger", // Salle à manger
-			],
-		"suite" : []
-		},
-		"BAIN" : {
-			"mots" :[
-				"bain",
-				"salle de bain",
-				"eau" // Salle d'eau pour les vieux
-			],
-		"suite" : [] 
-		},
-		"CUISINE" : {
-			"mots" :[
-				"cuisine"
-			],
-			"suite" : []
-		},
-	},
 	"porteOuVolet" : {
 		"PORTE" : {
 			"mots" :[
 				"porte",
 				"portes",
 			],
-		"suite" : ["piece"]
+		"suite" : ['all']
 		},
 		"VOLET" : {
 			"mots" :[
@@ -126,12 +98,11 @@ var jsonReconnaissance = {
 				"fenêtre",
 				"fenêtres"
 			],
-		"suite" : ["piece"]
+		"suite" : ['all']
 		},
 	}
 };
 
-console.log('micro added');
 // Permet de savoir si oui ou non on enregistre
 var record = false;
 // Moteur de reconnaissance vocale
@@ -172,59 +143,71 @@ recognition.onresult = function (event) {
 };
 
 function commandeVocale( phrase ) {
-	var commande = computeCommand( phrase );
-	var commandeSplitted = commande.split(' ');
-	var pieceDansCommande = commandeSplitted[commandeSplitted.length-2];
-	var pieceId = -1;
+	// On calcule la commande effectuée
+	var computedCommand = computeCommand( phrase );
+	var commande = computedCommand.commande;
+	var parametresCommande = computedCommand.parametres;
+	var piecesId = [];
+	parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
+	console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
 	$.getJSON( getControllerActionUrl("lumiere", "lister"), function( data ){
 		$.each( data.pieces, function( key, val ) {
-			console.log(pieceDansCommande + ' ' + val.nom);
-			console.log(jsonReconnaissance.piece[pieceDansCommande].mots);
-			console.log(jsonReconnaissance.piece[pieceDansCommande].mots.indexOf(val.nom));
-			if(jsonReconnaissance.piece[pieceDansCommande].mots.indexOf(val.nom) > -1) {
-				pieceId =  val.id;
+			var piece = simplifierPhrase(val.nom).split(' ');
+			var pieceReconnue = true;
+			console.log('Pieces disponible simplifiées : ' + piece.join(' '));
+			for(var i = 0; i < piece.length; i++) {
+				if(parametresCommandes.indexOf(piece[i]) == -1) {
+					pieceReconnue = false;
+				}
+			}
+			if(pieceReconnue) {
+				piecesId.push(val.id);
 			}
 		})
-		if(pieceId > -1) {
-			if(commande.indexOf('LUMIERE 1') > -1) {
-				var url = getControllerActionUrl("lumiere", "allumer", pieceId);
-			}
-			if(commande.indexOf('LUMIERE 0') > -1) {
-				var url = getControllerActionUrl("lumiere", "eteindre", pieceId);
-			}
-			if(commande.indexOf('PORTE 1') > -1) {
-				var url = getControllerActionUrl("porte", "deverrouiller", pieceId);
-			}
-			if(commande.indexOf('PORTE 0') > -1) {
-				var url = getControllerActionUrl("porte", "verrouiller", pieceId);
-			}
-			if(commande.indexOf('ACCES 1') > -1) {
-				if(commande.indexOf('PORTE') > -1) {
-					var url = getControllerActionUrl("porte", "deverrouiller", pieceId);
+		console.log(piecesId);
+		if(piecesId != []) {
+			for(var i = 0; i < piecesId.length; i++) {
+				var id = piecesId[i];
+				if(commande.indexOf('LUMIERE 1') > -1) {
+					var url = getControllerActionUrl("lumiere", "allumer", id);
 				}
-				else if(commande.indexOf('VOLET') > -1) {
-					var url = getControllerActionUrl("volet", "ouvrir", pieceId);
+				if(commande.indexOf('LUMIERE 0') > -1) {
+					var url = getControllerActionUrl("lumiere", "eteindre", id);
 				}
-				else {
-				//TODO
+				if(commande.indexOf('PORTE 1') > -1) {
+					var url = getControllerActionUrl("porte", "deverrouiller", id);
 				}
-			}
-			if(commande.indexOf('ACCES 0') > -1) {
-				if(commande.indexOf('PORTE') > -1) {
-					var url = getControllerActionUrl("porte", "verrouiller", pieceId);
+				if(commande.indexOf('PORTE 0') > -1) {
+					var url = getControllerActionUrl("porte", "verrouiller", id);
 				}
-				else if(commande.indexOf('VOLET') > -1) {
-					var url = getControllerActionUrl("volet", "fermer", pieceId);
+				if(commande.indexOf('ACCES 1') > -1) {
+					if(commande.indexOf('PORTE') > -1) {
+						var url = getControllerActionUrl("porte", "deverrouiller", id);
+					}
+					else if(commande.indexOf('VOLET') > -1) {
+						var url = getControllerActionUrl("volet", "ouvrir", id);
+					}
+					else {
+					//TODO
+					}
 				}
-				else {
-				//TODO
+				if(commande.indexOf('ACCES 0') > -1) {
+					if(commande.indexOf('PORTE') > -1) {
+						var url = getControllerActionUrl("porte", "verrouiller", id);
+					}
+					else if(commande.indexOf('VOLET') > -1) {
+						var url = getControllerActionUrl("volet", "fermer", id);
+					}
+					else {
+					//TODO
+					}
 				}
-			}
-			console.log(url);
-			if(url){
-				$.getJSON(url, function( data ){
-					notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
-				});
+				console.log(url);
+				if(url){
+					$.getJSON(url, function( data ){
+						notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
+					});
+				}
 			}
 		}
 	});
@@ -264,7 +247,11 @@ function computeCommand( phrase ) {
 	var typeIdRecherche = ["init"];
 	
 	// Appel fonction récurrente permettant de parcourir le fichier JSON
-	resultatParser = parsePhraseRecurrent(phrase, typeIdRecherche);
+	var resultatParser = {
+		"commande" : "",
+		"parametres" : ""
+	};
+	parsePhraseRecurrent(phrase, typeIdRecherche, resultatParser);
 	
 	// Affichage du résultat
 	if(resultatParser != '') {
@@ -281,24 +268,26 @@ function computeCommand( phrase ) {
 *	@param phrase Phrase à partir de laquelle on doit calculer la commande
 *	@param typeIdRecherche types recherchés
 */
-function parsePhraseRecurrent(phrase, typeIdRecherche) {
+function parsePhraseRecurrent(phrase, typeIdRecherche, resultatParser) {
 	//console.log('parsePhraseRecurrent('+phrase+', '+typeIdRecherche+')');
 	// Fin de la récurrence
-	if(phrase.length == 0) {
-		return '';
+	if(phrase.length == 0 || typeIdRecherche == []) {
+		return resultatParser;
 	}
 	// Fin de récurrence avec récupérationdu reste de la phrase
 	if(typeIdRecherche[0] == 'all') {
-		return phrase.join(' ');
+		resultatParser.parametres += phrase.join(' ');
+		return resultatParser;
 	}
 	for(var i = 0; i < typeIdRecherche.length; i++) {
 		var mot = phrase[0];
 		var resultatRecherche = retrouverIdDepuisMotEtTypesDansJson(mot, typeIdRecherche[i]);
 		if(resultatRecherche) {
-			return resultatRecherche.id + ' ' + parsePhraseRecurrent(phrase.slice(1, phrase.lenght), resultatRecherche.suite);
+			resultatParser.commande += resultatRecherche.id + ' ';
+			return parsePhraseRecurrent(phrase, resultatRecherche.suite, resultatParser);
 		}
 	}
-	return parsePhraseRecurrent(phrase.slice(1, phrase.lenght), typeIdRecherche);
+	return parsePhraseRecurrent(phrase.slice(1, phrase.lenght), typeIdRecherche, resultatParser);
 }
 
 function retrouverIdDepuisMotEtTypesDansJson(mot, type) {
@@ -317,11 +306,62 @@ function retrouverIdDepuisMotEtTypesDansJson(mot, type) {
 	return false;
 }
 
-/**
- * Refresh a onOffSwitcher for a Piece added with addOnOffSwitcher(...)
- * @param {Piece} piece
- * @returns {void}
- */
-function refreshPieceLumiere( piece ){
-   
+function simplifierPhrase(phrase) {
+	var res = phrase;
+	
+	// Supprimer les accents 
+	var accent = [
+        /[\300-\306]/g, /[\340-\346]/g, // A, a
+        /[\310-\313]/g, /[\350-\353]/g, // E, e
+        /[\314-\317]/g, /[\354-\357]/g, // I, i
+        /[\322-\330]/g, /[\362-\370]/g, // O, o
+        /[\331-\334]/g, /[\371-\374]/g, // U, u
+        /[\321]/g, /[\361]/g, // N, n
+        /[\307]/g, /[\347]/g, // C, c
+    ];
+    var noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
+     
+    for(var i = 0; i < accent.length; i++){
+        res = res.replace(accent[i], noaccent[i]);
+    }
+	
+	//Ensemble d'expession régulière pour la simplification
+	var regSimplifier = {
+		// Suppression des articles
+		"article" 		: new RegExp(" de | des | la | le | les | un | une | à | dans | et  | au " , "gi"),
+		// Suppression des ponctuations
+		"ponctuation" 	: new RegExp(",|\\.|:|!|\\?|'|\\(|\\)" , "g"),
+		// Suppression des lettre silencieuse
+		"silence"		: new RegExp("t |r |s |x |e |p |z " , "gi"),
+		// Suppression des lettre seules
+		"seule"			: new RegExp(" [a-z] " , "gi"),
+		// Simplification des lettre doublée
+		"double"		: new RegExp("([a-zA-Z])\\1", "gi")
+	};
+	// On vérifie que la chaîne à besoin d'être simplifié
+	var phraseEstComplexe =  res.match(regSimplifier.article) 
+						  || res.match(regSimplifier.ponctuation) 
+						  || res.match(regSimplifier.silence) 
+						  || res.match(regSimplifier.seule);
+	// Tant que la chaîne n'est pas simplifié
+	while(phraseEstComplexe){
+		res = res.replace(regSimplifier.article," ")
+				 .replace(regSimplifier.ponctuation," ")
+				 .replace(regSimplifier.silence," ")
+				 .replace(regSimplifier.seule," ");
+		// On vérifie que la chaîne à besoin d'être encore simplifié
+		phraseEstComplexe =  res.match(regSimplifier.article) 
+						  || res.match(regSimplifier.ponctuation) 
+						  || res.match(regSimplifier.silence) 
+						  || res.match(regSimplifier.seule);
+	}
+	
+	// On nettoie les lettre doubles
+	var aLettresDouble = res.match(regSimplifier.double);
+	while(aLettresDouble) {
+		res = res.replace(aLettresDouble[0],aLettresDouble[0].charAt(0));
+		aLettresDouble = res.match(regSimplifier.double);
+	}
+     
+	return res;
 }
