@@ -104,11 +104,11 @@
 						if ($.isFunction(fn)) fn.call(this,$e);
 
 					} else {
-						if (options.showerror) $e.html('<p>Weather information unavailable</p>');
+						if (options.showerror) $e.html('<p>Données météorologiques indisponibles</p>');
 					}
 				},
 				error: function(data) {
-					if (options.showerror) $e.html('<p>Weather request failed</p>');
+					if (options.showerror) $e.html('<p>La requête des données météorologiques a échouée</p>');
 				}
 			});
 
@@ -146,12 +146,12 @@
 					html += '<div class="weatherDesc">'+ feed.item.condition.text +'</div>';
 				
 					// Add optional data
-					if (options.highlow) html += '<div class="weatherRange">High: '+ wf.high +'&deg; Low: '+ wf.low +'&deg;</div>';
-					if (options.wind) html += '<div class="weatherWind">Wind: '+ wd +' '+ feed.wind.speed + feed.units.speed +'</div>';
-					if (options.humidity) html += '<div class="weatherHumidity">Humidity: '+ feed.atmosphere.humidity +'</div>';
-					if (options.visibility) html += '<div class="weatherVisibility">Visibility: '+ feed.atmosphere.visibility +'</div>';
-					if (options.sunrise) html += '<div class="weatherSunrise">Sunrise: '+ feed.astronomy.sunrise +'</div>';
-					if (options.sunset) html += '<div class="weatherSunset">Sunset: '+ feed.astronomy.sunset +'</div>';
+					if (options.highlow) html += '<div class="weatherRange">Haut(e): '+ wf.high +'&deg; Bas(se): '+ wf.low +'&deg;</div>';
+					if (options.wind) html += '<div class="weatherWind">Vent: '+ wd +' '+ feed.wind.speed + feed.units.speed +'</div>';
+					if (options.humidity) html += '<div class="weatherHumidity">Humidité: '+ feed.atmosphere.humidity +'</div>';
+					if (options.visibility) html += '<div class="weatherVisibility">Visibilité: '+ feed.atmosphere.visibility +'</div>';
+					if (options.sunrise) html += '<div class="weatherSunrise">Lever du soleil: '+ feed.astronomy.sunrise +'</div>';
+					if (options.sunset) html += '<div class="weatherSunset">Coucher du soleil: '+ feed.astronomy.sunset +'</div>';
 
 					// Add item forecast data
 					if (options.forecast) {
@@ -172,11 +172,11 @@
 						html += '</div>'
 					}
 
-					if (options.link) html += '<div class="weatherLink"><a href="'+ feed.link +'" target="'+ options.linktarget +'" title="Read full forecast">Full forecast</a></div>';
+					if (options.link) html += '<div class="weatherLink"><a href="'+ feed.link +'" target="'+ options.linktarget +'" title="Lire les prévisions complètes">Prévisions complètes</a></div>';
 
 				} else {
 					var html = '<div class="weatherItem '+ row +'">';
-					html += '<div class="weatherError">City not found</div>';
+					html += '<div class="weatherError">Ville non trouvée</div>';
 				}
 
 				html += '</div>';
