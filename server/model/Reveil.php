@@ -67,7 +67,25 @@ class Model_Reveil extends Entite {
      */
     public function sonneJour( $jour ) {
         $jours = explode(",", $this->jour);
-        return $jours[$jour] == "1";
+        return intval($jours[$jour]) == 1;
+    }
+    
+    /**
+     * Retourne true si le reveil sonne actuellement
+     * @return boolean
+     */
+    public function sonne(){
+        $numJour = intval( date("N") );
+        $numJour--;
+        if( !$this->sonneJour( $numJour ) )
+            return false;
+        $heureM = intval( date("H") );
+        $minM = intval( date("i") );
+        $heureMinR = explode( ":",  $this->heure );
+        $heureR = intval( $heureMinR[0] );
+        $minR = intval( $heureMinR[1] );
+        
+        return ( $heureM == $heureR && $minM == $minR );
     }
     
     /**
