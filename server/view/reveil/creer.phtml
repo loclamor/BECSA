@@ -2,19 +2,19 @@
 $code = $this->code;
 $retour = array();
 switch ($code) {
-    case 202:
+    case 201:
         $this->status = "success";
-        $this->message = "reveils trouvees";
+        $this->message = "reveil cree";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
             "message" => $this->message,
-            "reveils" => $this->reveils
+            "reveil" => $this->reveil->getState()
             );
         break;
-    case 404:
+    case 400:
         $this->status = "error";
-        $this->message = "pas de reveil";
+        $this->message = "parametre incorrect";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
