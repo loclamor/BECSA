@@ -63,21 +63,45 @@ button.btn-function {
     bottom: 10px;
 }
 
-#fctBody.recap .row.title {
+#fctBody.recap .row.title,
+#fctBody.reveil .row.title{
     text-align: center;
 }
 
-#fctBody.recap .row {
+#fctBody.recap .row,
+#fctBody.reveil .row{
     border-bottom : 1px solid #DEDEDE;
     margin-right: 15px;
     margin-left: 15px;
 }
 
-#fctBody.recap .row .nom{
+#fctBody.recap .row .nom,
+#fctBody.reveil .row .nom,
+#fctBody.reveil .row .heure,
+#fctBody.reveil .row .jours{
     padding-top : 5px;
 }
 
-#fctBody.recap .row:nth-child(2n) {
+#fctBody.reveil .row .heure {
+    text-align: center;
+}
+
+#fctBody.reveil .row .nom {
+    padding-left: 37px;
+    background-repeat: no-repeat;
+    height : 32px;
+}
+
+#fctBody.reveil .row .nom.on {
+    background-image: url("./img/clock_.png");
+}
+
+#fctBody.reveil .row .nom.off {
+    background-image: url("./img/clock_red.png");
+}
+
+#fctBody.recap .row:nth-child(2n),
+#fctBody.reveil .row:nth-child(2n){
     background-color: #EFEFEF;
 }
 
