@@ -31,4 +31,20 @@ if( $res === false ) {
     echo mysqli_error( $link );
 }
 
+/**
+ * v0.0.3 creation table reveil
+ */
+$requete = "CREATE TABLE IF NOT EXISTS `".TABLE_PREFIX."reveil`(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`nom` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`heure` TIME NOT NULL,
+	`jour` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0,0,0,0,0,0,0',
+	`repetition` INT NOT NULL DEFAULT '1',
+	PRIMARY KEY (`id`)
+)";
+$res = mysqli_query($link, $requete);
+if( $res === false ) {
+    echo mysqli_error( $link );
+}
+
 mysqli_close($link);

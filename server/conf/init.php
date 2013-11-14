@@ -5,7 +5,7 @@ session_start();
 define('SITE_NAME', 'CSA');
 
 //version du site (utile en particulier pour automatiser la mise � jour de la BDD
-define('VERSION','0.0.2');
+define('VERSION','0.0.3');
 
 //config pour savoir si on est en local ou pas
 if($_SERVER['SERVER_ADDR'] == '127.0.0.1')  {
@@ -23,13 +23,13 @@ define('TABLE_PREFIX','CSA_');
 //definition des variables de conf
 if(APPLICATION_ENV == 'dev') {//on est en local
 //mysql
-	define('MYSQL_SERVER','localhost');
+	define('MYSQL_SERVER','127.0.0.1');
 	define('MYSQL_USER','root');
 	define('MYSQL_PWD','');
 	define('MYSQL_DB','csa');
 	
 	define('FORCE_DEBUG', TRUE);
-	define('HOST_OF_SITE', 'http://localhost/workspace-php/BECSA');
+	define('HOST_OF_SITE', 'http://127.0.0.1/workspace-php/BECSA');
        
         define('BPCF', './bpcf');
 }
