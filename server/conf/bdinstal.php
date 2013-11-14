@@ -47,4 +47,14 @@ if( $res === false ) {
     echo mysqli_error( $link );
 }
 
+/**
+ * v0.0.4 ajout de la notion lastRing a la table piece
+ */
+$requete = "ALTER TABLE  `".TABLE_PREFIX."reveil` 
+    ADD  `lastRing` Date DEFAULT '1000-01-01'";
+$res = mysqli_query($link, $requete);
+if( $res === false ) {
+    echo mysqli_error( $link );
+}
+
 mysqli_close($link);

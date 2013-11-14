@@ -13,12 +13,14 @@ class Model_Reveil extends Entite {
         "heure"          => "heure",
         "jour"           => "jour",
         "repetition"     => "repetition",
+        "lastRing"       => "lastRing"
     );
     
     public $nom;
     public $heure;
     public $jour;
     public $repetition;
+    public $lastRing;
 
     /**
      * Retourne le nom du reveil
@@ -78,14 +80,32 @@ class Model_Reveil extends Entite {
         $numJour = intval( date("N") );
         $numJour--;
         if( !$this->sonneJour( $numJour ) )
-            return false;
+            return false; //pas de reveil aujourd'hui
+        if( $this->getRepetition() == 0 )
+            return false; //reveil disable
+        
         $heureM = intval( date("H") );
         $minM = intval( date("i") );
         $heureMinR = explode( ":",  $this->heure );
         $heureR = intval( $heureMinR[0] );
         $minR = intval( $heureMinR[1] );
         
-        return ( $heureM == $heureR && $minM == $minR );
+        $sonne = ( $heureM == $heureR && $minM == $minR );
+        
+        //decrementation repetition ?
+        if( $sonne ) {
+            $dateM = date("Y-m-d");
+            $dateR = $this->lastRing;
+            if( $dateM != $dateR){
+                //premiere fois aujourd'hui que c'est l'heure du reveil et
+                //que on check si il sonne : on decremente repetition
+                $this->repetition--;
+                $this->lastRing = $dateM;
+                $this->enregistrer( array("repetition", "lastRing") );
+            }
+        }
+        
+        return $sonne;
     }
     
     /**
@@ -121,6 +141,32 @@ class Model_Reveil extends Entite {
      */
     public function setRepetition( $repetition ) {
         $this->repetition = $repetition;
+    }
+    
+    /**
+     * retourne la date de la derniere sonnerie
+     * @return Date 'YYYY-MM-DD'
+     */
+    public function getLastRing(){
+        return $this->lastRing;
+    }
+    
+    /**
+     * Definit la date de la derniere sonnerie
+     * Ne devrait pas etre utilisee, la fonction sonne() le fait elle meme pour savoir si il faut decrementer le nombre de repetition
+     * @param Date $date 'YYYY-MM-DD'
+     */
+    public function setLastRing( $date ) {
+        $this->date = $date;
+    }
+    
+    public function getState() {
+        return array(
+            "id" => $this->id,
+            "nom" => $this->getNom(),
+            "heure" => $this->heure,
+            
+        );
     }
 }
 
