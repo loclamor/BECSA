@@ -1,5 +1,6 @@
 var baseUrl = "../server/";
 var auto_refresh = 0;
+var joursArray = Array("Lun","Mar","Mer","Jeu","Ven","Sam","Dim");
 
 $(document).ready(function(){
     main();

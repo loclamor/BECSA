@@ -10,7 +10,7 @@ function reveil() {
             + '<div class="col-xs-3" >Reveil</div>'
             + '<div class="col-xs-2" >Heure</div>'
             + '<div class="col-xs-4" >Jours</div>'
-        + '</div></div>'
+        + '</div></div><div id="ajout"></div>'
     );
     
     //get reveil list
@@ -20,7 +20,6 @@ function reveil() {
             var nom = val.nom;
             var heure = val.heure;
             var joursBrut = val.jour;
-            var joursArray = Array("Lun","Mar","Mer","Jeu","Ven","Sam","Dim");
             var joursBrutArray = joursBrut.split(",");
             var jours = "";
             for (var i = 0; i<7; i++){
@@ -43,6 +42,10 @@ function reveil() {
         });
     });
     
-    //TODO : creation reveil
+    // creation reveil
+    var ajout = $("#fctBody #ajout");
+    $.get("./ajoutReveil.html", function(data){
+        ajout.append(data);
+    });
 
 }
