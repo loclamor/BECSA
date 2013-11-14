@@ -144,12 +144,17 @@ class Controller_Volet extends Controller {
         $gesPiece = Gestionnaire::getGestionnaire("piece");
         $pieces = $gesPiece->getOf(array('aVolet' => 1));
         $this->pieces = array();
-        foreach ($pieces as $piece) {
-            if ($piece instanceof Model_Piece) {
-                $this->pieces[] = $piece->getState();
+        if ( $pieces ){
+            foreach ($pieces as $piece) {
+                if ($piece instanceof Model_Piece) {
+                    $this->pieces[] = $piece->getState();
+                }
             }
+            $this->code = 202;
         }
-        $this->code = 202;
+        else {
+            $this->code = 404;
+        }
     }
     
 }
