@@ -4,17 +4,17 @@ $retour = array();
 switch ($code) {
     case 202:
         $this->status = "success";
-        $this->message = "pieces trouvees";
+        $this->message = "reveils trouvees";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
             "message" => $this->message,
-            "pieces" => $this->pieces
+            "pieces" => $this->reveils
             );
         break;
     case 404:
         $this->status = "error";
-        $this->message = "pas de pieces";
+        $this->message = "pas de reveil";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
