@@ -117,7 +117,7 @@ h1 {
 	margin-left: 50px;
 }
 
-.btn-function.btn-micro {
+.btn-micro {
 	width: 32px;
 	height: 32px;
 	float: left;
@@ -130,7 +130,7 @@ h1 {
 	color:#fff;
 }
 
-.btn-function.btn-micro-record {
+.btn-micro-record {
 	width: 32px;
 	height: 32px;
 	float: left;

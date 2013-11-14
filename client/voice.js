@@ -241,41 +241,6 @@ function appliqueCommandeDansPiece(commande, piece) {
 			notify( data.code < 300 ? 'success' : 'warning', data.message, "", 4000);
 		});
 	}
-	// Rafraichit l'affichage
-	switch($("#fctBody").attr("class")) {
-		case "lumiere":
-			lumiere();
-		break;
-		case "volet":
-			volet();
-		break;
-		case "porte":
-			porte();
-		break;
-		case "micro" :
-			micro();
-		break;
-		case "hifi":
-			hifi();
-		break;
-		case "reveil":
-			reveil();
-		break;
-		case "itineraire":
-			itineraire();
-		break;
-		case "meteo":
-			meteo();
-		break;
-		case "recap":
-			recap();
-		break;
-		case "param":
-			param();
-		break;
-		default :
-			main();
-	}
 }
 		
 
@@ -284,10 +249,10 @@ function appliqueCommandeDansPiece(commande, piece) {
 */
 function refreshButton() {
 	if(record) {
-		$("#btnMicro").attr("class", 'btn-function btn-micro-record');
+		$("#btnMicro").attr("class", 'btn-micro-record');
 	}
 	else {
-		$("#btnMicro").attr("class", 'btn-function btn-micro');
+		$("#btnMicro").attr("class", 'btn-micro');
 	}
 }
 
