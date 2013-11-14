@@ -144,6 +144,14 @@ class Model_Reveil extends Entite {
     }
     
     /**
+     * Le reveil est il actif ?
+     * @return boolean true si le reveil est actif ( repetition != 0 )
+     */
+    public function actif() {
+        return $this->getRepetition() != 0;
+    }
+    
+    /**
      * retourne la date de la derniere sonnerie
      * @return Date 'YYYY-MM-DD'
      */
@@ -167,6 +175,7 @@ class Model_Reveil extends Entite {
             "heure" => $this->heure,
             "jour" =>$this->jour,
             "repetition" => $this->repetition,
+            "actif" => $this->actif(),
             "lastRing" => $this->lastRing,
             "sonne" => $this->sonne()
         );
