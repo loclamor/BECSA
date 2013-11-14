@@ -174,10 +174,10 @@ class Model_Reveil extends Entite {
             "nom" => $this->getNom(),
             "heure" => $this->heure,
             "jour" =>$this->jour,
+            "sonne" => $this->sonne(), //update eventually repetition, actif and lastRing
             "repetition" => $this->repetition,
             "actif" => $this->actif(),
-            "lastRing" => $this->lastRing,
-            "sonne" => $this->sonne()
+            "lastRing" => $this->lastRing
         );
     }
 }

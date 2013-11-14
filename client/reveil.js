@@ -6,11 +6,11 @@ function reveil() {
     body.addClass("reveil");
     
     body.append(
-        '<div class="row title">'
+        '<div id="listeReveils"><div class="row title">'
             + '<div class="col-xs-3" >Reveil</div>'
             + '<div class="col-xs-2" >Heure</div>'
             + '<div class="col-xs-4" >Jours</div>'
-        + '</div>'
+        + '</div></div>'
     );
     
     //get reveil list
@@ -32,7 +32,7 @@ function reveil() {
                 }
             }
             
-            body.append(
+            $("#listeReveils").append(
                 '<div class="row" id="row_' + val.id + '">'
                     + '<div class="col-xs-3 nom ' + actif + '" >' + nom + '</div>'
                     + '<div class="col-xs-2 heure" >' + heure + '</div>'
@@ -43,5 +43,6 @@ function reveil() {
         });
     });
     
+    //TODO : creation reveil
 
 }
