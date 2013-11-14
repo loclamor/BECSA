@@ -172,7 +172,7 @@ class Model_Reveil extends Entite {
         return array(
             "id" => $this->id,
             "nom" => $this->getNom(),
-            "heure" => $this->heure,
+            "heure" => substr($this->heure,0,-3), //remove seconds
             "jour" =>$this->jour,
             "sonne" => $this->sonne(), //update eventually repetition, actif and lastRing
             "repetition" => $this->repetition,
