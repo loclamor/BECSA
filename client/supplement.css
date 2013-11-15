@@ -69,6 +69,7 @@ button.btn-function {
 }
 
 #fctBody.recap .row,
+#fctBody.param .row,
 #fctBody.reveil .row{
     border-bottom : 1px solid #DEDEDE;
     margin-right: 15px;
