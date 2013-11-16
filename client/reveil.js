@@ -38,6 +38,25 @@ function reveil() {
                     + '<div class="col-xs-5 jours" >' + jours + '</div>'
                 + '</div>'
             );
+                
+            $('#fctBody.reveil .row#row_' + val.id + ' .nom').on('click', function(){
+                var action = "";
+                if( $(this).hasClass('on') ) {
+                    //on desactive
+                    action = "desactiver";
+                }
+                else {
+                    //on active
+                    action = "activer";
+                }
+                $(this).removeClass('on off');
+                $(this).addClass('wait');
+                //requete
+                $.getJSON( getControllerActionUrl("reveil", action, val.id), function( data ){
+                    $('#fctBody.reveil .row#row_' + data.reveil.id + ' .nom').removeClass( 'wait' );
+                    $('#fctBody.reveil .row#row_' + data.reveil.id + ' .nom').addClass( (data.reveil.actif ? "on" : "off" ) );
+                });
+            });
 
         });
         $("#listeReveils").slideDown(500);

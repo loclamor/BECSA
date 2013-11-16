@@ -97,8 +97,20 @@ button.btn-function {
     background-image: url("./img/clock_.png");
 }
 
+#fctBody.reveil .row .nom.on:hover {
+    background-image: url("./img/clock_stop.png");
+}
+
 #fctBody.reveil .row .nom.off {
     background-image: url("./img/clock_red.png");
+}
+
+#fctBody.reveil .row .nom.off:hover {
+    background-image: url("./img/clock_play.png");
+}
+
+#fctBody.reveil .row .nom.wait {
+    background-image: url("./img/clock_select_remain.png");
 }
 
 #fctBody.recap .row:nth-child(2n),
