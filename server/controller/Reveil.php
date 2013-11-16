@@ -48,6 +48,30 @@ class Controller_Reveil extends Controller {
     }
     
     /**
+     * recupere un reveil
+     * @param $_GET['id'] id de la piece
+     */
+    public function get() {
+        $ges = Gestionnaire::getGestionnaire("reveil");
+        $reveil = null;
+        $this->reveil = null;
+        if ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $id = $_GET['id']; // nom de la piece
+            $reveil = $ges->getOne( $id );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $reveil instanceof Model_Reveil ) {
+            $this->code = 200;
+            $this->reveil = $reveil->getState();
+        }
+        else {
+            $this->code = 404;
+        }
+    }
+    
+    /**
      * supprime un reveil existant
      * @param Int id identifiant du reveil à supprimer
      * (parametre en GET)
