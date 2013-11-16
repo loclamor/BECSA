@@ -1,0 +1,28 @@
+<?php
+$code = $this->code;
+switch ($code) {
+    case 200:
+        $this->status = "success";
+        $this->message = "reveil desactive";
+        break;
+    case 400:
+        $this->status = "error";
+        $this->message = "parametre incorrect";
+        break;
+    case 404:
+        $this->status = "error";
+        $this->message = "reveil non trouvee";
+        break;
+    default:
+        $this->code = 520;
+        $this->status = "error";
+        $this->message = "une erreur est survenue";
+        break;
+}
+
+echo json_encode( array( 
+    "status" => $this->status,
+    "code" => $this->code,
+    "message" => $this->message,
+    "reveil" => $this->reveil
+    ) );

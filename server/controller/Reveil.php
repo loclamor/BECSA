@@ -49,7 +49,7 @@ class Controller_Reveil extends Controller {
     
     /**
      * recupere un reveil
-     * @param $_GET['id'] id de la piece
+     * @param $_GET['id'] id du reveil
      */
     public function get() {
         $ges = Gestionnaire::getGestionnaire("reveil");
@@ -64,6 +64,56 @@ class Controller_Reveil extends Controller {
         }
         if( $reveil instanceof Model_Reveil ) {
             $this->code = 200;
+            $this->reveil = $reveil->getState();
+        }
+        else {
+            $this->code = 404;
+        }
+    }
+    
+    /**
+     * active un reveil (repetition = -1)
+     * @param $_GET['id'] id du reveil
+     */
+    public function activer() {
+        $ges = Gestionnaire::getGestionnaire("reveil");
+        $reveil = null;
+        $this->reveil = null;
+        if ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $id = $_GET['id']; // nom de la piece
+            $reveil = $ges->getOne( $id );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $reveil instanceof Model_Reveil ) {
+            $reveil->setRepetition(-1);
+            $reveil->enregistrer(array("repetition"));
+            $this->reveil = $reveil->getState();
+        }
+        else {
+            $this->code = 404;
+        }
+    }
+    
+    /**
+     * desactive un reveil (repetition = 0)
+     * @param $_GET['id'] id du reveil
+     */
+    public function desactiver() {
+        $ges = Gestionnaire::getGestionnaire("reveil");
+        $reveil = null;
+        $this->reveil = null;
+        if ( isset($_GET['id']) and !empty($_GET['id']) ) {
+            $id = $_GET['id']; // nom de la piece
+            $reveil = $ges->getOne( $id );
+        } 
+        else {
+            $this->code = 400;
+        }
+        if( $reveil instanceof Model_Reveil ) {
+            $reveil->setRepetition(0);
+            $reveil->enregistrer(array("repetition"));
             $this->reveil = $reveil->getState();
         }
         else {
