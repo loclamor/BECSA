@@ -90,6 +90,7 @@ class Controller_Reveil extends Controller {
             $reveil->setRepetition(-1);
             $reveil->enregistrer(array("repetition"));
             $this->reveil = $reveil->getState();
+            $this->code = 200;
         }
         else {
             $this->code = 404;
@@ -115,6 +116,7 @@ class Controller_Reveil extends Controller {
             $reveil->setRepetition(0);
             $reveil->enregistrer(array("repetition"));
             $this->reveil = $reveil->getState();
+            $this->code = 200;
         }
         else {
             $this->code = 404;
