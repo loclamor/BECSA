@@ -33,30 +33,17 @@ function reveil() {
             
             $("#listeReveils").append(
                 '<div class="row" id="row_' + val.id + '">'
-                    + '<div class="col-xs-3 nom ' + actif + '" >' + nom + '</div>'
+                    + '<div class="pull-left status ' + actif + '" ></div>'
+                    + '<h4 class="col-xs-3 nom " >' + nom + '</h4>'
                     + '<div class="col-xs-2 heure" >' + heure + '</div>'
                     + '<div class="col-xs-5 jours" >' + jours + '</div>'
+                    + '<div class="pull-right delete" ></div>'
                 + '</div>'
             );
-                
-            $('#fctBody.reveil .row#row_' + val.id + ' .nom').on('click', function(){
-                var action = "";
-                if( $(this).hasClass('on') ) {
-                    //on desactive
-                    action = "desactiver";
-                }
-                else {
-                    //on active
-                    action = "activer";
-                }
-                $(this).removeClass('on off');
-                $(this).addClass('wait');
-                //requete
-                $.getJSON( getControllerActionUrl("reveil", action, val.id), function( data ){
-                    $('#fctBody.reveil .row#row_' + data.reveil.id + ' .nom').removeClass( 'wait' );
-                    $('#fctBody.reveil .row#row_' + data.reveil.id + ' .nom').addClass( (data.reveil.actif ? "on" : "off" ) );
-                });
-            });
+            
+            //attach click listener
+            $('#fctBody.reveil .row#row_' + val.id + ' .status').on('click', function(){reveilActifListener( $(this), val.id );});
+            $('#fctBody.reveil .row#row_' + val.id + ' .delete').on('click', function(){reveilSupprListener( $(this), val.id );});
 
         });
         $("#listeReveils").slideDown(500);
@@ -68,4 +55,33 @@ function reveil() {
         ajout.append(data);
     });
 
+}
+
+function reveilActifListener( elt, id ){
+    var action = "";
+    if( elt.hasClass('on') ) {
+        //on desactive
+        action = "desactiver";
+    }
+    else {
+        //on active
+        action = "activer";
+    }
+    elt.removeClass('on off');
+    elt.addClass('wait');
+    //requete
+    $.getJSON( getControllerActionUrl("reveil", action, id), function( data ){
+        $('#fctBody.reveil .row#row_' + data.reveil.id + ' .status').removeClass( 'wait' );
+        $('#fctBody.reveil .row#row_' + data.reveil.id + ' .status').addClass( (data.reveil.actif ? "on" : "off" ) );
+        notify( (data.code < 300 ? 'success' : 'warning') , data.message, '', 4000);
+    });
+}
+
+function reveilSupprListener( elt, id ){
+    elt.parent('.row').remove();
+    //requete
+    $.getJSON( getControllerActionUrl("reveil", "supprimer", id), function( data ){
+        console.log(elt + " : reveil " + id + " supprime : " + data);
+        notify( (data.code < 300 ? 'info' : 'warning') , data.message, '', 4000);
+    });
 }
