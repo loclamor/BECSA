@@ -1,0 +1,41 @@
+<div class="row">
+    <form class="form-horizontal well" role="form" method="POST" action="" id="mapParam" >
+        <div class="form-group">
+            <label for="adresseMaison" class="col-sm-3 control-label">Votre adresse :</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="adresseMaison" id="adresseMaison" placeholder="Votre adresse" />
+            </div>
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="button" class="btn btn-default" id="btn-save" data-loading-text="Définir..." onclick="saveLocation()">Sauvegarder votre adresse</button>
+				<button type="button" class="btn btn-default" id="btn-loc" data-loading-text="Géolocalisation..." onclick="getLocation()">Géolocalisation</button>
+			</div>
+			<label for="adresseMaison" class="col-sm-3 control-label">Votre destination :</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" name="adresseDestination" id="adresseDestination" placeholder="Destination" />
+            </div>
+			<div class="col-sm-offset-3 col-sm-9">
+				<button type="button" class="btn btn-default" id="btn-iti" data-loading-text="Calculer..." onclick="computeItineraire()">Calculer l'itinéraire</button>
+			</div>
+        </div>
+	</form>
+	<div id="map"></div>
+</div>
+<script>
+$('#adresseMaison').val("29 rue pablo picasso 09600 laroque d'olmes");
+$('#adresseDestination').val("toulouse");
+function computeItineraire() {
+	changeHome($('#adresseMaison').val(),'FR',newDestination($('#adresseDestination').val(), 'FR'));
+}
+
+function getLocation() {
+	geolocation(function(location) {
+		retrieveAdress(location, function(adresse){
+			$('#adresseMaison').val(adresse);
+		});
+	});
+}
+
+function saveLocation() {
+	notify('info' , "TODO : Save adress " + $('#adresseMaison').val());
+}
+</script>
