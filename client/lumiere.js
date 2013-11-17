@@ -1,9 +1,6 @@
 function lumiere() {
     $("#fctTitle").html("Lumières");
-    var body = $("#fctBody");
-    body.html("");
-    body.removeClass();
-    body.addClass("lumiere");
+    var body = initBodyPage('lumiere');
     addOnOffSwitcher( body, "all", "Toutes les lumières", "Allumer", "Eteindre",
         getControllerActionUrl("lumiere", "allumerTout"),
         getControllerActionUrl("lumiere", "eteindreTout"),
@@ -11,15 +8,18 @@ function lumiere() {
         refreshPieceLumiere
     );
     
+    var list = initPageList('lumiere');
+    
     $.getJSON( getControllerActionUrl("lumiere", "lister"), function( data ){
         $.each( data.pieces, function( key, val ) {
-            addOnOffSwitcher( body, val.id, val.nom, "Allumer", "Eteindre",
+            addOnOffSwitcher( list, val.id, val.nom, "Allumer", "Eteindre",
                 getControllerActionUrl("lumiere", "allumer", val.id),
                 getControllerActionUrl("lumiere", "eteindre", val.id),
                 val.lumiereAllumee ? "on" : "off",
                 refreshPieceLumiere
             );
         });
+        list.slideDown(500);
     });
     
     auto_refresh = setInterval(

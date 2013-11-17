@@ -1,9 +1,6 @@
 function reveil() {
     $("#fctTitle").html("Réveils");
-    var body = $("#fctBody");
-    body.html("");
-    body.removeClass();
-    body.addClass("reveil");
+    var body = initBodyPage('reveil');
     
     body.append(
         '<div id="listeReveils" style="display:none;"><div class="row title">'

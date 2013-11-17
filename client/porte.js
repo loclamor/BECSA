@@ -1,9 +1,6 @@
 function porte() {
     $("#fctTitle").html("Portes");
-    var body = $("#fctBody");
-    body.html("");
-    body.removeClass();
-    body.addClass("porte");
+    var body = initBodyPage('porte');
     addOnOffSwitcher( body, "all", "Toutes les portes", "Déverrouiller", "Verrouiller",
         getControllerActionUrl("porte", "deverrouillerTout"),
         getControllerActionUrl("porte", "verrouillerTout"),
@@ -11,15 +8,18 @@ function porte() {
         refreshPiecePorte
     );
     
+    var list = initPageList('porte');
+    
     $.getJSON( getControllerActionUrl("porte", "lister"), function( data ){
         $.each( data.pieces, function( key, val ) {
-            addOnOffSwitcher( body, val.id, val.nom, "Déverrouiller", "Verrouiller",
+            addOnOffSwitcher( list, val.id, val.nom, "Déverrouiller", "Verrouiller",
                 getControllerActionUrl("porte", "deverrouiller", val.id),
                 getControllerActionUrl("porte", "verrouiller", val.id),
                 val.porteVerrouillee ? "off" : "on",
                 refreshPiecePorte
             );
         });
+        list.slideDown(500);
     });
     
     auto_refresh = setInterval(
@@ -27,7 +27,7 @@ function porte() {
             //refresh
             $.getJSON( getControllerActionUrl("porte", "lister"), function( data ){
                 $.each( data.pieces, function( key, val ) {
-                    refreshPieceLPorte( val );
+                    refreshPiecePorte( val );
                 });
             });
         },

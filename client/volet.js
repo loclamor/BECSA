@@ -1,9 +1,6 @@
 function volet() {
     $("#fctTitle").html("Volets");
-    var body = $("#fctBody");
-    body.html("");
-    body.removeClass();
-    body.addClass("volet");
+    var body = initBodyPage('volet');
     addOnOffSwitcher( body, "all", "Tous les volets", "Ouvrir", "Fermer",
         getControllerActionUrl("volet", "ouvrirTout"),
         getControllerActionUrl("volet", "fermerTout"),
@@ -11,15 +8,18 @@ function volet() {
         refreshPieceVolet
     );
     
+    var list = initPageList('volet');
+    
     $.getJSON( getControllerActionUrl("volet", "lister"), function( data ){
         $.each( data.pieces, function( key, val ) {
-            addOnOffSwitcher( body, val.id, val.nom, "Ouvrir", "Fermer",
+            addOnOffSwitcher( list, val.id, val.nom, "Ouvrir", "Fermer",
                 getControllerActionUrl("volet", "ouvrir", val.id),
                 getControllerActionUrl("volet", "fermer", val.id),
                 val.voletOuvert ? "on" : "off",
                 refreshPieceVolet
             );
         });
+        list.slideDown(500);
     });
     
     auto_refresh = setInterval(

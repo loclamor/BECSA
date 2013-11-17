@@ -1,9 +1,6 @@
 function recap() {
     $("#fctTitle").html("Récapitulatif");
-    var body = $("#fctBody");
-    body.html("");
-    body.removeClass();
-    body.addClass("recap");
+    var body = initBodyPage('recap');
     body.append(
         '<div class="row title">'
             + '<div class="col-xs-3" >Piece</div>'
@@ -12,6 +9,7 @@ function recap() {
             + '<div class="col-xs-2" >Porte</div>'
         + '</div>'
     );
+    var list = initPageList('recap');
     $.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
         $.each( data.pieces, function( key, val ) {
             var lum = "no";
@@ -26,7 +24,7 @@ function recap() {
             if( val.aPorte ) {
                 porte = ( val.porteVerrouillee ? "off" : "on" );
             }
-            body.append(
+            list.append(
                 '<div class="row" id="row_' + val.id + '">'
                     + '<div class="col-xs-3 nom" >' + val.nom + '</div>'
                     + '<div class="col-xs-2 lumiere ' + lum + '" ></div>'
@@ -35,6 +33,7 @@ function recap() {
                 + '</div>'
             );
         });
+        list.slideDown(500);
     });
     
     auto_refresh = setInterval(

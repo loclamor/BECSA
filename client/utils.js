@@ -1,4 +1,18 @@
+function initBodyPage( page ) {
+    var body = $("#fctBody");
+    body.html("");
+    body.removeClass();
+    body.addClass( page );
+    body = $("#fctBody."+page);
+    console.log(body);
+    return body;
+}
 
+function initPageList( page ) {
+    $("#fctBody."+page).append('<div class="list" style="display: none;"></div>');
+    var list = $("#fctBody."+page+" .list");
+    return list;
+}
 /**
  * 
  * @param {String} controller the controller to ask
@@ -26,6 +40,7 @@ function getControllerActionUrl( controller, action, id ){
  * @returns {void}
  */
 function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, state, refreshPiece ){
+    console.log(elt);
     var name = "onOff_" + eltId;
     var hiddeOn = "", hiddeOff = "";
     var spanText = 9, spanBtn = 3;
