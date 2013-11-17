@@ -7,8 +7,8 @@ function reveil() {
     
     body.append(
         '<div id="listeReveils" style="display:none;"><div class="row title">'
-            + '<div class="col-xs-3" >Reveil</div>'
-            + '<div class="col-xs-2" >Heure</div>'
+            + '<div class="col-xs-4" >Reveil</div>'
+            + '<div class="col-xs-1" >Heure</div>'
             + '<div class="col-xs-5" >Jours</div>'
         + '</div></div><div id="ajout"></div>'
     );
@@ -34,8 +34,8 @@ function reveil() {
             $("#listeReveils").append(
                 '<div class="row" id="row_' + val.id + '">'
                     + '<div class="pull-left status ' + actif + '" ></div>'
-                    + '<h4 class="col-xs-3 nom " >' + nom + '</h4>'
-                    + '<div class="col-xs-2 heure" >' + heure + '</div>'
+                    + '<h4 class="col-xs-4 nom " >' + nom + '</h4>'
+                    + '<div class="col-xs-1 heure" >' + heure + '</div>'
                     + '<div class="col-xs-5 jours" >' + jours + '</div>'
                     + '<div class="pull-right delete" ></div>'
                 + '</div>'

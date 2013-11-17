@@ -85,6 +85,11 @@ button.btn-function {
     margin-bottom : 0px;
 }
 
+#fctBody.reveil .row .nom {
+    overflow: hidden;
+    white-space: nowrap;
+}
+
 #fctBody.reveil .row .heure {
     text-align: center;
 }
