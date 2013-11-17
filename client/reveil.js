@@ -7,6 +7,7 @@ function reveil() {
     
     body.append(
         '<div id="listeReveils" style="display:none;"><div class="row title">'
+            + '<div class="pull-left status" ></div>'
             + '<div class="col-xs-4" >Reveil</div>'
             + '<div class="col-xs-1" >Heure</div>'
             + '<div class="col-xs-5" >Jours</div>'
