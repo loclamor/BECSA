@@ -136,6 +136,8 @@ function notify( type, message, title, timeout ) {
         _timeout = timeout;
     if( title && title !== "" )
         _title = '<h4>' + title + '</h4>';
+    if( type == "error" )
+        type = "danger";
     var notifbox = $('<div class="alert alert-' + type + ' fade in">'
                 + '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>'
                 + _title
