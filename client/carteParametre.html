@@ -21,8 +21,8 @@
 	<div id="map"></div>
 </div>
 <script>
-$('#adresseMaison').val("29 rue pablo picasso 09600 laroque d'olmes");
-$('#adresseDestination').val("toulouse");
+$('#adresseMaison').val("");
+$('#adresseDestination').val("");
 function computeItineraire() {
 	changeHome($('#adresseMaison').val(),'FR',newDestination($('#adresseDestination').val(), 'FR'));
 }
