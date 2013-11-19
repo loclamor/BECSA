@@ -24,7 +24,7 @@
 $('#adresseMaison').val("");
 $('#adresseDestination').val("");
 function computeItineraire() {
-	changeHome($('#adresseMaison').val(),'FR',newDestination($('#adresseDestination').val(), 'FR'));
+	changeHome($('#adresseMaison').val(),'FR',function() {newDestination($('#adresseDestination').val(), 'FR')});
 }
 
 function getLocation() {
@@ -36,6 +36,7 @@ function getLocation() {
 }
 
 function saveLocation() {
+	changeHome($('#adresseMaison').val(),'FR');
 	notify('info' , "TODO : Save adress " + $('#adresseMaison').val());
 }
 </script>

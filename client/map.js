@@ -60,6 +60,7 @@ function changeHome(adress, stateCode, callBack) {
 	var urlAdress = "http://maps.google.com/maps/api/geocode/json?address="+adress+","+stateCode+"&sensor=false";
 	// Get the adress information
 	$.getJSON(urlAdress, function( data ){
+		console.log('Change gome data : ');
 		console.log(data);
 		// If adress found
 		if(data.status == "OK") {
@@ -67,6 +68,7 @@ function changeHome(adress, stateCode, callBack) {
 			var location = data.results[0].geometry.location;
 			// Change the home position
 			homePosition = new google.maps.LatLng(location.lat, location.lng);
+			console.log(homePosition);
 			// Recenter the map
 			map.panTo(homePosition);
 			map.setZoom(10);
@@ -84,6 +86,9 @@ function changeHome(adress, stateCode, callBack) {
 */
 function newDestination(adress, stateCode, callBack) {
 	// Direction display
+	if(directionsDisplay) {
+		directionsDisplay.setMap();
+	}
 	directionsDisplay = new google.maps.DirectionsRenderer();
 	directionsDisplay.setMap(map);
 	// Direction service
@@ -97,7 +102,7 @@ function newDestination(adress, stateCode, callBack) {
 			// Compute and display the path
 			var location = data.results[0].geometry.location;
 			var request = {
-				origin : homeMarker.getPosition(),
+				origin : homePosition,
 				destination : new google.maps.LatLng(location.lat, location.lng),
 				travelMode : google.maps.TravelMode.DRIVING
 			};

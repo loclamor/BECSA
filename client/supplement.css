@@ -202,3 +202,7 @@ h1 {
 #notif-row .alert .close {
     margin-left : 20px;
 }
+
+#map{
+	min-height : 666px;
+}
