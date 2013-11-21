@@ -1,0 +1,12 @@
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\SmartHome\bin\Debug\SmartHome.XML
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\SmartHome\bin\Debug\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\SmartHome\obj\Debug\SmartHome.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\SmartHome\obj\Debug\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\SmartHome\bin\Debug\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\SmartHome\obj\Debug\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\bin\Debug\SmartHome.XML
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\bin\Debug\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\obj\Debug\SmartHome.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\obj\Debug\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\bin\Debug\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\obj\Debug\SmartHome.dll

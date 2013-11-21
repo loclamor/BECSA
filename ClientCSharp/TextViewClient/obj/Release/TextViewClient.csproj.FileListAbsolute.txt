@@ -1,0 +1,9 @@
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\bin\Release\TextViewClient.exe.config
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\bin\Release\TextViewClient.exe
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\bin\Release\TextViewClient.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\bin\Release\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\bin\Release\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\bin\Release\SmartHome.xml
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\obj\Release\TextViewClient.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\obj\Release\TextViewClient.exe
+E:\fac\csa\Projet_Treuillet\ClientCSharp\TextViewClient\obj\Release\TextViewClient.pdb

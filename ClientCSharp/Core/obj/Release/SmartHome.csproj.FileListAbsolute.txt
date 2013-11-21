@@ -1,0 +1,6 @@
+E:\fac\csa\Projet_Treuillet\ClientCSharp\SmartHome.XML
+E:\fac\csa\Projet_Treuillet\ClientCSharp\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\obj\Release\SmartHome.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\obj\Release\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\Core\obj\Release\SmartHome.pdb

@@ -1,0 +1,9 @@
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\bin\Debug\AudioViewClient.exe.config
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\bin\Debug\AudioViewClient.exe
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\bin\Debug\AudioViewClient.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\bin\Debug\SmartHome.dll
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\bin\Debug\SmartHome.pdb
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\bin\Debug\SmartHome.xml
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\obj\Debug\AudioViewClient.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\obj\Debug\AudioViewClient.exe
+E:\fac\csa\Projet_Treuillet\ClientCSharp\AudioViewClient\obj\Debug\AudioViewClient.pdb
