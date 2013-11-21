@@ -80,6 +80,12 @@ var dictionnaireJSON = {
 				"itinéraire"
 			],
 			"suite" : ['all'] // Indique que l'on garde la reste de la phrase
+		},
+		"MAP HOME" : {
+			"mots" : [
+				"habiter"
+			],
+			"suite" : ['all'] // Indique que l'on garde la reste de la phrase
 		}
 	},
 	"porteOuVolet" : {
@@ -157,43 +163,66 @@ function commandeVocale( phrase ) {
 	var commande = computedCommand.commande;
 	// On récupèe les paramètres
 	var parametresCommande = computedCommand.parametres;
-	var piecesId = [];
-	// On simplifie les paramètres pour faciliter les comparaison
-	// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
-	parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
-	//console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
-	// On récupère la liste des pièces
-	$.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
-		//console.log(data);
-		// Pour chaque piece
-		$.each( data.pieces, function( key, val ) {
-			// On simplifie le nom pour faciliter la comparaison
-			var piece = simplifierPhrase(val.nom).split(' ');
-			// Passe à faux si la pièce ne correspond pas
-			var pieceReconnue = true;
-			//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
-			// Pour chaque mot dans le nomde la piece
-			for(var i = 0; i < piece.length; i++) {
-				// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
-				if(parametresCommandes.indexOf(piece[i]) == -1) {
-					pieceReconnue = false;
-				}
+	// On check si on a demandé l'itinaire
+	console.log(parametresCommande);
+	console.log(commande);
+	if(commande.indexOf('MAP') > -1) {
+		if(commande.indexOf('GOTO') > -1) {
+			if($("#fctTitle").html() == "Itinéraire") {
+				newDestination(parametresCommande,'FR');
 			}
-			// On garde la piece si son nom se trouve dans la phrase
-			if(pieceReconnue) {
-				piecesId.push(val.id);
-			}
-		})
-		//console.log(piecesId);
-		// Si il y a des pièce dans la phrase
-		if(piecesId != []) {
-			// Pour chacune, on applique la commande trouvée
-			for(var i = 0; i < piecesId.length; i++) {
-				var id = piecesId[i];
-				appliqueCommandeDansPiece(commande, id);
+			else {
+				itineraire(newDestination(parametresCommande,'FR'));
 			}
 		}
-	});
+		else if(commande.indexOf('HOME') > -1) {
+			if($("#fctTitle").html() == "Itinéraire") {
+				changeHome(parametresCommande,'FR');
+			}
+			else {
+				itineraire(changeHome(parametresCommande,'FR'));
+			}
+		}
+	}
+	else {
+		var piecesId = [];
+		// On simplifie les paramètres pour faciliter les comparaison
+		// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
+		parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
+		//console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
+		// On récupère la liste des pièces
+		$.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
+			//console.log(data);
+			// Pour chaque piece
+			$.each( data.pieces, function( key, val ) {
+				// On simplifie le nom pour faciliter la comparaison
+				var piece = simplifierPhrase(val.nom).split(' ');
+				// Passe à faux si la pièce ne correspond pas
+				var pieceReconnue = true;
+				//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
+				// Pour chaque mot dans le nomde la piece
+				for(var i = 0; i < piece.length; i++) {
+					// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
+					if(parametresCommandes.indexOf(piece[i]) == -1) {
+						pieceReconnue = false;
+					}
+				}
+				// On garde la piece si son nom se trouve dans la phrase
+				if(pieceReconnue) {
+					piecesId.push(val.id);
+				}
+			})
+			//console.log(piecesId);
+			// Si il y a des pièce dans la phrase
+			if(piecesId != []) {
+				// Pour chacune, on applique la commande trouvée
+				for(var i = 0; i < piecesId.length; i++) {
+					var id = piecesId[i];
+					appliqueCommandeDansPiece(commande, id);
+				}
+			}
+		});
+	}
 }
 
 /**
@@ -235,6 +264,9 @@ function appliqueCommandeDansPiece(commande, piece) {
 		else {
 		//TODO
 		}
+	}
+	if(commande.indexOf('MAP GOTO') > -1) {
+	
 	}
 	if(url){
 		$.getJSON(url, function( data ){
@@ -322,16 +354,19 @@ function computeCommand( phrase ) {
 * @param type Type dans lequel on doit cherche la commande correspondante
 */
 function retrouverIdDepuisMotEtTypesDansJson(mot, type) {
-	console.log('retrouverIdDepuisMotEtTypesDansJson('+mot+', '+type+')');
-	mot = mot.toLowerCase();
+	var motSimplifie = simplifierPhrase(mot);
 	var jsonTmp = dictionnaireJSON[type];
-	for(var id in jsonTmp) {
-		var mots = jsonTmp[id]['mots'];
-		if(mots.indexOf(mot) > -1) {
-			return {
-				'id' : id,
-				'suite' : jsonTmp[id]['suite']
-			};
+	for(var i in jsonTmp) {
+		var mots = jsonTmp[i]['mots'];
+		for(var j in mots) {
+			var motJson = simplifierPhrase(mots[j]);
+			if(motJson == motSimplifie && ! motJson.match(new RegExp("^[ ]*$", "gi"))) {
+				console.log('ORDRE TROUVE : '+ i +' car '+ motJson +' == '+ motSimplifie);
+				return {
+					'id' : i,
+					'suite' : jsonTmp[i]['suite']
+				};
+			}
 		}
 	}
 	return false;
@@ -345,7 +380,8 @@ function retrouverIdDepuisMotEtTypesDansJson(mot, type) {
 								 et de lettre non prononcées)
 */
 function simplifierPhrase(phrase) {
-	var res = phrase.toLowerCase();
+	// Passe en minuscule et ajoutd'espace avant et après pour simplifier expression régulière
+	var res = ' ' + phrase.toLowerCase() + ' '; 
 	
 	// Supprimer les accents (de finalclap.com)
 	var accent = [
@@ -366,7 +402,7 @@ function simplifierPhrase(phrase) {
 	//Ensemble d'expession régulière pour la simplification
 	var regSimplifier = {
 		// Suppression des articles
-		"article" 		: new RegExp(" de | des | la | le | les | un | une | à | dans | et  | au " , "gi"),
+		"article" 		: new RegExp(" l' | d' | de | des | la | le | les | un | une | à | dans | et  | au " , "gi"),
 		// Suppression des ponctuations
 		"ponctuation" 	: new RegExp(",|\\.|:|!|\\?|'|\\(|\\)" , "g"),
 		// Suppression des lettre silencieuse

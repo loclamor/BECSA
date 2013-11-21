@@ -1,7 +1,7 @@
 /**
 * Initialize the itineraire panel
 */
-function itineraire(){
+function itineraire(callBack){
 	$("#fctTitle").html("Itinéraire");
     var body = $("#fctBody");
     body.removeClass();
@@ -12,6 +12,7 @@ function itineraire(){
     $.get("./carteParametre.html", function(data){
         ajout.append(data);
 		initialize('map');
+		if(callBack) callBack();
     });
 }
 
@@ -46,7 +47,6 @@ function initialize(elementId) {
 		map : map,
 		position : homePosition
 	});
-	changeHome("29 rue pablo picasso 09600 laroque d'olmes", "FR");
 }
 
 /**
