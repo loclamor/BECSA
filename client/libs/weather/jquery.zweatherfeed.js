@@ -121,7 +121,7 @@
 
 					// Format feed items
 					var wd = feed.wind.direction;
-					if (wd>=348.75&&wd<=360){wd="N"};if(wd>=0&&wd<11.25){wd="N"};if(wd>=11.25&&wd<33.75){wd="NNE"};if(wd>=33.75&&wd<56.25){wd="NE"};if(wd>=56.25&&wd<78.75){wd="ENE"};if(wd>=78.75&&wd<101.25){wd="E"};if(wd>=101.25&&wd<123.75){wd="ESE"};if(wd>=123.75&&wd<146.25){wd="SE"};if(wd>=146.25&&wd<168.75){wd="SSE"};if(wd>=168.75&&wd<191.25){wd="S"};if(wd>=191.25 && wd<213.75){wd="SSW"};if(wd>=213.75&&wd<236.25){wd="SW"};if(wd>=236.25&&wd<258.75){wd="WSW"};if(wd>=258.75 && wd<281.25){wd="W"};if(wd>=281.25&&wd<303.75){wd="WNW"};if(wd>=303.75&&wd<326.25){wd="NW"};if(wd>=326.25&&wd<348.75){wd="NNW"};
+					if (wd>=348.75&&wd<=360){wd="N"};if(wd>=0&&wd<11.25){wd="N"};if(wd>=11.25&&wd<33.75){wd="NNE"};if(wd>=33.75&&wd<56.25){wd="NE"};if(wd>=56.25&&wd<78.75){wd="ENE"};if(wd>=78.75&&wd<101.25){wd="E"};if(wd>=101.25&&wd<123.75){wd="ESE"};if(wd>=123.75&&wd<146.25){wd="SE"};if(wd>=146.25&&wd<168.75){wd="SSE"};if(wd>=168.75&&wd<191.25){wd="S"};if(wd>=191.25 && wd<213.75){wd="SSO"};if(wd>=213.75&&wd<236.25){wd="SO"};if(wd>=236.25&&wd<258.75){wd="OSO"};if(wd>=258.75 && wd<281.25){wd="O"};if(wd>=281.25&&wd<303.75){wd="ONO"};if(wd>=303.75&&wd<326.25){wd="NO"};if(wd>=326.25&&wd<348.75){wd="NNO"};
 					var wf = feed.item.forecast[0];
 		
 					// Determine day or night image
@@ -146,7 +146,7 @@
 					html += '<div class="weatherDesc">'+ feed.item.condition.text +'</div>';
 				
 					// Add optional data
-					if (options.highlow) html += '<div class="weatherRange">Haut(e): '+ wf.high +'&deg; Bas(se): '+ wf.low +'&deg;</div>';
+					if (options.highlow) html += '<div class="weatherRange">Maximal(e): '+ wf.high +'&deg; Minimal(e): '+ wf.low +'&deg;</div>';
 					if (options.wind) html += '<div class="weatherWind">Vent: '+ wd +' '+ feed.wind.speed + feed.units.speed +'</div>';
 					if (options.humidity) html += '<div class="weatherHumidity">Humidité: '+ feed.atmosphere.humidity +'</div>';
 					if (options.visibility) html += '<div class="weatherVisibility">Visibilité: '+ feed.atmosphere.visibility +'</div>';
