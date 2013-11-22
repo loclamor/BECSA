@@ -1,7 +1,7 @@
 /**
 * Initialize the itineraire panel
 */
-function itineraire(){
+function itineraire(callBack){
 	$("#fctTitle").html("Itinéraire");
     var body = $("#fctBody");
     body.removeClass();
@@ -12,6 +12,7 @@ function itineraire(){
     $.get("./carteParametre.html", function(data){
         ajout.append(data);
 		initialize('map');
+		if(callBack) callBack;
     });
 }
 
@@ -41,12 +42,16 @@ function initialize(elementId) {
 	map = new google.maps.Map(document.getElementById(elementId),
 								  mapOptions
 	);
+	
+	map.fitBounds(new google.maps.LatLngBounds(
+		new google.maps.LatLng(41.5,-5.0),
+		new google.maps.LatLng(51.0,10.0)
+	));
 	// Add a marqueur on the home position
 	homeMarker = new google.maps.Marker({
 		map : map,
 		position : homePosition
 	});
-	changeHome("29 rue pablo picasso 09600 laroque d'olmes", "FR");
 }
 
 /**
@@ -90,7 +95,6 @@ function newDestination(adress, stateCode, callBack) {
 		directionsDisplay.setMap();
 	}
 	directionsDisplay = new google.maps.DirectionsRenderer();
-	directionsDisplay.setMap(map);
 	// Direction service
 	var directionsService = new google.maps.DirectionsService();
 	// URL of the adress
@@ -109,6 +113,7 @@ function newDestination(adress, stateCode, callBack) {
 			directionsService.route(request, function(result, status) {
 				if (status == google.maps.DirectionsStatus.OK) {
 					directionsDisplay.setDirections(result);
+					directionsDisplay.setMap(map);
 				}
 			});
 		}

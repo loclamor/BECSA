@@ -53,17 +53,17 @@ namespace TextViewClient
         static void PieceUpdate(Piece p, Home.RoomUpdateKind act) {
             string s = "";
             if (act == Home.RoomUpdateKind.SwitchOnRoomLight) {
-                s = "Lumiere allumée: " + p.Nom;
+                s = "Lumière allumée : " + p.Nom;
             } else if (act == Home.RoomUpdateKind.SwitchOffRoomLight) {
-                s = "Lumiere eteint: " + p.Nom;
+                s = "Lumière éteinte : " + p.Nom;
             } else if (act == Home.RoomUpdateKind.CloseRoomDoor) {
-                s = "Porte vérrouiller: " + p.Nom;
+                s = "Porte verrouillée : " + p.Nom;
             } else if (act == Home.RoomUpdateKind.OpenRoomDoor) {
-                s = "Porte déverouiller: " + p.Nom;
+                s = "Porte déverrouillée : " + p.Nom;
             } else if (act == Home.RoomUpdateKind.OpenRoomFlap) {
-                s = "Volet ouvert: " + p.Nom;
+                s = "Volet ouvert : " + p.Nom;
             } else if (act == Home.RoomUpdateKind.CloseRoomFlap) {
-                s = "Volet fermer: " + p.Nom;
+                s = "Volet fermé : " + p.Nom;
             }
             System.Console.WriteLine(s);
         }
@@ -74,17 +74,17 @@ namespace TextViewClient
         static void HomeUpdate(Home.HomeUpdateKind act) {
             string s = "";
             if (act == Home.HomeUpdateKind.SwitchOnAllRoomLight) {
-                s = "Toutes les lumieres sont allumés";
+                s = "Toutes les lumières sont allumés";
             } else if (act == Home.HomeUpdateKind.SwitchOffAllRoomLight) {
-                s = "Toutes les lumieres sont eteintes";
+                s = "Toutes les lumières sont éteintes";
             } else if (act == Home.HomeUpdateKind.OpenAllDoor) {
-                s = "Toutes les portes sont déverouiller";
+                s = "Toutes les portes sont déverrouillées";
             } else if (act == Home.HomeUpdateKind.CloseAllDoor) {
-                s = "Toutes les portes sont vérouiller";
+                s = "Toutes les portes sont verrouillées";
             } else if (act == Home.HomeUpdateKind.OpenAllFlap) {
-                s = "Tous les volets sont ouvert";
+                s = "Tous les volets sont ouverts";
             } else if (act == Home.HomeUpdateKind.CloseAllFlap) {
-                s = "Tous les volets sont fermer";
+                s = "Tous les volets sont fermés";
             }
             System.Console.WriteLine(s);
         }
@@ -105,8 +105,8 @@ namespace TextViewClient
             Thread homeThread = new Thread(HomeThread);
             homeThread.Start();
             /* Run a loop that wait User action */
-            System.Console.WriteLine(">> Les actions éffectués sur la maison s'inscriront ici");
-            System.Console.WriteLine(">> Pour quitter appuyer sur n'importe qu'elle touche");
+            System.Console.WriteLine(">> Les actions effectuées sur la maison s'inscriront ici");
+            System.Console.WriteLine(">> Pour quitter appuyer sur n'importe quelle touche");
             while (running) {
                 ConsoleKeyInfo key = System.Console.ReadKey();
                 running = false;

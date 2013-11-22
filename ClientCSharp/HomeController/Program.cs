@@ -38,7 +38,7 @@ namespace HomeController
         /// </summary>
         static private bool running;
         /// <summary>
-        /// Used to recognize user speak
+        /// Used to recognize the speech of the user
         /// </summary>
         static private SpeechRecognitionEngine _engine;
 
@@ -47,16 +47,16 @@ namespace HomeController
         /// </summary>
         static private string _homeName = "Maison";
         /// <summary>
-        /// Home actions recognizable.
+        /// Home's actions recognizable.
         /// </summary>
         static private string[] _actionList = {
             //"Allumer lumiere", "Eteindre lumiere", "Allume lumiere", "Eteint lumiere",
             "ouvrir volet", "fermer volet", "ouvre volet", "fermer volet",
-            "verrouiller porte", "deverrouiller porte", "verrouille porte", "deverrouille porte", 
+            "verrouiller porte", "déverrouiller porte", "verrouille porte", "déverrouille porte", 
             "fermer porte", "ouvrir porte",  "ferme porte", "ouvre porte",
-            "allumer", "eteindre", "allume", "eteint",
+            "allumer", "éteindre", "allume", "éteint",
             "ouvrir", "fermer", "ouvre", "ferme", 
-            "verrouiller", "deverrouiller", "verrouille", "deverrouille" 
+            "verrouiller", "déverrouiller", "verrouille", "déverrouille" 
         };
 
 
@@ -166,22 +166,22 @@ namespace HomeController
         /// <param name="result">Recognition result</param>
         /// <returns>Controller found</returns>
         static private Controller RetrieveController(RecognitionResult result) {
-            if (result.Text.IndexOf(" lumieres", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            if (result.Text.IndexOf(" lumières", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.ALL_LUMIERE;
             } else if (result.Text.IndexOf(" portes", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.ALL_PORTE;
             } else if (result.Text.IndexOf(" volets", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.ALL_VOLET;
-            /* Lumiere */ 
-            } else if (result.Text.IndexOf(" lumiere ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            /* Lumiere */
+            } else if (result.Text.IndexOf(" lumières ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.LUMIERE;
             } else if (result.Text.IndexOf(" allumer ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.LUMIERE;
             } else if (result.Text.IndexOf(" allume ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.LUMIERE;
-            } else if (result.Text.IndexOf(" eteindre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" éteindre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.LUMIERE;
-            } else if (result.Text.IndexOf(" eteint ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" éteint ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.LUMIERE;
             /* Porte */ 
             } else if (result.Text.IndexOf(" porte ", StringComparison.CurrentCultureIgnoreCase) != -1) {
@@ -198,9 +198,9 @@ namespace HomeController
                 return Controller.PORTE;
             } else if (result.Text.IndexOf(" verrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.PORTE;
-            } else if (result.Text.IndexOf(" deverrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" déverrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.PORTE;
-            } else if (result.Text.IndexOf(" deverrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" déverrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Controller.PORTE;
             /* Volet */ 
             } else if (result.Text.IndexOf(" volet ", StringComparison.CurrentCultureIgnoreCase) != -1) {
@@ -223,17 +223,17 @@ namespace HomeController
                 return Action.ON;
             } else if (result.Text.IndexOf(" allume ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.ON;
-            } else if (result.Text.IndexOf(" deverrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" déverrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.ON;
-            } else if (result.Text.IndexOf(" deverrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" déverrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.ON;
             } else if (result.Text.IndexOf(" fermer ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.OFF;
             } else if (result.Text.IndexOf(" ferme ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.OFF;
-            } else if (result.Text.IndexOf(" eteindre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" éteindre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.OFF;
-            } else if (result.Text.IndexOf(" eteint ", StringComparison.CurrentCultureIgnoreCase) != -1) {
+            } else if (result.Text.IndexOf(" éteint ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.OFF;
             } else if (result.Text.IndexOf(" verrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
                 return Action.OFF;
@@ -271,7 +271,7 @@ namespace HomeController
                 /* Analyse Controller */
                 string roomName = "";
                 switch (RetrieveController(e.Result)) {
-                    /* All lumieres,portes,volets */
+                    /* All lumières,portes,volets */
                     case Controller.ALL_LUMIERE:
                         switch (RetrieveAction(e.Result)) {
                             case Action.ON: home.AllumerTout(); break;
@@ -290,7 +290,7 @@ namespace HomeController
                             case Action.OFF: home.FermerTout(); break;
                         }
                         break;
-                    /* Lumiere */ 
+                    /* Lumière */ 
                     case Controller.LUMIERE:
                         roomName = RetrieveRoomName(e.Result);
                         if (roomName.Length > 0) {
@@ -339,8 +339,8 @@ namespace HomeController
             Thread homeThread = new Thread(HomeThread);
             homeThread.Start();
             /* Run a loop that wait User action */
-            System.Console.WriteLine(">> Dites une phrase pour controller la maison");
-            System.Console.WriteLine(">> Pour quitter appuyer sur n'importe qu'elle touche");
+            System.Console.WriteLine(">> Dites une phrase pour contrôler la maison");
+            System.Console.WriteLine(">> Pour quitter appuyer sur n'importe quelle touche");
             while (running) {
                 ConsoleKeyInfo key = System.Console.ReadKey();
                 running = false;
