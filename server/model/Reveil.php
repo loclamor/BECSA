@@ -79,13 +79,26 @@ class Model_Reveil extends Entite {
     public function sonne(){
         $numJour = intval( date("N") );
         $numJour--;
-        if( !$this->sonneJour( $numJour ) )
-            return false; //pas de reveil aujourd'hui
-        if( $this->getRepetition() == 0 )
-            return false; //reveil disable
         
         $heureM = intval( date("H") );
         $minM = intval( date("i") );
+        $heureMinLR = explode( ":",  $this->lastRing );
+        if( count( $heureMinLR ) >= 2 ) {
+            $heureLR = intval( $heureMinLR[0] );
+            $minLR = intval( $heureMinLR[1] );
+        }
+        else {
+            $heureLR = -1;
+            $minLR = -1;
+        }
+        
+        if( !$this->sonneJour( $numJour ) )
+            return false; //pas de reveil aujourd'hui
+        //si plus de répétition, et pas l'heure de la dernière sonnerie
+        if( $this->getRepetition() == 0 && ( $heureLR != $heureM || $minLR != $minM ) )
+            return false; //reveil disable
+        
+        
         $heureMinR = explode( ":",  $this->heure );
         $heureR = intval( $heureMinR[0] );
         $minR = intval( $heureMinR[1] );
