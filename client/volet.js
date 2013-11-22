@@ -22,17 +22,15 @@ function volet() {
         list.slideDown(500);
     });
     
-    auto_refresh = setInterval(
-        function (){
-            //refresh
-            $.getJSON( getControllerActionUrl("volet", "lister"), function( data ){
-                $.each( data.pieces, function( key, val ) {
+    //listen refresh
+    $("body").on( "maison.refreshed", function(){
+        if( $("#fctBody").hasClass('volet') ){
+            $.each( state.pieces, function( key, val ) {
+                if( val.aVolet )
                     refreshPieceVolet( val );
-                });
             });
-        },
-        1000
-    ); // refresh every 1000 milliseconds
+        }
+    });
 }
 
 /**

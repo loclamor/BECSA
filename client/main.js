@@ -1,26 +1,33 @@
 var baseUrl = "../server/";
 var auto_refresh = 0;
 var joursArray = Array("Lun","Mar","Mer","Jeu","Ven","Sam","Dim");
+var state = {};
 
 $(document).ready(function(){
     main();
     //auto refresh alarm
-    setInterval(
-        function (){
-            //get reveils
-            $.getJSON( getControllerActionUrl("reveil", "lister"), function( data ){
-                $.each( data.reveils, function( key, val ) {
-                    if( val.sonne ) {
-                        notify("danger", "<img src='./img/bell.png'>&nbsp;" + val.heure, val.nom, 0);
-                        //refresh alarm state
-                        $("#listeReveils #row_"+val.id+" .nom").removeClass("on off");
-                        $("#listeReveils #row_"+val.id+" .nom").addClass( (val.actif ? "on" : "off") );
-                    }
-                });
-            });
-        },
-        60000
-    ); // refresh every minutes
+    $("body").on( "maison.refreshed", function(){
+        $.each( state.reveils, function( key, val ) {
+            if( val.sonne ) {
+                notify("danger", "<img src='./img/bell.png'>&nbsp;" + val.heure, val.nom, 0);
+                //refresh alarm state
+                $("#listeReveils #row_"+val.id+" .nom").removeClass("on off");
+                $("#listeReveils #row_"+val.id+" .nom").addClass( (val.actif ? "on" : "off") );
+            }
+        });
+    });
+        
+    setInterval( function(){
+        $.getJSON( getControllerActionUrl("maison", "getState")+"&dest=webapp", function( data ){
+            if( data.code < 300 ){
+                state = data.state;
+                $("body").trigger("maison.refreshed");
+            }
+            else {
+                console.error( data.message );
+            }
+        });
+    }, 1000 );
     
     /**
      * clic sur une fonction
