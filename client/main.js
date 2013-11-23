@@ -2,13 +2,14 @@ var baseUrl = "../server/";
 var auto_refresh = 0;
 var joursArray = Array("Lun","Mar","Mer","Jeu","Ven","Sam","Dim");
 var state = {};
+var reveilsRinged = Array();
 
 $(document).ready(function(){
     main();
     //auto refresh alarm
     $("body").on( "maison.refreshed", function(){
         $.each( state.reveils, function( key, val ) {
-            if( val.sonne ) {
+            if( val.sonne && !reveilASonne(val.id)) {
                 notify("danger", "<img src='./img/bell.png'>&nbsp;" + val.heure, val.nom, 0);
                 //refresh alarm state
                 $("#listeReveils #row_"+val.id+" .nom").removeClass("on off");

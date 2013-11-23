@@ -13,6 +13,29 @@ function initPageList( page ) {
     var list = $("#fctBody."+page+" .list");
     return list;
 }
+
+function reveilASonne( reveil ){
+    var dateM = Date();
+    console.log(dateM);
+    
+    if( !reveilsRinged[reveil.id] ){
+        reveilsRinged[reveil.id] = reveil;
+        return false;
+    }
+    //le reveil est présent en mémoire.
+    //a t-il sonne aujourd'hui (celui en mémoire) ?
+    var dateReveil = reveilsRinged[reveil.id].lastRing;
+    var dateReveilArray = dateReveil.split("-");
+    if( dateM.getDate() == parseInt(dateReveilArray[2]) && ( dateM.getMonth() +1 ) == parseInt(dateReveilArray[1]) ){
+        reveilsRinged[reveil.id] = reveil;
+        return true;
+    }
+    else {
+        reveilsRinged[reveil.id] = reveil;
+        return false;
+    }
+    
+}
 /**
  * 
  * @param {String} controller the controller to ask
