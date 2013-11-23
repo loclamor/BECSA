@@ -7,7 +7,7 @@
  */
 class Model_Hifi extends Entite {
     
-    public $DB_table = 'Hifi';
+    public $DB_table = 'hifi';
     public $DB_equiv = array(
         "id"             => "id",
         "artist"         => "artist",
@@ -36,8 +36,8 @@ class Model_Hifi extends Entite {
     public function getState() {
         return array(
             "id" => $this->id,
-            "artist" => $this->artist(),
-            "title" => $this->title()
+            "artist" => $this->getArtist(),
+            "title" => $this->getTitle()
         );
     }    
     

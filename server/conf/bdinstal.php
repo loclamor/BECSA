@@ -57,4 +57,18 @@ if( $res === false ) {
     echo mysqli_error( $link );
 }
 
+/**
+ * v0.0.5 creation table hifi
+ */
+$requete = "CREATE TABLE IF NOT EXISTS `".TABLE_PREFIX."hifi`(
+	`id` int(11) NOT NULL AUTO_INCREMENT,
+	`artist` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	`title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+	PRIMARY KEY (`id`)
+)";
+$res = mysqli_query($link, $requete);
+if( $res === false ) {
+    echo mysqli_error( $link );
+}
+
 mysqli_close($link);

@@ -30,6 +30,7 @@ class Controller_Hifi extends Controller {
         }
         
         if( $song instanceof Model_Hifi ) {
+            $this->song = $song->getState();
             $this->code = 200;
         }
         else {
