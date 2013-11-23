@@ -34,13 +34,13 @@ class Controller_Maison extends Controller {
             }
         }
         
-//        $actions = Gestionnaire::getGestionnaire('action')->getOf( array( 'dest' => $dest ) );
-//        $state['actions'] = array();
-//        foreach ( $actions as $a ) {
-//            if( $a instanceof Model_Action ){
-//                $state['actions'][] = $a->get();
-//            }
-//        }
+        $actions = Gestionnaire::getGestionnaire('action')->getOf( array( 'destinataire' => $dest ) );
+        $state['actions'] = array();
+        foreach ( $actions as $a ) {
+            if( $a instanceof Model_Action ){
+                $state['actions'][] = $a->getState();
+            }
+        }
         
         $this->state = $state;
         $this->code = 202;
