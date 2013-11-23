@@ -4,12 +4,11 @@ $retour = array();
 switch ($code) {
     case 201:
         $this->status = "success";
-        $this->message = "piece cree";
+        $this->message = "action cree";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
-            "message" => $this->message,
-            "piece" => $this->piece->getState()
+            "message" => $this->message
             );
         break;
     case 400:

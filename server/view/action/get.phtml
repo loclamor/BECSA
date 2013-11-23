@@ -4,17 +4,26 @@ $retour = array();
 switch ($code) {
     case 202:
         $this->status = "success";
-        $this->message = "pieces trouvees";
+        $this->message = "action trouvees";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
             "message" => $this->message,
-            "pieces" => $this->pieces
+            "actions" => $this->actions
+            );
+        break;
+    case 400:
+        $this->status = "error";
+        $this->message = "parametres incorects";
+        $retour = array( 
+            "status" => $this->status,
+            "code" => $this->code,
+            "message" => $this->message
             );
         break;
     case 404:
         $this->status = "error";
-        $this->message = "pas de pieces";
+        $this->message = "pas d'actions";
         $retour = array( 
             "status" => $this->status,
             "code" => $this->code,
