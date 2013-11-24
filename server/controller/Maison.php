@@ -20,30 +20,36 @@ class Controller_Maison extends Controller {
         
         $pieces = Gestionnaire::getGestionnaire('piece')->getAll();
         $state['pieces'] = array();
-        foreach ( $pieces as $p ) {
-            if( $p instanceof Model_Piece ){
-                $state['pieces'][] = $p->getState();
+        if( $pieces ) {
+            foreach ( $pieces as $p ) {
+                if( $p instanceof Model_Piece ){
+                    $state['pieces'][] = $p->getState();
+                }
             }
         }
 
         $reveils = Gestionnaire::getGestionnaire('reveil')->getAll();
         $state['reveils'] = array();
-        foreach ( $reveils as $r ) {
-            if( $r instanceof Model_Reveil ){
-                $state['reveils'][] = $r->getState();
+        if( $reveils ) {
+            foreach ( $reveils as $r ) {
+                if( $r instanceof Model_Reveil ){
+                    $state['reveils'][] = $r->getState();
+                }
             }
         }
         
         $actions = Gestionnaire::getGestionnaire('action')->getOf( array( 'destinataire' => $dest ) );
         $state['actions'] = array();
-        foreach ( $actions as $a ) {
-            if( $a instanceof Model_Action ){
-                $state['actions'][] = $a->getState();
+        if( $actions ) {
+            foreach ( $actions as $a ) {
+                if( $a instanceof Model_Action ){
+                    $state['actions'][] = $a->getState();
+                }
             }
         }
         
-        $this->state = $state;
         $this->code = 202;
+        $this->state = $state;
     }
 }
 ?>
