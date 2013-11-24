@@ -10,7 +10,6 @@ function micro() {
 		notify('info' , 'Que voulez-vous faire?',"",3000);
 		notify('info' , 'Allumer la salle de bain. <BR>Fermer les volets du salon. <BR>Déverrouiller la cuisine.',"Exemple de commande",10000);
 		recognition.start();
-		//commandeVocale("allumer la cuisine");
 	}
 	else {
 		console.log('Fin enregistrement.');
@@ -19,11 +18,19 @@ function micro() {
 	}
 	record = !record;
 	refreshButton();
+	
 }
 
 var dictionnaireJSON = {
 	// TYPE A RECHERCHER 
 	"init" : {
+		"MENU" : {
+			"mots" : [
+				"menu",
+				"afficher"
+			],
+			"suite" : ['all']
+		},
 		// IDENTIFIANT DE L'ACTION (LUMIERE 1 : POUR ALLUMER LA LUMIERE)
 		"LUMIERE 1" : {
 			// MOTS PERMETTANT De CHOISIR CETTE ACTION
@@ -86,6 +93,12 @@ var dictionnaireJSON = {
 				"habiter"
 			],
 			"suite" : ['all'] // Indique que l'on garde la reste de la phrase
+		},
+		"REVEIL" : {
+			"mots" : [
+				"réveil"
+			],
+			"suite" : ['all']
 		}
 	},
 	"porteOuVolet" : {
@@ -184,47 +197,129 @@ function commandeVocale( phrase ) {
 			}
 		}
 	}
-	else {
-		var piecesId = [];
-		// On simplifie les paramètres pour faciliter les comparaison
-		// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
-		parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
-		//console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
-		// On récupère la liste des pièces
-		$.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
-			//console.log(data);
-			// Pour chaque piece
-			$.each( data.pieces, function( key, val ) {
-				// On simplifie le nom pour faciliter la comparaison
-				var piece = simplifierPhrase(val.nom).split(' ');
-				// Passe à faux si la pièce ne correspond pas
-				var pieceReconnue = true;
-				//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
-				// Pour chaque mot dans le nomde la piece
-				for(var i = 0; i < piece.length; i++) {
-					// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
-					if(parametresCommandes.indexOf(piece[i]) == -1) {
-						pieceReconnue = false;
-					}
-				}
-				// On garde la piece si son nom se trouve dans la phrase
-				if(pieceReconnue) {
-					piecesId.push(val.id);
-				}
-			})
-			//console.log(piecesId);
-			// Si il y a des pièce dans la phrase
-			if(piecesId != []) {
-				// Pour chacune, on applique la commande trouvée
-				for(var i = 0; i < piecesId.length; i++) {
-					var id = piecesId[i];
-					appliqueCommandeDansPiece(commande, id);
-				}
+	else if(commande.indexOf('MENU') > -1) {
+		var parametreSimplifie = simplifierPhrase(parametresCommande);
+		if(parametreSimplifie.indexOf(simplifierPhrase("lumiere")) > -1) {
+                lumiere();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("volet"))> -1) {
+                volet();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("porte"))> -1) {
+                porte();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("hifi"))> -1) {
+                hifi();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("réveil"))> -1) {
+                reveil();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("itinéraire"))> -1) {
+                itineraire();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("météo"))> -1) {
+                meteo();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("recapitulatif"))> -1) {
+                recap();
+		}
+        else if(parametreSimplifie.indexOf(simplifierPhrase("paramètres"))> -1) {
+                param();
+		}
+	}
+	else if(commande.indexOf('REVEIL') > -1) {
+		var heure = -1;
+		var minute = -1;
+		var regHeureMinutes = new RegExp('([0-9]+)h ([0-9]*)');
+		var regHeure = new RegExp('([0-9]+)h');
+		var match = parametresCommande.match(regHeureMinutes);
+		if(!match) {
+			match = parametresCommande.match(regHeure);
+			if(match) {
+				var heure = parseInt(match[1]);
+				var minute = 0;
 			}
-		});
+		}
+		else{
+			heure = parseInt(match[1]);
+			minute = parseInt(match[2]);
+		}
+		if(heure != -1) {
+			var jour;
+			if((new Date().getHours() == heure && new Date().getMinutes() < minute)
+			|| (new Date().getHours() > heure)) {
+				jour = (new Date().getDay() + 6)%7;
+			}
+			else {
+				jour = (new Date().getDay() + 7)%7;
+			}
+			var jours = [0,0,0,0,0,0,0];
+			jours[jour] = 1;
+			if(minute < 10) {
+				minute = "0" + minute;
+			}
+			if(heure < 10) {
+				heure = "0" + heure;
+			}
+			var postData = {
+				"reveil": "Nouveau réveil à " + heure + ":" + minute,
+				"heure": match[1] + ":" + minute + ":00",
+				"jours": jours,
+				"repetition":1
+			};
+			console.log(postData);
+			$.post( getControllerActionUrl("reveil","creer"), postData, function(data) {console.log(data);});
+		}
+	}	
+	else {
+		commandeVocalePiece(parametresCommande);
 	}
 }
 
+
+/**
+*
+*
+*/
+function commandeVocalePiece(parametresCommande) {
+	var piecesId = [];
+	// On simplifie les paramètres pour faciliter les comparaison
+	// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
+	parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
+	//console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
+	// On récupère la liste des pièces
+	$.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
+		//console.log(data);
+		// Pour chaque piece
+		$.each( data.pieces, function( key, val ) {
+			// On simplifie le nom pour faciliter la comparaison
+			var piece = simplifierPhrase(val.nom).split(' ');
+			// Passe à faux si la pièce ne correspond pas
+			var pieceReconnue = true;
+			//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
+			// Pour chaque mot dans le nomde la piece
+			for(var i = 0; i < piece.length; i++) {
+				// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
+				if(parametresCommandes.indexOf(piece[i]) == -1) {
+					pieceReconnue = false;
+				}
+			}
+			// On garde la piece si son nom se trouve dans la phrase
+			if(pieceReconnue) {
+				piecesId.push(val.id);
+			}
+		})
+		//console.log(piecesId);
+		// Si il y a des pièce dans la phrase
+		if(piecesId != []) {
+			// Pour chacune, on applique la commande trouvée
+			for(var i = 0; i < piecesId.length; i++) {
+				var id = piecesId[i];
+				appliqueCommandeDansPiece(commande, id);
+			}
+		}
+	});
+}
 /**
 *
 * @param commande Action à effectuer (voir dictionnaireJSON en début de code)
@@ -264,9 +359,6 @@ function appliqueCommandeDansPiece(commande, piece) {
 		else {
 		//TODO
 		}
-	}
-	if(commande.indexOf('MAP GOTO') > -1) {
-	
 	}
 	if(url){
 		$.getJSON(url, function( data ){
