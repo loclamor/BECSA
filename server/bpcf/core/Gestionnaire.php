@@ -83,7 +83,7 @@ class Gestionnaire {
 	
 	/**
 	 * Retourne les enregistrements corespondant aux conditions
-	 * @param array $mixedConditions [var, value] (WHERE var = value AND ...)
+	 * @param array $mixedConditions [var, value] or [var, [op, value]] (WHERE var = value AND ...)
 	 * @param string $orderby [optional, default 'id'] (ORDER BY $orderby)
 	 * @param boolean $desc [optional, default false] si true DESC sinon ASC
 	 * @param integer $limitDown [optional, default 0] cf $limitUp
@@ -106,7 +106,15 @@ class Gestionnaire {
 		}
 		$cond = array();
 		foreach ($mixedConditions as $var => $value){
-			$cond[] = $this->class->DB_equiv[$var].' = \''.$value.'\'';
+            if( is_array( $value ) ) {
+                //forme [var, [op, value]]
+                $cond[] = $this->class->DB_equiv[$var].' '.$value[0].' \''.$value[1].'\'';
+            }
+            else {
+                //forme [var, value] === [var, ["=", value] ]
+                $cond[] = $this->class->DB_equiv[$var].' = \''.$value.'\'';
+            }
+			
 		}
 		$res = SQL::getInstance()->exec('SELECT '.$this->class->DB_equiv['id'].' FROM '.TABLE_PREFIX.$this->class->DB_table.' WHERE '.implode(' AND ',$cond).$orderby.$limit);
 		if($res) { //cas ou aucun retour requete (retour FALSE)
@@ -123,7 +131,7 @@ class Gestionnaire {
 	
 	/**
 	 * Retourne le premier enregistrement respectant les conditions
-	 * @param array $mixedConditions [var, value] (WHERE var = value AND ...)
+	 * @param array $mixedConditions [var, value] or [var, [op, value]] (WHERE var = value AND ...)
 	 * @return Entite $this->class ou false si pas de r�sultat
 	 */
 	public function getOneOf(array $mixedConditions){
@@ -136,13 +144,21 @@ class Gestionnaire {
 	/**
 	 * 
 	 * Enter description here ...
-	 * @param array $mixedConditions [var, value]
+	 * @param array $mixedConditions [var, value] or [var, [op, value]]
 	 * @return integer
 	 */
 	public function countOf(array $mixedConditions) {
 		$cond = array();
 		foreach ($mixedConditions as $var => $value){
-			$cond[] = $this->class->DB_equiv[$var].' = \''.$value.'\'';
+            if( is_array( $value ) ) {
+                //forme [var, [op, value]]
+                $cond[] = $this->class->DB_equiv[$var].' '.$value[0].' \''.$value[1].'\'';
+            }
+            else {
+                //forme [var, value] === [var, ["=", value] ]
+                $cond[] = $this->class->DB_equiv[$var].' = \''.$value.'\'';
+            }
+			
 		}
 		$res = SQL::getInstance()->exec('SELECT COUNT(*) as nombre FROM '.TABLE_PREFIX.$this->class->DB_table.' WHERE '.implode(' AND ',$cond));
 		if($res) { //cas ou aucun retour requete (retour FALSE)
