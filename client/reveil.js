@@ -1,3 +1,16 @@
+
+//auto refresh alarm
+$("body").on( "maison.refreshed", function(){
+    $.each( state.reveils, function( key, val ) {
+        if( val.sonne && !reveilASonne(val.id)) {
+            notify("danger", "<img src='./img/bell.png'>&nbsp;" + val.heure, val.nom, 0);
+            //refresh alarm state
+            $("#listeReveils #row_"+val.id+" .nom").removeClass("on off");
+            $("#listeReveils #row_"+val.id+" .nom").addClass( (val.actif ? "on" : "off") );
+        }
+    });
+});
+
 function reveil() {
     $("#fctTitle").html("Réveils");
     var body = initBodyPage('reveil');
