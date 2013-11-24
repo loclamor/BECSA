@@ -38,7 +38,8 @@ class Controller_Maison extends Controller {
             }
         }
         
-        $actions = Gestionnaire::getGestionnaire('action')->getOf( array( 'destinataire' => $dest ) );
+        $envoie = date("Y-m-d H:i:s", time()-60);
+        $actions = Gestionnaire::getGestionnaire('action')->getOf( array( 'destinataire' => $dest, "envoie" => array( ">", $envoie ) ) );
         $state['actions'] = array();
         if( $actions ) {
             foreach ( $actions as $a ) {

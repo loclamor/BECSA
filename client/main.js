@@ -13,6 +13,7 @@ $(document).ready(function(){
             if( data.code < 300 ){
                 state = data.state;
                 $("body").trigger("maison.refreshed");
+                console.log( "maison.refreshed emmited" );
             }
             else {
                 console.error( data.message );
