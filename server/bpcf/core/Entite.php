@@ -51,7 +51,7 @@ class Entite {
 		foreach ($values as $key => $value){
 			$db_equiv = array_flip($this->DB_equiv); //on inverse les clees et le valeurs pour utiliser les valeurs en tant que clees
 			$var = $db_equiv[$key];
-			$this->$var = htmlentities(stripslashes($value));
+			$this->$var = (stripslashes($value));
 		}
 	}
 	
@@ -94,7 +94,7 @@ class Entite {
 						$toSet[] = ' '.$value.' = '.$this->$key;
 					}
 					else {
-							$toSet[] = ' '.$value.' = "'.addslashes(html_entity_decode(nl2br($this->$key))).'"';
+							$toSet[] = ' '.$value.' = "'.addslashes((nl2br($this->$key))).'"';
 					}
 				}
 			}
@@ -115,7 +115,7 @@ class Entite {
 						$values[] = $this->$key;
 					}
 					else {
-						$values[] = '"'.addslashes(html_entity_decode(nl2br($this->$key))).'"';
+						$values[] = '"'.addslashes((nl2br($this->$key))).'"';//html_entity_decode
 					}
 				}
 			}
