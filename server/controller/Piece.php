@@ -38,6 +38,27 @@ class Controller_Piece extends Controller {
     }
     
     /**
+     * supprime une piece existante
+     * @param Int id identifiant de la piece à supprimer
+     * (parametre en GET)
+     */
+    public function supprimer() {
+        if ( isset($_GET["id"]) and !empty($_GET["id"] ) ){
+            $piece = Gestionnaire::getGestionnaire("piece")->getOne( $_GET["id"] );
+            if ( $piece ) {
+                $piece->supprimer();
+                $this->code = 205;
+            }
+            else {
+                $this->code = 404;
+            }
+        }
+        else {
+            $this->code = 400;
+        }
+    }
+    
+    /**
      * recupere une piece
      * @param $_GET['piece'] nom de la piece
      * or

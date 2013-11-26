@@ -55,6 +55,55 @@
             </div>
         </div>
     </form>
+    <h3>Supprimer une pièce</h3>
+    <form class="form-horizontal well" role="form" method="POST" action="../server/?controller=piece&action=supprimer" id="supprimerPiece" >
+        <div class="form-group">
+            <label for="inputNom" class="col-sm-3 control-label">Pièce</label>
+            <div class="col-sm-8">
+                <select class="form-control" name="piece" id="selectPiece" >
+                    
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-3 col-sm-9">
+                <button type="button" class="btn btn-danger" id="btn-supprimer" data-loading-text="Suppression..." >Supprimer</button>
+            </div>
+        </div>
+    </form>
+    <script>
+        //gestion de la suppression
+        $(document).ready(function(){
+            $.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
+                $.each( data.pieces, function( key, p ) {
+                    $("#selectPiece").append("<option value='" + p.id + "'>" + p.nom + "</option>");
+                });
+            });
+        });
+        $("#supprimerPiece #btn-supprimer").click(function() {
+            $(this).button('loading');
+            var id = $("#selectPiece").val();
+            if (confirm("Voulez-vous vraiment supprimer cette pièce ?")) {
+                //suppression
+                $.getJSON( getControllerActionUrl("piece", "supprimer", id), function(data) {
+                    if (data.code < 300) {
+                        notify('success', data.message, "", 3000);
+                    }
+                    else {
+                        notify('warning', data.message, "", 5000);
+                    }
+                    $("#fctBody").html("");
+                    $.get("./ajout.html", function(data) {
+                        $("#fctBody").append(data);
+                    });
+                });
+            }
+            else {
+                $(this).button('reset');
+            }
+        });
+        
+    </script>
 </div>
 <script>
     $("#aLumiere").parent("label").button('toggle');
