@@ -288,29 +288,44 @@ function commandeVocalePiece(commande, parametresCommande) {
 	var piecesId = [];
 	// On simplifie les paramètres pour faciliter les comparaison
 	// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
-	parametresCommandes = simplifierPhrase(parametresCommande).split(' ');
+	console.log(parametresCommande);
+	parametresCommande = simplifierPhrase(parametresCommande).split(' ');
+	console.log(parametresCommande);
+	if(parametresCommande.indexOf("tou") > -1) {
+		parametresCommande = "ALL";
+		console.log('VOICE : Allumer toutes les pièces.');
+	}
 	//console.log('Pieces demandées simplifiées : ' + parametresCommandes.join(' '));
 	// On récupère la liste des pièces
 	$.getJSON( getControllerActionUrl("piece", "lister"), function( data ){
 		//console.log(data);
 		// Pour chaque piece
 		$.each( data.pieces, function( key, val ) {
-			// On simplifie le nom pour faciliter la comparaison
-			var piece = simplifierPhrase(val.nom).split(' ');
-
-			// Passe à faux si la pièce ne correspond pas
-			var pieceReconnue = true;
-			//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
-			// Pour chaque mot dans le nomde la piece
-			for(var i = 0; i < piece.length; i++) {
-				// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
-				if(parametresCommandes.indexOf(piece[i]) == -1) {
-					pieceReconnue = false;
-				}
-			}
-			// On garde la piece si son nom se trouve dans la phrase
-			if(pieceReconnue) {
+			if(parametresCommande == "ALL") {
 				piecesId.push(val.id);
+			}
+			else {
+				// On simplifie le nom pour faciliter la comparaison
+				var piece = simplifierPhrase(val.nom).split(' ');
+
+				// Passe à faux si la pièce ne correspond pas
+				var pieceReconnue = true;
+				//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
+				// Pour chaque mot dans le nomde la piece
+				for(var i = 0; i < piece.length; i++) {
+					// Si le mot n'existe pas dans la phrase, on ne garde pas la piece
+					if(parametresCommande.indexOf(piece[i]) == -1) {
+						pieceReconnue = false;
+					}
+				}
+				// On garde la piece si son nom se trouve dans la phrase
+				if(pieceReconnue) {
+					console.log("VOICE : Pièce comprise : " + simplifierPhrase(val.nom));
+					piecesId.push(val.id);
+				}
+				else {
+					console.log("VOICE : Pièce non comprise : " + simplifierPhrase(val.nom));
+				}
 			}
 		})
 		//console.log(piecesId);
@@ -492,7 +507,8 @@ function simplifierPhrase(phrase) {
     var noaccent = ['A','a','E','e','I','i','O','o','U','u','N','n','C','c'];
      
     for(var i = 0; i < accent.length; i++){
-        res = res.replace(accent[i], noaccent[i]);
+        //res = res.replace(accent[i], noaccent[i]);
+		res = res.replace(accent[i], "@");
     }
 	
 	//Ensemble d'expession régulière pour la simplification
@@ -508,7 +524,7 @@ function simplifierPhrase(phrase) {
 		// Simplification des lettre doublée
 		"double"		: new RegExp("([a-zA-Z])\\1", "gi"),
 		// Caractère spéciaux
-		"special"		: new RegExp("(&[a-z]*;)", "gi"),
+		"special"		: new RegExp("&[a-zA-Z]*;|@@", "gi"),
 	};
 	// On vérifie que la chaîne à besoin d'être simplifié
 	var phraseEstComplexe =  res.match(regSimplifier.article) 
@@ -522,7 +538,7 @@ function simplifierPhrase(phrase) {
 				 .replace(regSimplifier.ponctuation," ")
 				 .replace(regSimplifier.silence," ")
 				 .replace(regSimplifier.seule," ")
-				 .replace(regSimplifier.special," ");
+				 .replace(regSimplifier.special,"@");
 		// On vérifie que la chaîne à besoin d'être encore simplifié
 		phraseEstComplexe =  res.match(regSimplifier.article) 
 						  || res.match(regSimplifier.ponctuation) 
