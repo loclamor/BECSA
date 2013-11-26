@@ -6,13 +6,13 @@
 */
 function micro() {
 	if(!record) {
-		console.log('Debut enregistrement.');
+		console.log('VOICE : Debut enregistrement.');
 		notify('info' , 'Que voulez-vous faire?',"",3000);
 		notify('info' , 'Allumer la salle de bain. <BR>Fermer les volets du salon. <BR>Déverrouiller la cuisine.',"Exemple de commande",10000);
 		recognition.start();
 	}
 	else {
-		console.log('Fin enregistrement.');
+		console.log('VOICE : Fin enregistrement.');
 		notify('info' , "Enregistrement annulé.","",3000);
 		recognition.stop();
 	}
@@ -129,7 +129,7 @@ recognition.lang = "fr";
 
 // Fonction appélée si la reconnaissance échoue
 recognition.onerror = function (event) {
-	console.log('Erreur : ');
+	console.log('VOICE : Erreur : ');
 	console.log(event);
 	recognition.stop();
 	record = false;
@@ -155,6 +155,7 @@ recognition.onresult = function (event) {
 			// On récupère la phrase
 			var sentence = event.results[i][0].transcript;
 			notify('info' , 'Vous avez demandé : ' + sentence + ".","",3000);
+			console.log('VOICE : Phrase comprise :');
 			console.log(sentence);
 			// On la traite
 			commandeVocale(sentence);
@@ -177,8 +178,10 @@ function commandeVocale( phrase ) {
 	// On récupèe les paramètres
 	var parametresCommande = computedCommand.parametres;
 	// On check si on a demandé l'itinaire
-	console.log(parametresCommande);
+	console.log('VOICE : Commande reconnue:');
 	console.log(commande);
+	console.log('VOICE : Paramètres de la commande:');
+	console.log(parametresCommande);
 	if(commande.indexOf('MAP') > -1) {
 		if(commande.indexOf('GOTO') > -1) {
 			if($("#fctTitle").html() == "Itinéraire") {
@@ -272,7 +275,7 @@ function commandeVocale( phrase ) {
 		}
 	}	
 	else {
-		commandeVocalePiece(parametresCommande);
+		commandeVocalePiece(commande, parametresCommande);
 	}
 }
 
@@ -281,7 +284,7 @@ function commandeVocale( phrase ) {
 *
 *
 */
-function commandeVocalePiece(parametresCommande) {
+function commandeVocalePiece(commande, parametresCommande) {
 	var piecesId = [];
 	// On simplifie les paramètres pour faciliter les comparaison
 	// (supprime articles, lettre silencieuse, accents, ponctuation, etc)
@@ -294,6 +297,7 @@ function commandeVocalePiece(parametresCommande) {
 		$.each( data.pieces, function( key, val ) {
 			// On simplifie le nom pour faciliter la comparaison
 			var piece = simplifierPhrase(val.nom).split(' ');
+
 			// Passe à faux si la pièce ne correspond pas
 			var pieceReconnue = true;
 			//console.log('Pieces disponible simplifiées : ' + piece.join(' '));
@@ -407,7 +411,7 @@ function computeCommand( phrase ) {
 			var resultatRecherche = retrouverIdDepuisMotEtTypesDansJson(mot, typeIdRecherche[i]);
 			if(resultatRecherche) {
 				resultatParser.commande += resultatRecherche.id + ' ';
-				return parsePhraseRecurrent(phrase, resultatRecherche.suite, resultatParser);
+				return parsePhraseRecurrent(phrase.slice(1, phrase.lenght), resultatRecherche.suite, resultatParser);
 			}
 		}
 		return parsePhraseRecurrent(phrase.slice(1, phrase.lenght), typeIdRecherche, resultatParser);
@@ -502,23 +506,28 @@ function simplifierPhrase(phrase) {
 		// Suppression des lettre seules
 		"seule"			: new RegExp(" [a-z] " , "gi"),
 		// Simplification des lettre doublée
-		"double"		: new RegExp("([a-zA-Z])\\1", "gi")
+		"double"		: new RegExp("([a-zA-Z])\\1", "gi"),
+		// Caractère spéciaux
+		"special"		: new RegExp("(&[a-z]*;)", "gi"),
 	};
 	// On vérifie que la chaîne à besoin d'être simplifié
 	var phraseEstComplexe =  res.match(regSimplifier.article) 
 						  || res.match(regSimplifier.ponctuation) 
 						  || res.match(regSimplifier.silence) 
+						  || res.match(regSimplifier.special)
 						  || res.match(regSimplifier.seule);
 	// Tant que la chaîne n'est pas simplifié
 	while(phraseEstComplexe){
 		res = res.replace(regSimplifier.article," ")
 				 .replace(regSimplifier.ponctuation," ")
 				 .replace(regSimplifier.silence," ")
-				 .replace(regSimplifier.seule," ");
+				 .replace(regSimplifier.seule," ")
+				 .replace(regSimplifier.special," ");
 		// On vérifie que la chaîne à besoin d'être encore simplifié
 		phraseEstComplexe =  res.match(regSimplifier.article) 
 						  || res.match(regSimplifier.ponctuation) 
 						  || res.match(regSimplifier.silence) 
+						  || res.match(regSimplifier.special)
 						  || res.match(regSimplifier.seule);
 	}
 	
