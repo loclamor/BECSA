@@ -94,7 +94,7 @@ class Entite {
 						$toSet[] = ' '.$value.' = '.$this->$key;
 					}
 					else {
-							$toSet[] = ' '.$value.' = "'.addslashes((nl2br($this->$key))).'"';
+							$toSet[] = ' '.$value.' = "'.addslashes(htmlspecialchars(nl2br($this->$key))).'"';
 					}
 				}
 			}
@@ -115,7 +115,7 @@ class Entite {
 						$values[] = $this->$key;
 					}
 					else {
-						$values[] = '"'.addslashes((nl2br($this->$key))).'"';//html_entity_decode
+						$values[] = '"'.addslashes(htmlspecialchars(nl2br($this->$key))).'"';
 					}
 				}
 			}
