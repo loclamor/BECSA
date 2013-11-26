@@ -7,12 +7,12 @@ Le projet consistait à prototyper la réalisation et le fonctionnement d'une ma
 
 #Matériel
 
-Pour profiter pleinement de ce prototype, vous aller devoir voue munir :
+Pour profiter pleinement de ce prototype, vous aller devoir vous munir :
 
 * D'un Kinect (au minimum) : pour la reconnaissance de mouvement ainsi que la communication avec la maison
 * D'un micro (si vous n'avez pas de Kinect) : pour communiquer avec la maison
-* D'une paire d'enceinte pour le retour vocale de la maison
-* D'un serveur : pour héberger le cerveau de la maison, le projet ne seras pas toujour disponible chez nous :)
+* D'une paire d'enceinte : pour le retour vocale de la maison
+* D'un serveur : pour héberger le 'cerveau' de la maison, le projet ne seras pas toujour disponible chez nous :)
 * D'un ordinateur/tablette/téléphone (pouvant utiliser Chrome pour la reconnaissance vocale) : pour utiliser le client web
 
 
@@ -26,11 +26,11 @@ Le reste viendra plus tard ;)
 
 Tout les membres de l'équipe sont (au moment de la création de ce projet) en [M2 spécialité Développement Logiciel](http://www.master-developpement-logiciel.fr/master-2)
 
-* Kevin ANATOLE
-* Vincent CARASSUS
-* Florian CLAVEL
-* Loïc FAVIER
 * Dorian RODDE
+* Florian CLAVEL
+* Kevin ANATOLE
+* Loïc FAVIER
+* Vincent CARASSUS
 * Vivian RODDE
 * Xavier VARLEZ
 
