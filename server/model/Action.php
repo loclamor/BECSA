@@ -17,7 +17,8 @@ class Model_Action extends Entite {
         "id"           => "id",
         "action"       => "action",
         "envoie"       => "envoie",
-        "destinataire" => "destinataire"
+        "destinataire" => "destinataire",
+        "params" => "params"
     );
     
     public function getAction() {
@@ -44,12 +45,27 @@ class Model_Action extends Entite {
         $this->destinataire = $dest;
     }
     
+    public function getParams(){
+        return explode( ";", $this->params );
+    }
+    
+    public function setParams( array $params ) {
+        $this->params = implode( ";", $params );
+    }
+    
+    public function addParam( $param ) {
+        $temp = $this->getParams();
+        $temp[] = $param;
+        $this->setParams( $temp );
+    }
+    
     public function getState(){
         return Array(
             "id" => $this->id,
             "action" => $this->getAction(),
             "envoie" => $this->getEnvoie(),
-            "dest" => $this->getDestinataire()
+            "dest" => $this->getDestinataire(),
+            "params" => $this->getParams()
         );
     }
 }

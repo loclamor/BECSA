@@ -20,7 +20,7 @@ class Controller_Action extends Controller {
         }
         if( $actions ) {
             foreach ( $actions as $action ) {
-                if( $action instanceof Model_Reveil ) {
+                if( $action instanceof Model_Action ) {
                     $this->actions[] = $action->getState();
                 }
             }
@@ -38,6 +38,13 @@ class Controller_Action extends Controller {
             $action = new Model_Action();
             $action->setAction($_POST['action']);
             $action->setDestinataire($_POST['dest']);
+            
+            //gestion des params param1, param2, paramX
+            $i = 0;
+            while( isset($_POST['param'.$i]) && !empty($_POST['param'.$i]) ){
+                $action->addParam( $_POST['param'.$i] );
+            }
+            
             $action->enregistrer();
             $this->code = 201;
         }

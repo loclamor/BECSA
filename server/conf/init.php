@@ -5,7 +5,7 @@ session_start();
 define('SITE_NAME', 'CSA');
 
 //version du site (utile en particulier pour automatiser la mise � jour de la BDD
-define('VERSION','0.0.6');
+define('VERSION','0.0.7');
 
 //config pour savoir si on est en local ou pas
 if($_SERVER['SERVER_ADDR'] == '127.0.0.1')  {
