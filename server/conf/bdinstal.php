@@ -77,10 +77,20 @@ if( $res === false ) {
 $requete = "CREATE TABLE IF NOT EXISTS `".TABLE_PREFIX."action`(
 	`id` int(11) NOT NULL AUTO_INCREMENT,
 	`action` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-	`envoie` datetime DEFAULT CURRENT_TIMESTAMP,
+	`envoie` datetime NOT NULL,
     `destinataire` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
 	PRIMARY KEY (`id`)
 )";
+$res = mysqli_query($link, $requete);
+if( $res === false ) {
+    echo mysqli_error( $link );
+}
+
+/**
+ * v0.0.7 ajout des paramètres a la table actions
+ */
+$requete = "ALTER TABLE  `".TABLE_PREFIX."action` 
+    ADD `params` TEXT CHARACTER SET utf8 COLLATE utf8_general_ci NULL ";
 $res = mysqli_query($link, $requete);
 if( $res === false ) {
     echo mysqli_error( $link );
