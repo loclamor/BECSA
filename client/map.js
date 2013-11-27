@@ -138,6 +138,14 @@ function newDestination(adress, stateCode, callBack) {
 				if (status == google.maps.DirectionsStatus.OK) {
 					directionsDisplay.setDirections(result);
 					directionsDisplay.setMap(map);
+					try {
+						var distance = result.routes[0].legs[0].distance.text;
+						var duree = result.routes[0].legs[0].duration.text;
+						notify('info',"Temps de trajet : " + duree + "<BR>Distance du trajet : " + distance);
+					}
+					catch(e) {
+						notify('info',"Informations sur le trajet indisponibles.");
+					}
 				}
 			});
 		}
