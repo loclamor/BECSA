@@ -22,8 +22,9 @@ var homePosition = new google.maps.LatLng(46.5,2.5);
 var map;
 // Home marker
 var homeMarker;
-// Direction display
+// Direction and traffic display
 var directionsDisplay;
+var trafficLayer;
 
 /**
 * Initialize the map in the element having the id
@@ -137,6 +138,20 @@ function geolocation(callback) {
 	else{
 		notify('error' ,"Geolocalisation impossible sur votre navigateur.");
 	}	
+}
+
+function traffic(displayOrNot) {
+	if(displayOrNot === undefined) {
+		displayOrNot = !trafficLayer;
+	}
+	if(displayOrNot) {
+		trafficLayer = new google.maps.TrafficLayer();
+		trafficLayer.setMap(map);
+	}
+	else {
+		trafficLayer.setMap();
+		trafficLayer = false;
+	}
 }
 
 function retrieveAdress(location, callback) {

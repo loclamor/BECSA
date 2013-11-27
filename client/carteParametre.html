@@ -15,14 +15,18 @@
             </div>
 			<div class="col-sm-offset-3 col-sm-9">
 				<button type="button" class="btn btn-default" id="btn-iti" data-loading-text="Calculer..." onclick="computeItineraire()">Calculer l'itinéraire</button>
+				<button type="button" class="btn btn-default" id="btn-traf" data-loading-text="Traffic..." onclick="changeTraffic()">Afficher le traffic</button>
 			</div>
         </div>
 	</form>
 	<div id="map"></div>
 </div>
 <script>
+var TRAFFICON = "Masquer le traffic";
+var TRAFFICOFF = "Afficher le traffic";
 $('#adresseMaison').val("");
 $('#adresseDestination').val("");
+$('#btn-traf').text(TRAFFICOFF);
 function computeItineraire() {
 	changeHome($('#adresseMaison').val(),'FR',function() {newDestination($('#adresseDestination').val(), 'FR')});
 }
@@ -38,5 +42,15 @@ function getLocation() {
 function saveLocation() {
 	changeHome($('#adresseMaison').val(),'FR');
 	notify('info' , "TODO : Save adress " + $('#adresseMaison').val());
+}
+
+function changeTraffic() {
+	traffic($('#btn-traf').text() == TRAFFICOFF);
+	if($('#btn-traf').text() == TRAFFICOFF) {
+		$('#btn-traf').text(TRAFFICON);
+	}
+	else {
+		$('#btn-traf').text(TRAFFICOFF);
+	}
 }
 </script>
