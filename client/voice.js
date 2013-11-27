@@ -24,10 +24,21 @@ function micro() {
 var dictionnaireJSON = {
 	// TYPE A RECHERCHER 
 	"init" : {
+		"DISPLAY 1" : {
+			"mots" : [
+				"afficher",
+			],
+			"suite" : ["menuOuTraffic"]
+		},
+		"DISPLAY 0" : {
+			"mots" : [
+				"masquer",
+			],
+			"suite" : ["menuOuTraffic"]
+		},
 		"MENU" : {
 			"mots" : [
-				"menu",
-				"afficher"
+				"menu"
 			],
 			"suite" : ['all']
 		},
@@ -118,6 +129,20 @@ var dictionnaireJSON = {
 			],
 		"suite" : ['all']
 		},
+	},
+	"menuOuTraffic" : {
+		"TRAFFIC" : {
+			"mots" :[
+				"traffic"
+			],
+			"suite" : ['all']
+		},
+		"MENU" : {
+			"mots" :[
+				"menu"
+			],
+			"suite" : ['all']
+		}
 	}
 };
 
@@ -199,6 +224,14 @@ function commandeVocale( phrase ) {
 				itineraire(changeHome(parametresCommande,'FR'));
 			}
 		}
+	}
+	else if(commande.indexOf('TRAFFIC') > -1) {
+			if($("#fctTitle").html() == "Itinéraire") {
+				traffic(commande.indexOf('1') > -1)
+			}
+			else {
+				itineraire(traffic(commande.indexOf('1') > -1));
+			}		
 	}
 	else if(commande.indexOf('MENU') > -1) {
 		var parametreSimplifie = simplifierPhrase(parametresCommande);

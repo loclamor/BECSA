@@ -144,14 +144,19 @@ function traffic(displayOrNot) {
 	if(displayOrNot === undefined) {
 		displayOrNot = !trafficLayer;
 	}
-	if(displayOrNot) {
-		trafficLayer = new google.maps.TrafficLayer();
-		trafficLayer.setMap(map);
-	}
-	else {
+	if(trafficLayer) {
 		trafficLayer.setMap();
 		trafficLayer = false;
 	}
+	if(displayOrNot) {
+		console.log("MAP : Traffic ON");
+		trafficLayer = new google.maps.TrafficLayer();
+		trafficLayer.setMap(map);
+	}
+}
+
+function setZoom(zoom) {
+	map.setZoom(zoom);
 }
 
 function retrieveAdress(location, callback) {
