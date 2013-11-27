@@ -18,7 +18,7 @@ Pour profiter pleinement de ce prototype, vous aller devoir vous munir :
 
 #Documentation
 
-Toute la documentation sera dans le dossier documents à la racine.
+Toute la documentation sera dans le [wiki du github](https://github.com/loclamor/BECSA/wiki).
 
 Le reste viendra plus tard ;)
 
