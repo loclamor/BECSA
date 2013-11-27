@@ -46,7 +46,10 @@ class Model_Action extends Entite {
     }
     
     public function getParams(){
-        return explode( ";", $this->params );
+        $temp = explode( ";", $this->params );
+        if( $temp[0] == "")
+            $temp = array();
+        return $temp;
     }
     
     public function setParams( array $params ) {
@@ -54,9 +57,14 @@ class Model_Action extends Entite {
     }
     
     public function addParam( $param ) {
+        $logger = new Logger('./logs');
+        $logger->setBaseString('Action : addParam :');
         $temp = $this->getParams();
+        if($temp == null)
+            $temp = array();
         $temp[] = $param;
         $this->setParams( $temp );
+        $logger->log('infos', 'infos_general', $param . ' - ' . $this->params . ' - ' . $temp, Logger::GRAN_MONTH);
     }
     
     public function getState(){

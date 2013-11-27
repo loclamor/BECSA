@@ -12,13 +12,22 @@
  */
 abstract class Controller {
 	
+    
+    
 	public $isJSON = true;
 	
 	public function getAction( $action ){
+        
 		$action = firstchartolower( $action );
+        $subClass = get_class($this);
+        
+        $this->logger = new Logger('./logs');
+        $this->logger->setBaseString($subClass.' : '.$action.' :');
+        //$this->logger->log('infos', 'infos_general', 'requested', Logger::GRAN_MONTH);
+        
 		$this->$action();
 		
-		$subClass = get_class($this);
+		
 		$simpleName = firstchartolower( str_replace( "Controller_", "", $subClass ) );
 		$pathView = "view/".$simpleName."/".$action.".phtml";
 		

@@ -44,6 +44,7 @@ class Controller_Action extends Controller {
             $i = 0;
             while( isset($_POST['param'.$i]) && !empty($_POST['param'.$i]) ){
                 $action->addParam( $_POST['param'.$i] );
+                $this->logger->log('infos', 'infos_general', 'param ajoute '.$i.' : '.$_POST['param'.$i], Logger::GRAN_MONTH);
                 $i++;
             }
             
