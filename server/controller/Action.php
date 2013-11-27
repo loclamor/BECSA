@@ -38,12 +38,13 @@ class Controller_Action extends Controller {
             $action = new Model_Action();
             $action->setAction($_POST['action']);
             $action->setDestinataire($_POST['dest']);
-            $action->setEnvoie( time() );
+            $action->setEnvoie( date("Y-m-d H:i:s", time()) );
             
             //gestion des params param0, param1, paramX
             $i = 0;
             while( isset($_POST['param'.$i]) && !empty($_POST['param'.$i]) ){
                 $action->addParam( $_POST['param'.$i] );
+                $i++;
             }
             
             $action->enregistrer();
