@@ -222,6 +222,7 @@ function commandeVocale( phrase ) {
 			}
 			else {
 				itineraire(changeHome(parametresCommande,'FR'));
+				itineraire();
 			}
 		}
 	}

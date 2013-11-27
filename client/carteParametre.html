@@ -27,6 +27,14 @@ var TRAFFICOFF = "Afficher le traffic";
 $('#adresseMaison').val("");
 $('#adresseDestination').val("");
 $('#btn-traf').text(TRAFFICOFF);
+if(readCookie("adress")) {
+	$('#adresseMaison').val(readCookie("adress"));
+	changeHome($('#adresseMaison').val(),'FR');
+}
+if($('#adresseMaison').val()) {
+	changeHome($('#adresseMaison').val(),'FR');
+}
+
 function computeItineraire() {
 	changeHome($('#adresseMaison').val(),'FR',function() {newDestination($('#adresseDestination').val(), 'FR')});
 }
@@ -34,13 +42,13 @@ function computeItineraire() {
 function getLocation() {
 	geolocation(function(location) {
 		retrieveAdress(location, function(adresse){
-			$('#adresseMaison').val(adresse);
+			saveAdress(adresse);
 		});
 	});
 }
 
 function saveLocation() {
-	changeHome($('#adresseMaison').val(),'FR');
+	changeHome($('#adresseMaison').val(),'FR',itineraire);
 	notify('info' , "TODO : Save adress " + $('#adresseMaison').val());
 }
 

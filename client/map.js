@@ -32,7 +32,18 @@ var trafficLayer;
 */
 function initialize(elementId) {
 	// Home position (center of France by default)
-	homePosition = new google.maps.LatLng(46.5,2.5);
+	var adresseSaved;
+	var latSaved, lngSaved;
+	if(readCookie) {
+		latSaved = readCookie("lat");
+		lngSaved = readCookie("lng");
+	}
+	if(!latSaved || !lngSaved) {
+		homePosition = new google.maps.LatLng(46.5,2.5);
+	}
+	else {
+		homePosition = new google.maps.LatLng(latSaved,lngSaved);
+	}
 	// Default map option
 	var mapOptions = {
 		center: homePosition,
@@ -61,7 +72,7 @@ function initialize(elementId) {
 * @param stateCode Code of the state of the home
 * @param callback a calback function that can use date from adress
 */
-function changeHome(adress, stateCode, callBack) {
+function changeHome(adress, stateCode, callBack, saveCallback) {
 	// Recenter on the user adress
 	var urlAdress = "http://maps.google.com/maps/api/geocode/json?address="+adress+","+stateCode+"&sensor=false";
 	// Get the adress information
@@ -72,6 +83,18 @@ function changeHome(adress, stateCode, callBack) {
 		if(data.status == "OK") {
 			// Get location coordinate
 			var location = data.results[0].geometry.location;
+			if(createCookie) {
+				if(data.results[0].formatted_address) {
+					createCookie("adress",data.results[0].formatted_address);
+				}
+				else {
+					console.log("MAP : Save " + adress);
+					createCookie("adress",adress);
+				}
+				createCookie("lat",location.lat);
+				createCookie("lng",location.lng);
+			}
+
 			// Change the home position
 			homePosition = new google.maps.LatLng(location.lat, location.lng);
 			console.log(homePosition);
