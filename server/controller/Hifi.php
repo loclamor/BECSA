@@ -40,6 +40,33 @@ class Controller_Hifi extends Controller {
 
     
     /**
+     * ajoute une piste
+     * @param string artist le nom de l'artiste
+     * @param string title le nom de la chanson
+     * (paramettres en POST
+     */
+    public function ajouter() {
+        if( isset($_POST["artist"]) and !empty($_POST["artist"] )
+                && isset($_POST["title"]) and !empty($_POST["title"] ) ) {
+            
+            $artist = $_POST["artist"];
+            $title = $_POST["title"];
+                
+            $track = new Model_Hifi();
+            $track->setArtist($artist);
+            $track->setTitle($title);
+            $track->enregistrer();
+            
+            $this->code = 201;
+            $this->piste = $track->getState();
+        }
+        else {
+            $this->code = 400;
+        }
+        
+    }
+    
+    /**
      * liste toutes les chansons 
      */
     public function lister() {
