@@ -206,3 +206,52 @@ h1 {
 #map{
 	min-height : 666px;
 }
+
+/*
+ * Style pour les player Hifi
+ */
+div.playerscontainer {
+    width : 450px;
+    height : 210px;
+    position: relative;
+    left: 50%;
+    margin-left: -250px;
+}
+
+div.playerscontainer .wrapper {
+    position: relative;
+    width : 450px;
+    height : 210px;
+    z-index: 300;
+/*    background-color: rgba(66,66,66,.5);*/
+}
+
+div.player {
+    float: left;
+    height:200px;
+    width: 200px;
+    background-color: rgba(66,66,66,.5);
+}
+
+div.player.prev {
+    position: relative;
+    z-index: 100;
+    transform: perspective(300) rotateY(45deg) scale(0.8);
+    -webkit-transform: perspective(300) rotateY(45deg) scale(0.8);
+}
+
+div.player.next {
+    position: relative;
+    z-index: 100;
+    left : 250px;
+    top: -205px;
+    transform: perspective(300) rotateY(-45deg) scale(0.8);
+    -webkit-transform: perspective(300) rotateY(-45deg) scale(0.8);
+}
+
+div.player.curr {
+    position: relative;
+    z-index: 200;
+    left : -75px;
+    top: 10px;
+}
