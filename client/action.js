@@ -36,6 +36,24 @@ function moteurEtAction( action ) {
         case "meteo" :
             $("#functions #btn_meteo").trigger("click");
             break;
+        case "playSong" :
+            if( !$('#fctBody').hasClass('hifi') ){
+                //si pas sur la page
+                $("#functions #btn_hifi").trigger("click");
+                $("body").on("hifi.player.playble", function(){
+                    $("body").off("hifi.player.playble");
+                    $("#btnPlay").trigger("player.playrequested");
+                });
+            }
+            else {
+                //si deja sur al page, on clic
+                $("#btnPlay").trigger("player.playrequested");
+            }
+            break;
+        case "pauseSong" :
+            $("#btnPlay").trigger("player.pauserequested");
+
+            break;
         default :
             notify( "warning", "action inconue : " + action.action, "Gestionnaire d'Actions", 5000 );
             console.log( action );

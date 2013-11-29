@@ -47,6 +47,16 @@ function hifi() {
         }
     });
     
+    $("#btnPlay").on("player.playrequested", function(){
+        if( !playing )
+            $("#btnPlay").trigger("click");
+    });
+    
+    $("#btnPlay").on("player.pauserequested", function(){
+        if( playing )
+            $("#btnPlay").trigger("click");
+    });
+    
     $("#btnPrev").click(function(){
         $("#btnPrev").button('loading');
         $(".next").remove();
@@ -171,6 +181,7 @@ function hifi() {
                     //console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
                     if( track.song == currSong ){
                         $("#btnPlay").button('reset');
+                        $("body").trigger("hifi.player.playble");
                     }
                     else if ( track.song == getPrevious( currSong ) ) {
                         $("#btnPrev").button('reset');
