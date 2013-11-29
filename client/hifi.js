@@ -12,33 +12,38 @@ function hifi() {
     
     body.append("<div id='playerscontainer' class='playerscontainer'><div id='trackViewer'><div id='prevTrack' class='player prev'></div><div id='curTrack' class='player curr'></div><div id='nextTrack' class='player next'></div></div><div class='wrapper'></div></div>");
     
-    body.append("<div class='btn-group'>"
-                + "<button id='btnPrev' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-fast-backward'></span>\">"
-                    + "<span class='glyphicon glyphicon-fast-backward'></span>"
+    body.append("<div class='row' id='rowTimeControl'><div class='currTime col-xs-1'>--:--</div>"
+            + "<div class='sliderContainer col-xs-10'><div id='slider' class=''></div></div>"
+            + "<div class='totalTime col-xs-1'>--:--</div></div>");
+    
+    body.append("<div id='playerControls' class='btn-group'>"
+                + "<button id='btnPrev' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-step-backward'></span>\">"
+                    + "<span class='glyphicon glyphicon-step-backward'></span>"
                 + "</button>"
                 + "<button id='btnPlay' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-play'></span>\" data-pause-text=\"<span class='glyphicon glyphicon-pause'></span>\">"
                     + "<span class='glyphicon glyphicon-play'></span>"
                 + "</button>"
-                + "<button id='btnNext' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-fast-forward'></span>\">"
-                    + "<span class='glyphicon glyphicon-fast-forward'></span>"
+                + "<button id='btnNext' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-step-forward'></span>\">"
+                    + "<span class='glyphicon glyphicon-step-forward'></span>"
                 + "</button>"
               + "</div>");
       
-      //on init, disable buttons
-      $("#btnPrev").button('loading');
-      $("#btnPlay").button('loading');
-      $("#btnNext").button('loading');
+    //on init, disable buttons
+    $("#btnPrev").button('loading');
+    $("#btnPlay").button('loading');
+    $("#btnNext").button('loading');
+    $( "#slider" ).slider({ disabled: true });
     
     $("#btnPlay").click(function(){
         if( playing ) {
             playing = false;
             thkCurr.pause();
-            $("#btnPlay").button('pause');
+            $("#btnPlay").button('reset');
         }
         else {
             playing = true;
              thkCurr.play();
-             $("#btnPlay").button('reset');
+             $("#btnPlay").button('pause');
         }
     });
     
@@ -61,6 +66,7 @@ function hifi() {
         thkCurr.seek(0);
         thkCurr.play();
         playing = true;
+        $("#btnPlay").button('pause');
     });
     
     $("#btnNext").click(function(){
@@ -82,6 +88,7 @@ function hifi() {
         thkCurr.seek(0);
         thkCurr.play();
         playing = true;
+        $("#btnPlay").button('pause');
     });
     
 //recuperation des tracks
@@ -158,6 +165,10 @@ function hifi() {
                 onplayable: function() {
                     //console.log(track.connection+":\n  playable");
                     //TODO : activer btn play/pause, continuer la lecture si c'est une piste suivante
+                    
+                },
+                onresolved: function(resolver, result) {
+                    //console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
                     if( track.song == currSong ){
                         $("#btnPlay").button('reset');
                     }
@@ -168,9 +179,6 @@ function hifi() {
                         $("#btnNext").button('reset');
                     }
                 },
-                onresolved: function(resolver, result) {
-                    //console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
-                },
                 ontimeupdate: function(timeupdate) {
                     var currentTime = timeupdate.currentTime;
                     var duration = timeupdate.duration;
@@ -178,6 +186,22 @@ function hifi() {
                     duration = parseInt(duration);
 
                     //C'est ici qu'il faut gérer si on veut faire une bare de progression
+                    if( track.song == currSong ){
+                        $( "#slider" ).slider( {
+                            min : 0,
+                            max : duration,
+                            value : currentTime,
+                            slide: function( event, ui ) {
+                                track.seek( ui.value );
+                            },
+                            range: "min",
+                            animate: true,
+                            disabled: false
+                        } );
+                        //update times
+                        $('.currTime').html( formatTime(currentTime) );
+                        $('.totalTime').html( formatTime(duration) );
+                    }
                 }
             }
         });
@@ -189,5 +213,19 @@ function hifi() {
     function renderTrack( track, elt ) {
         elt.html(track.render());
     }
-
+    
+    function formatTime( sec ) {
+        if( isNaN(sec) ){
+            return "--:--";
+        }
+        var s = sec % 60;
+        var m = (sec - s) / 60;
+        
+        if( s < 10 )
+            s = "0"+s;
+        if( m < 10 )
+            m = "0"+m;
+        
+        return m+":"+s;
+    }
 }

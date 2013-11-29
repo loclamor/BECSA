@@ -215,7 +215,7 @@ div.playerscontainer {
     height : 210px;
     position: relative;
     left: 50%;
-    margin-left: -250px;
+    margin-left: -225px;
 }
 
 div.playerscontainer .wrapper {
@@ -254,4 +254,32 @@ div.player.curr {
     z-index: 200;
     left : -75px;
     top: 10px;
+}
+
+#playerControls {
+    position: relative;
+    left : 50%;
+    margin-left : -59px;
+}
+
+div#rowTimeControl.row {
+    border: none;
+    line-height: 20px;
+    height: 30px;
+}
+
+#rowTimeControl .currTime,
+#rowTimeControl .totalTime
+{
+    text-align: center;
+}
+
+.sliderContainer {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+/* custom slider active state */
+.sliderContainer #slider .ui-state-active {
+    background: #0078ae url("./css/start/images/ui-bg_glass_45_0078ae_1x400.png") 50% 50% repeat-x;
 }
