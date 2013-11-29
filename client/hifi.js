@@ -13,23 +13,37 @@ function hifi() {
     body.append("<div id='playerscontainer' class='playerscontainer'><div id='trackViewer'><div id='prevTrack' class='player prev'></div><div id='curTrack' class='player curr'></div><div id='nextTrack' class='player next'></div></div><div class='wrapper'></div></div>");
     
     body.append("<div class='btn-group'>"
-                + "<button id='btnPrev' class='btn btn-default'>Prev</button>"
-                + "<button id='btnPlay' class='btn btn-default'>Play</button>"
-                + "<button id='btnNext' class='btn btn-default'>Next</button>"
+                + "<button id='btnPrev' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-fast-backward'></span>\">"
+                    + "<span class='glyphicon glyphicon-fast-backward'></span>"
+                + "</button>"
+                + "<button id='btnPlay' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-play'></span>\" data-pause-text=\"<span class='glyphicon glyphicon-pause'></span>\">"
+                    + "<span class='glyphicon glyphicon-play'></span>"
+                + "</button>"
+                + "<button id='btnNext' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-fast-forward'></span>\">"
+                    + "<span class='glyphicon glyphicon-fast-forward'></span>"
+                + "</button>"
               + "</div>");
+      
+      //on init, disable buttons
+      $("#btnPrev").button('loading');
+      $("#btnPlay").button('loading');
+      $("#btnNext").button('loading');
     
     $("#btnPlay").click(function(){
         if( playing ) {
             playing = false;
             thkCurr.pause();
+            $("#btnPlay").button('pause');
         }
         else {
             playing = true;
              thkCurr.play();
+             $("#btnPlay").button('reset');
         }
     });
     
     $("#btnPrev").click(function(){
+        $("#btnPrev").button('loading');
         $(".next").remove();
         $(".curr").removeClass('curr').addClass('next');
         $(".prev").removeClass('prev').addClass('curr');
@@ -50,6 +64,7 @@ function hifi() {
     });
     
     $("#btnNext").click(function(){
+        $("#btnNext").button('loading');
         $(".prev").remove();
         $(".curr").removeClass('curr').addClass('prev');
         $(".next").removeClass('next').addClass('curr');
@@ -79,13 +94,13 @@ function hifi() {
             });
             //generate players
             currSong = tracks[0];
-            thkCurr = getTHKW( tracks[0] );
+            thkCurr = getTHKW( currSong );
             renderTrack( thkCurr, $(".curr") );
             
-            thkPrev = getTHKW( getPrevious( tracks[0] ) );
+            thkPrev = getTHKW( getPrevious( currSong ) );
             renderTrack( thkPrev, $(".prev") );
             
-            thkNext = getTHKW( getNext( tracks[0] ) );
+            thkNext = getTHKW( getNext( currSong ) );
             renderTrack( thkNext, $(".next") );
             
             list.slideDown(500);
@@ -143,6 +158,15 @@ function hifi() {
                 onplayable: function() {
                     //console.log(track.connection+":\n  playable");
                     //TODO : activer btn play/pause, continuer la lecture si c'est une piste suivante
+                    if( track.song == currSong ){
+                        $("#btnPlay").button('reset');
+                    }
+                    else if ( track.song == getPrevious( currSong ) ) {
+                        $("#btnPrev").button('reset');
+                    }
+                    else if ( track.song == getNext( currSong ) ) {
+                        $("#btnNext").button('reset');
+                    }
                 },
                 onresolved: function(resolver, result) {
                     //console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
@@ -153,10 +177,12 @@ function hifi() {
                     currentTime = parseInt(currentTime);
                     duration = parseInt(duration);
 
-                    //console.log(track.connection+":\n  Time update: "+currentTime + " "+duration);
+                    //C'est ici qu'il faut gérer si on veut faire une bare de progression
                 }
             }
         });
+        //add the song object in the THK var
+        track.song = song;
         return track;
     }
 
