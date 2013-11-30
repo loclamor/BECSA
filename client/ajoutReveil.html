@@ -56,12 +56,16 @@
 </div>
 <script>
     $(document).ready(function() {
+        var dM = new Date();
         for (var i = 0; i < 24; i++) {
-            $("#heure").append("<option value=" + (i < 10 ? "0" : "") + i + ">" + (i < 10 ? "0" : "") + i + "</option>");
+            var sel = dM.getHours() == i ? "selected='selected'" : "";
+            $("#heure").append("<option "+sel+" value=" + (i < 10 ? "0" : "") + i + ">" + (i < 10 ? "0" : "") + i + "</option>");
         }
         for (var i = 0; i < 60; i++) {
-            $("#minute").append("<option value=" + (i < 10 ? "0" : "") + i + ">" + (i < 10 ? "0" : "") + i + "</option>");
+            var sel = dM.getMinutes() == i ? "selected='selected'" : "";
+            $("#minute").append("<option "+sel+" value=" + (i < 10 ? "0" : "") + i + ">" + (i < 10 ? "0" : "") + i + "</option>");
         }
+       $("#jours option[value="+(dM.getDay() - 1)+"]").attr("selected","selected");//dM.getDay()
     });
     $("#creerReveil #btn-ajouter").click(function() {
         $(this).button('loading');
