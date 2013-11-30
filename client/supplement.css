@@ -236,8 +236,9 @@ div.player {
 div.player.prev {
     position: relative;
     z-index: 100;
-    transform: perspective(300) rotateY(45deg) scale(0.8);
-    -webkit-transform: perspective(300) rotateY(45deg) scale(0.8);
+    transform: perspective(300px) rotateY(45deg) scale(0.8); /*recente firefox understand this */
+    -moz-transform: perspective(300px) rotateY(45deg) scale(0.8);
+    -webkit-transform: perspective(300px) rotateY(45deg) scale(0.8);
 }
 
 div.player.next {
@@ -245,8 +246,9 @@ div.player.next {
     z-index: 100;
     left : 250px;
     top: -205px;
-    transform: perspective(300) rotateY(-45deg) scale(0.8);
-    -webkit-transform: perspective(300) rotateY(-45deg) scale(0.8);
+    transform: perspective(300px) rotateY(-45deg) scale(0.8);
+    -moz-transform: perspective(300px) rotateY(-45deg) scale(0.8);
+    -webkit-transform: perspective(300px) rotateY(-45deg) scale(0.8);
 }
 
 div.player.curr {
