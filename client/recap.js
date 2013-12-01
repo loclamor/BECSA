@@ -3,7 +3,7 @@ function recap() {
     var body = initBodyPage('recap');
     body.append(
         '<div class="row title">'
-            + '<div class="col-xs-3" >Piece</div>'
+            + '<div class="col-xs-6" >Piece</div>'
             + '<div class="col-xs-2" >Lumiere</div>'
             + '<div class="col-xs-2" >Volet</div>'
             + '<div class="col-xs-2" >Porte</div>'
@@ -26,7 +26,7 @@ function recap() {
             }
             list.append(
                 '<div class="row" id="row_' + val.id + '">'
-                    + '<div class="col-xs-3 nom" >' + val.nom + '</div>'
+                    + '<div class="col-xs-6 nom" >' + val.nom + '</div>'
                     + '<div class="col-xs-2 lumiere ' + lum + '" ></div>'
                     + '<div class="col-xs-2 volet ' + volet + '" ></div>'
                     + '<div class="col-xs-2 porte ' + porte + '" ></div>'
