@@ -68,7 +68,7 @@ function moteurEtAction( action ) {
             $("#btnNext").trigger("player.nextrequested");
             break;
         case "previousSong" :
-            $("#btnNext").trigger("player.nextrequested");
+            $("#btnPrev").trigger("player.nextrequested");
             break;
         case "pauseSong" :
             $("#btnPlay").trigger("player.pauserequested");
