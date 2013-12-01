@@ -9,6 +9,7 @@ function hifi() {
     var thkPrev;
     var thkNext;
     var playing = false;
+    var random = false;
     
     body.append("<div id='playerscontainer' class='playerscontainer'><div id='trackViewer'><div id='prevTrack' class='player prev'></div><div id='curTrack' class='player curr'></div><div id='nextTrack' class='player next'></div></div><div class='wrapper'></div></div>");
     
@@ -26,7 +27,11 @@ function hifi() {
                 + "<button id='btnNext' class='btn btn-default' data-loading-text=\"<span class='glyphicon glyphicon-step-forward'></span>\">"
                     + "<span class='glyphicon glyphicon-step-forward'></span>"
                 + "</button>"
-              + "</div>");
+              + "</div>"
+              + "<button id='btnRandom' class='btn btn-default pull-right' >"
+                + "<span class='glyphicon glyphicon-random'></span>"
+              + "</button>"
+            );
       
     //on init, disable buttons
     $("#btnPrev").button('loading');
@@ -34,16 +39,33 @@ function hifi() {
     $("#btnNext").button('loading');
     $( "#slider" ).slider({ disabled: true });
     
+    $("#btnRandom").click(function(){
+        console.info( "randomizing");
+        //shuffle
+        tracks = shuffle( tracks );
+        //attach handler to play on resolved
+        $("body").on("hifi.player.playble", function(){
+            $("body").off("hifi.player.playble");
+            $("#btnPlay").trigger("player.playrequested");
+        });
+        playing = false;
+        //re-init
+        initFromTrackList();
+        
+    });
+    
     $("#btnPlay").click(function(){
         if( playing ) {
             playing = false;
             thkCurr.pause();
             $("#btnPlay").button('reset');
+            console.log("pausing");
         }
         else {
             playing = true;
              thkCurr.play();
              $("#btnPlay").button('pause');
+             console.log("playing");
         }
     });
     
@@ -105,27 +127,40 @@ function hifi() {
     $.getJSON( getControllerActionUrl("hifi", "lister"), function( data ){
         if( data.code < 300 ) {
             tracks = data.songs;
+            
             $.each( data.songs, function( key, val ) {
                 
                 console.log( val.id + ' : ' + val.artist + ' - ' + val.title + ' - ' + findSong( val ) + ' - ' + getPrevious( val ).title + ' - ' + getNext( val ).title);
             });
             //generate players
-            currSong = tracks[0];
-            thkCurr = getTHKW( currSong );
-            renderTrack( thkCurr, $(".curr") );
+            initFromTrackList();
             
-            thkPrev = getTHKW( getPrevious( currSong ) );
-            renderTrack( thkPrev, $(".prev") );
+            //we are ready to play, say it to the world !
+            $("body").trigger("hifi.page.ready");
             
-            thkNext = getTHKW( getNext( currSong ) );
-            renderTrack( thkNext, $(".next") );
-            
-            list.slideDown(500);
         }
         else {
             notify("danger", data.message, "Error", 5000);
         }
     });
+    
+    function initFromTrackList() {
+        $("#btnPrev").button('loading');
+        $("#btnPlay").button('loading');
+        $("#btnNext").button('loading');
+        $( "#slider" ).slider({ disabled: true });
+        
+        currSong = tracks[0];
+        thkCurr = getTHKW( currSong );
+        renderTrack( thkCurr, $(".curr") );
+
+        thkPrev = getTHKW( getPrevious( currSong ) );
+        renderTrack( thkPrev, $(".prev") );
+
+        thkNext = getTHKW( getNext( currSong ) );
+        renderTrack( thkNext, $(".next") );
+        console.info( "player initialized");
+    }
     
     function getPrevious( song ){
         var index = findSong( song );
@@ -180,7 +215,12 @@ function hifi() {
                 onresolved: function(resolver, result) {
                     //console.log(track.connection+":\n  Track found: "+resolver+" - "+ result.track + " by "+result.artist);
                     if( track.song == currSong ){
-                        $("#btnPlay").button('reset');
+                        if( !playing ) {
+                            $("#btnPlay").button('reset');
+                        }
+                        else {
+                            $("#btnPlay").button('pause');
+                        }
                         $("body").trigger("hifi.player.playble");
                     }
                     else if ( track.song == getPrevious( currSong ) ) {

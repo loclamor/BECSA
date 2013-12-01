@@ -50,6 +50,20 @@ function moteurEtAction( action ) {
                 $("#btnPlay").trigger("player.playrequested");
             }
             break;
+        case "randomSong" :
+            if( !$('#fctBody').hasClass('hifi') ){
+                //si pas sur la page
+                $("#functions #btn_hifi").trigger("click");
+                $("body").on("hifi.page.ready", function(){
+                    $("body").off("hifi.page.ready");
+                    $("#btnRandom").trigger("click");
+                });
+            }
+            else {
+                //si deja sur al page, on clic
+                $("#btnRandom").trigger("click");
+            }
+            break;
         case "pauseSong" :
             $("#btnPlay").trigger("player.pauserequested");
 

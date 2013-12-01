@@ -151,3 +151,21 @@ function notify( type, message, title, timeout ) {
         notifbox.slideDown(1000).delay(_timeout).queue(function() { $(this).slideUp(1000).alert("close"); });
     }
 }
+
+/**
+ * generate a random number between from number and to number
+ * @param {Number} from
+ * @param {Number} to
+ * @returns {Number} the random value in [from, to]
+ */
+function randomFromInterval(from,to)
+{
+    return Math.floor(Math.random()*(to-from+1)+from);
+}
+
+//+ Jonas Raoni Soares Silva
+//@ http://jsfromhell.com/array/shuffle [v1.0]
+function shuffle(o){ //v1.0
+    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+    return o;
+};
