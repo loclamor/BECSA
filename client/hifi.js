@@ -69,6 +69,28 @@ function hifi() {
         }
     });
     
+    $("#btnNext").on("player.nextrequested", function(){
+        if( $("#btnNext").hasClass("disabled") ){
+            $("#btnNext").on("hifi.player.next.playble", function(){
+                $("#btnNext").trigger("click");
+            });
+        }
+        else {
+            $("#btnNext").trigger("click");
+        }
+    });
+    
+    $("#btnPrev").on("player.nextrequested", function(){
+        if( $("#btnPrev").hasClass("disabled") ){
+            $("#btnPrev").on("hifi.player.previous.playble", function(){
+                $("#btnPrev").trigger("click");
+            });
+        }
+        else {
+            $("#btnPrev").trigger("click");
+        }
+    });
+    
     $("#btnPlay").on("player.playrequested", function(){
         if( !playing )
             $("#btnPlay").trigger("click");
@@ -225,9 +247,11 @@ function hifi() {
                     }
                     else if ( track.song == getPrevious( currSong ) ) {
                         $("#btnPrev").button('reset');
+                        $("#btnPrev").trigger("hifi.player.previous.playble");
                     }
                     else if ( track.song == getNext( currSong ) ) {
                         $("#btnNext").button('reset');
+                        $("#btnNext").trigger("hifi.player.next.playble");
                     }
                 },
                 ontimeupdate: function(timeupdate) {

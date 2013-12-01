@@ -64,6 +64,12 @@ function moteurEtAction( action ) {
                 $("#btnRandom").trigger("click");
             }
             break;
+        case "nextSong" :
+            $("#btnNext").trigger("player.nextrequested");
+            break;
+        case "previousSong" :
+            $("#btnNext").trigger("player.nextrequested");
+            break;
         case "pauseSong" :
             $("#btnPlay").trigger("player.pauserequested");
 
