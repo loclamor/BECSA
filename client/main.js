@@ -7,7 +7,39 @@ var reveilsRinged = Array();
 $(document).ready(function(){
     main();
     
-        
+    //menu toggle small display
+    $("#btn-menu").click(function(){
+        if( $("#functions").hasClass("displayed") ) {
+            $("#btn-menu").animate({
+                left: 0
+            }, 500, "linear", function() { 
+                $("#functions").removeClass("displayed");
+            });
+            $("#functions").animate({
+                width: 0
+            }, 500, "linear", function() { 
+                $("#btn-menu").removeClass("displayed");
+                $("#functions").removeClass("done");
+                $("#functions").attr("style","");
+            });
+        }
+        else {
+            $("#functions").addClass("displayed");
+            $("#btn-menu").addClass("displayed");
+            $("#btn-menu").animate({
+                left: 199
+            }, 500, "linear", function() {});
+            $("#functions").animate({
+                width: 200
+            }, 500, "linear", function() {
+                $("#functions").addClass("done");
+                $("#functions").attr("style","");
+            });
+            
+        }
+    });
+    
+    
     setInterval( function(){
         $.getJSON( getControllerActionUrl("maison", "getState")+"&dest=webapp", function( data ){
             if( data.code < 300 ){
