@@ -72,6 +72,7 @@ function hifi() {
     $("#btnNext").on("player.nextrequested", function(){
         if( $("#btnNext").hasClass("disabled") ){
             $("#btnNext").on("hifi.player.next.playble", function(){
+                $("#btnNext").off("hifi.player.next.playble");
                 $("#btnNext").trigger("click");
             });
         }
@@ -83,6 +84,7 @@ function hifi() {
     $("#btnPrev").on("player.nextrequested", function(){
         if( $("#btnPrev").hasClass("disabled") ){
             $("#btnPrev").on("hifi.player.previous.playble", function(){
+                $("#btnPrev").off("hifi.player.previous.playble");
                 $("#btnPrev").trigger("click");
             });
         }
