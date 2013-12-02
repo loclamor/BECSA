@@ -9,7 +9,7 @@ function hifi() {
     var thkPrev;
     var thkNext;
     var playing = false;
-    var random = false;
+
     
     body.append("<div id='playerscontainer' class='playerscontainer'><div id='trackViewer'><div id='prevTrack' class='player prev'></div><div id='curTrack' class='player curr'></div><div id='nextTrack' class='player next'></div></div><div class='wrapper'></div></div>");
     
@@ -104,18 +104,13 @@ function hifi() {
     });
     
     $("#btnPlay").on("player.playsongrequested", function( e, id ){
-        $.getJSON( getControllerActionUrl("hifi", "lister"), function( data ){
-            if( data.code < 300 ) {
-                tracks = data.songs;
-                $("body").on("hifi.player.playble", function(){
-                    $("body").off("hifi.player.playble");
-                    $("#btnPlay").trigger("player.playrequested");
-                });
-                playing = false;
-                //re-init
-                initFromTrackList( id );
-            }
+        $("body").on("hifi.player.playble", function(){
+            $("body").off("hifi.player.playble");
+            $("#btnPlay").trigger("player.playrequested");
         });
+        playing = false;
+        //re-init
+        initFromTrackList( findSongById( id ) );
     });
     
     $("#btnPrev").click(function(){
@@ -228,6 +223,15 @@ function hifi() {
      */
     function findSong( song ) {
         return tracks.indexOf( song );
+    }
+    
+    function findSongById( id ){
+        var i;
+        for( i =0; i<tracks.length; i++ ){
+            if( tracks[i].id == id )
+                return i;
+        }
+        return 0;
     }
 
     function getTHKW( song ) {
