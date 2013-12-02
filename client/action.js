@@ -74,6 +74,20 @@ function moteurEtAction( action ) {
             $("#btnPlay").trigger("player.pauserequested");
 
             break;
+        case "playSongId" :
+            if( !$('#fctBody').hasClass('hifi') ){
+                //si pas sur la page
+                $("#functions #btn_hifi").trigger("click");
+                $("body").on("hifi.page.ready", function(){
+                    $("body").off("hifi.page.ready");
+                    $("#btnPlay").trigger("player.playsongrequested", action.params[0]);
+                });
+            }
+            else {
+                //si deja sur al page, on clic
+                $("#btnPlay").trigger("player.playsongrequested", action.params[0]);
+            }
+            break;
         default :
             notify( "warning", "action inconue : " + action.action, "Gestionnaire d'Actions", 5000 );
             console.log( action );

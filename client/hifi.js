@@ -50,7 +50,7 @@ function hifi() {
         });
         playing = false;
         //re-init
-        initFromTrackList();
+        initFromTrackList( 0 );
         
     });
     
@@ -101,6 +101,21 @@ function hifi() {
     $("#btnPlay").on("player.pauserequested", function(){
         if( playing )
             $("#btnPlay").trigger("click");
+    });
+    
+    $("#btnPlay").on("player.playsongrequested", function( e, id ){
+        $.getJSON( getControllerActionUrl("hifi", "lister"), function( data ){
+            if( data.code < 300 ) {
+                tracks = data.songs;
+                $("body").on("hifi.player.playble", function(){
+                    $("body").off("hifi.player.playble");
+                    $("#btnPlay").trigger("player.playrequested");
+                });
+                playing = false;
+                //re-init
+                initFromTrackList( id );
+            }
+        });
     });
     
     $("#btnPrev").click(function(){
@@ -157,7 +172,7 @@ function hifi() {
                 console.log( val.id + ' : ' + val.artist + ' - ' + val.title + ' - ' + findSong( val ) + ' - ' + getPrevious( val ).title + ' - ' + getNext( val ).title);
             });
             //generate players
-            initFromTrackList();
+            initFromTrackList( 0 );
             
             //we are ready to play, say it to the world !
             $("body").trigger("hifi.page.ready");
@@ -168,13 +183,13 @@ function hifi() {
         }
     });
     
-    function initFromTrackList() {
+    function initFromTrackList( trackId ) {
         $("#btnPrev").button('loading');
         $("#btnPlay").button('loading');
         $("#btnNext").button('loading');
         $( "#slider" ).slider({ disabled: true });
         
-        currSong = tracks[0];
+        currSong = tracks[ trackId ];
         thkCurr = getTHKW( currSong );
         renderTrack( thkCurr, $(".curr") );
 
