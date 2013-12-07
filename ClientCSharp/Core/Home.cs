@@ -7,15 +7,16 @@ namespace SmartHome
     /// <summary>
     /// Home main controller which interact directly with the Home server
     /// </summary>
+    /// <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
     public class Home
     {
 
         ///////////////////////////////////////////////////////////////////////////////////////////
-        // Enum
+        // Enums
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Action that an room can do
+        /// Room events handleable
         /// </summary>
         public enum RoomUpdateKind
         {
@@ -42,13 +43,40 @@ namespace SmartHome
             /// <summary>
             /// Indicate that a room flap have been closed
             /// </summary>
-            CloseRoomFlap
+            CloseRoomFlap,
+            /// <summary>
+            /// Indicate that a new room have been setted
+            /// </summary>
+            /// <remarks>
+            ///     This event is triggered always after 
+            ///     <see cref="SmartHome.Home.RoomUpdateKind.RoomRemoved">RoomRemoved</see> 
+            ///     and before
+            ///     <see cref="SmartHome.Home.HomeUpdateKind.RoomListChanged">RoomListChanged</see>
+            /// </remarks>
+            NewRoomAdded,
+            /// <summary>
+            /// Indicate that an room have been removed
+            /// </summary>
+            /// <remarks>
+            ///     This event is triggered always before 
+            ///     <see cref="SmartHome.Home.RoomUpdateKind.NewRoomAdded">NewRoomAdded</see> and 
+            ///     <see cref="SmartHome.Home.HomeUpdateKind.RoomListChanged">RoomListChanged</see>
+            /// </remarks>
+            RoomRemoved
         }
         /// <summary>
-        /// Action that the home can do
+        /// Home events handleable
         /// </summary>
         public enum HomeUpdateKind
         {
+            /// <summary>
+            /// Update begin
+            /// </summary>
+            BeginUpdate,
+            /// <summary>
+            /// End of update
+            /// </summary>
+            EndUpdate,
             /// <summary>
             /// Indicate that all home lights have been switched to on
             /// </summary>
@@ -76,54 +104,215 @@ namespace SmartHome
             /// <summary>
             /// Indicate that some room(s) have been added or removed
             /// </summary>
-            RoomCountChanged
+            /// <remarks>
+            ///     This event is triggered always after 
+            ///     <see cref="SmartHome.Home.RoomUpdateKind.NewRoomAdded">NewRoomAdded</see> and 
+            ///     <see cref="SmartHome.Home.RoomUpdateKind.RoomRemoved">RoomRemoved</see>
+            /// </remarks>
+            RoomListChanged,
+            /// <summary>
+            /// Indicate that some alarm clock(s) have been added or removed
+            /// </summary>
+            /// <remarks>
+            ///     This event is triggered always after 
+            ///     <see cref="SmartHome.Home.AlarmClockUpdateKind.NewAlarmClockSet">NewAlarmClockSet</see> and 
+            ///     <see cref="SmartHome.Home.AlarmClockUpdateKind.AlarmClockRemoved">AlarmClockRemoved</see>
+            /// </remarks>
+            AlarmClockListChanged,
+            /// <summary>
+            /// Indicate that some song(s) have been added or removed
+            /// </summary>
+            /// <remarks>
+            ///     This event is triggered always after 
+            ///     <see cref="SmartHome.Home.HifiUpdateKind.NewSongAdded">NewSongAdded</see> and 
+            ///     <see cref="SmartHome.Home.HifiUpdateKind.SongRemoved">SongRemoved</see>
+            /// </remarks>
+            SongListChanged
         }
-
+        /// <summary>
+        /// Alarm clock events handleable
+        /// </summary>
+        public enum AlarmClockUpdateKind
+        {
+            /// <summary>
+            /// Indicate that an alarm clock ringing
+            /// </summary>
+            AlarmClockRing,
+            /// <summary>
+            /// Indicate that an alarm clock have been updated
+            /// </summary>
+            /// <remarks>On the event AlarmClock parameter is the old alarm clock. You can compare change by get new one by it's id, since event are fired after update done</remarks>
+            AlarmClockUpdated,
+            /// <summary>
+            /// Indicate that a new alarm clock have been setted
+            /// </summary>
+            /// <remarks>
+            ///     This event is triggered always after 
+            ///     <see cref="SmartHome.Home.AlarmClockUpdateKind.AlarmClockRemoved">AlarmClockRemoved</see> 
+            ///     and before 
+            ///     <see cref="SmartHome.Home.HomeUpdateKind.AlarmClockListChanged">AlarmClockListChanged</see>
+            /// </remarks>
+            NewAlarmClockSet,
+            /// <summary>
+            /// Indicate that an alarm clock have been removed
+            /// </summary>
+            /// <remarks>
+            ///     This event is triggered always before 
+            ///     <see cref="SmartHome.Home.AlarmClockUpdateKind.NewAlarmClockSet">NewAlarmClockSet</see> and 
+            ///     <see cref="SmartHome.Home.HomeUpdateKind.AlarmClockListChanged">AlarmClockListChanged</see>
+            /// </remarks>
+            AlarmClockRemoved
+        }
+        /// <summary>
+        /// Hifi events handleable
+        /// </summary>
+        public enum HifiUpdateKind
+        {
+            /// <summary>
+            /// Indicate that a song have been updated
+            /// </summary>
+            /// <remarks>On the event Song parameter is the old song. You can compare change by get new one by it's id, since event are fired after update done</remarks>
+            SongUpdated,
+            /// <summary>
+            /// Indicate that a new song is available
+            /// </summary>
+            /// <remarks>
+            ///     This event is always triggered after 
+            ///     <see cref="SmartHome.Home.HifiUpdateKind.SongRemoved">SongRemoved</see> 
+            ///     and before 
+            ///     <see cref="SmartHome.Home.HomeUpdateKind.SongListChanged">SongListChanged</see>
+            /// </remarks>
+            NewSongAdded,
+            /// <summary>
+            /// Indicate that a song have been removed
+            /// </summary>
+            /// <remarks>
+            ///     This event is always triggered before 
+            ///     <see cref="SmartHome.Home.HifiUpdateKind.NewSongAdded">NewSongAdded</see> and 
+            ///     <see cref="SmartHome.Home.HomeUpdateKind.SongListChanged">SongListChanged</see>
+            /// </remarks>
+            SongRemoved
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Events
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Event function to detect when a Room have been updated
+        /// Delegate able to treat a room event
         /// </summary>
-        /// <param name="p">Room updated</param>
+        /// <param name="h">Home</param>
+        /// <param name="r">Room updated</param>
         /// <param name="updateKind">Update kind</param>
-        public delegate void PieceUpdate(Piece p, RoomUpdateKind updateKind);
+        public delegate void RoomUpdate(Home h, Room r, RoomUpdateKind updateKind);
         /// <summary>
-        /// Event function to detect when the homve have been updated
+        /// Delegate able to treat an home event
         /// </summary>
+        /// <param name="h">Home</param>
         /// <param name="updateKind">Update kind</param>
-        public delegate void HomeUpdate(HomeUpdateKind updateKind);
+        public delegate void HomeUpdate(Home h, HomeUpdateKind updateKind);
+        /// <summary>
+        /// Delegate able to treat an alarm clock event
+        /// </summary>
+        /// <param name="h">Home</param>
+        /// <param name="a">Alarm clock updated</param>
+        /// <param name="updateKind">Update kind</param>
+        public delegate void AlarmClockUpdate(Home h, AlarmClock a, AlarmClockUpdateKind updateKind);
+        /// <summary>
+        /// Delegate able to treat an hifi event
+        /// </summary>
+        /// <param name="h">Home</param>
+        /// <param name="s">Song updated</param>
+        /// <param name="updateKind">Update kind</param>
+        public delegate void HifiUpdate(Home h, Song s, HifiUpdateKind updateKind);
+        /// <summary>
+        /// Delegate able to treat an action received
+        /// </summary>
+        /// <param name="h">Home</param>
+        /// <param name="a">Action received</param>
+        public delegate void ActionReceived(Home h, HomeAction a);
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Members
         ///////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>
-        /// Room availaible from home server
-        /// </summary>
-        private Dictionary<string, Piece> _pieces;
+
+        // Global
         /// <summary>
         /// Home server URI
         /// </summary>
         public string HomeURI { get; set; }
         /// <summary>
+        /// Identifier used by home to receive/send message
+        /// </summary>
+        public string HomeIdentifier { get; set; }
+        /// <summary>
+        /// Frequency of refresh in milliseconds
+        /// </summary>
+        public int RefreshFrequency { get; set; }
+
+        // Events
+        /// <summary>
         /// Event called when a room have been updated
         /// </summary>
-        private PieceUpdate _onPieceUpdate;
+        public RoomUpdate OnRoomUpdate { get; protected set;} 
         /// <summary>
         /// Event called when home have been updated
         /// </summary>
-        private HomeUpdate _onHomeUpdate;
+        public HomeUpdate OnHomeUpdate { get; protected set; } 
+        /// <summary>
+        /// Event called when an alarm clock is added/updated/removed
+        /// </summary>
+        public AlarmClockUpdate OnAlarmClockUpdate { get; protected set; }
+        /// <summary>
+        /// Event called when an song is added/updated/removed
+        /// </summary>
+        public HifiUpdate OnHifiUpdate { get; protected set; } 
+        /// <summary>
+        /// Event called when an action have been received
+        /// </summary>
+        public ActionReceived OnActionReceived { get; protected set;} 
+
+        // Private members
         /// <summary>
         /// Last System.Environment.TickCount when a refresh was done
         /// </summary>
         private int _lastUpdateTick;
         /// <summary>
-        /// Frequency of refresh in milliseconds
+        /// Basic home controller
         /// </summary>
-        private int RefreshFrequency { get; set; }
+        private Controller _basicController;
+
+        // Controllers
+        /// <summary>
+        /// Room controller
+        /// </summary>
+        public RoomController Pieces { get; protected set; }
+        /// <summary>
+        /// Light controller
+        /// </summary>
+        public LightController Lumieres { get; protected set; }
+        /// <summary>
+        /// Door controller
+        /// </summary>
+        public DoorController Portes { get; protected set; }
+        /// <summary>
+        /// Flap controller
+        /// </summary>
+        public FlapController Volets { get; protected set; }
+        /// <summary>
+        /// Alarm clock controller
+        /// </summary>
+        public AlarmClockController Reveils { get; protected set; }
+        /// <summary>
+        /// Hifi controller
+        /// </summary>
+        public HifiController Hifi { get; protected set; }
+        /// <summary>
+        /// Action controller
+        /// </summary>
+        public ActionController Actions { get; protected set; }
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Constructors
@@ -133,69 +322,35 @@ namespace SmartHome
         /// Initialize an empty Home. HomeURI need to be set after before using refresh.
         /// </summary>
         public Home() {
-            _pieces = new Dictionary<string, Piece>();
-            RefreshFrequency = 0;
-            _lastUpdateTick = 0;
+            /* Global */ 
             HomeURI = "";
+            HomeIdentifier = "";
+            RefreshFrequency = 0;
+            /* Private members */ 
+            _lastUpdateTick = 0;
+            _basicController = new Controller(this);
+            /* Controllers */
+            Pieces = new RoomController(this);
+            Lumieres = new LightController(this);
+            Portes = new DoorController(this);
+            Volets = new FlapController(this);
+            Reveils = new AlarmClockController(this);
+            Hifi = new HifiController(this);
+            Actions = new ActionController(this);
         }
         /// <summary>
         /// Initialize Home with the location of the Home server set
         /// </summary>
         /// <param name="uri">URI of the Home server</param>
+        /// <param name="identifier">Identifier used by home server. Can be empty.</param>
         /// <param name="refreshFrequency">Frequency of refresh in milliseconds (set to 0 to have direct refresh)</param>
-        public Home(string uri, int refreshFrequency = 1000) 
+        public Home(string uri, string identifier = "", int refreshFrequency = 1000) 
             : this()
         {
             HomeURI = uri;
+            HomeIdentifier = identifier;
             RefreshFrequency = refreshFrequency;
         }
-        
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        // Event
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Register an update event for room
-        /// </summary>
-        /// <param name="update">Update function called when a room have been update</param>
-        public void RegisterPieceUpdateEvent(PieceUpdate update) {
-            if (_onPieceUpdate == null) {
-                _onPieceUpdate = new PieceUpdate(update);
-            } else {
-                _onPieceUpdate += update;
-            }
-        }
-        /// <summary>
-        /// Register an update event for home
-        /// </summary>
-        /// <param name="update">Update function called when home have been update</param>
-        public void RegisterHomeUpdateEvent(HomeUpdate update) {
-            if (_onHomeUpdate == null) {
-                _onHomeUpdate = new HomeUpdate(update);
-            } else {
-                _onHomeUpdate += update;
-            }
-        }
-        /// <summary>
-        /// Unregister an update event for room
-        /// </summary>
-        /// <param name="update">Update function to unregister</param>
-        public void UnregisterPieceUpdateEvent(PieceUpdate update) {
-            if (_onPieceUpdate != null) {
-                _onPieceUpdate -= update;
-            }
-        }
-        /// <summary>
-        /// Unregister an update event for home
-        /// </summary>
-        /// <param name="update">Update function to unregister</param>
-        public void UnregisterHomeUpdateEvent(HomeUpdate update) {
-            if (_onHomeUpdate != null) {
-                _onHomeUpdate -= update;
-            }
-        }
-
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -203,9 +358,13 @@ namespace SmartHome
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Refresh list of rooms and status of each rooms.
+        /// Synchronous refreshing of home state (<see cref="RoomController.Refresh"/>, <see cref="AlarmClockController.Refresh"/>, <see cref="HifiController.Refresh"/>, <see cref="ActionController.Refresh"/>)
         /// </summary>
-        /// <remarks>Will automatically fired room update and home update event if needed and configured (<see cref="SmartHome.Home.RegisterPieceUpdateEvent"/>, <see cref="SmartHome.Home.RegisterHomeUpdateEvent"/>)</remarks>
+        /// <remarks>
+        /// Will automatically fire all the registered events.
+        /// Will update also Hifi datas however if <see cref="Home.HomeIdentifier">HomeIdentifier</see> is set the home server response returned will be only the response of the request "getState" on "maison" (cf. doc serveur web for more details)
+        /// Nonetheless if Home identifier is not set then the response returned will be the response of "lister" on "pieces" controller (cf. doc serveur web)
+        /// </remarks>
         /// <returns>Response of the Home server</returns>
         public HomeResponse Refresh() {
             /* Check if time to refresh */
@@ -214,289 +373,70 @@ namespace SmartHome
                     return null;
                 }
             }
-            /* Get Pieces from server */
-            HomeResponse res = ExecuteAction("piece", "lister");
-            JSON jsonPieces = res.Data.Get("pieces");
-            /* Retrieve all Pieces from JSON response */
-            Dictionary<string, Piece> newPieces = new Dictionary<string, Piece>();
-            for (int i = 0, max = jsonPieces.Count; i < max; i++) {
-                JSON jsonPiece = jsonPieces.Get(i);
-                newPieces.Add(jsonPiece.Get("nom").Value, new Piece(jsonPiece));
+            /* Get refresh data from home */
+            HomeResponse returnRes;
+            JSON roomJSONRes = null;
+            JSON alarmClockJSONRes = null;
+            JSON actionJSONRes = null;
+            HomeRequest msg = new HomeRequest();
+            HTTPRequest request;
+            if (HomeIdentifier.Length > 0) { 
+                /* Get Home state from server by "maison" controller */
+                msg.Set("controller", "maison").Set("action", "getState").Set("dest", HomeIdentifier);
+                request = new HTTPRequest(HomeURI, msg);
+                HomeResponse homeStateRes = HomeResponse.Create(new JSON(request.GetResponse()));
+                JSON stateJSON = homeStateRes.Data.Get("state");
+                roomJSONRes = stateJSON.Get("pieces");
+                alarmClockJSONRes = stateJSON.Get("reveils");
+                actionJSONRes = stateJSON.Get("actions");
+                /* Set return response */ 
+                returnRes = homeStateRes;
+            } else {
+                /* Get Room state from server */
+                msg.Set("controller", "pieces").Set("action", "lister");
+                request = new HTTPRequest(HomeURI, msg);
+                HomeResponse roomRes = HomeResponse.Create(new JSON(request.GetResponse()));
+                roomJSONRes = roomRes.Data.Get("pieces");
+                /* Get Alarm clocks state from server */
+                msg.Set("controller", "reveil").Set("action", "lister");
+                request = new HTTPRequest(HomeURI, msg);
+                HomeResponse alarmClockRes = HomeResponse.Create(new JSON(request.GetResponse()));
+                alarmClockJSONRes = alarmClockRes.Data.Get("reveils");
+                /* Set return response */
+                returnRes = roomRes;
             }
-            /* Count how many Piece element have changed */ 
-            List<Piece> lightUpdated = new List<Piece>();
-            List<Piece> doorUpdated = new List<Piece>();
-            List<Piece> flapUpdated = new List<Piece>();
-            int haveLightCount = 0;
-            int haveDoorCount = 0;
-            int haveFlapCount = 0;
-            int lightOnCount = 0;
-            int doorOpenCount = 0;
-            int flapOpenCount = 0;
-            foreach (KeyValuePair<string,Piece> pair in newPieces) {
-                Piece p = pair.Value;
-                /* Check if there is an update from older Piece */ 
-                Piece oldPiece = GetPiece(p.Nom);
-                if ((oldPiece != null) && (oldPiece != p)) {
-                    /* Count the light/door/flap change */ 
-                    if (p.LumiereAllumer != oldPiece.LumiereAllumer) lightUpdated.Add(p);
-                    if (p.PorteDeverrouiller != oldPiece.PorteDeverrouiller) doorUpdated.Add(p);
-                    if (p.VoletOuvert != oldPiece.VoletOuvert) flapUpdated.Add(p);
-                }
-                /* Count element "on" */
-                if (p.ALumiere) haveLightCount++;
-                if (p.APorte) haveDoorCount++;
-                if (p.AVolet) haveFlapCount++;
-                if ((p.ALumiere) && (p.LumiereAllumer)) lightOnCount++;
-                if ((p.APorte) && (p.PorteDeverrouiller)) doorOpenCount++;
-                if ((p.AVolet) && (p.VoletOuvert)) flapOpenCount++;
+            /* Get Hifi state from server */
+            msg.Clear().Set("controller", "hifi").Set("action", "lister");
+            request = new HTTPRequest(HomeURI, msg);
+            HomeResponse hifiRes = HomeResponse.Create(new JSON(request.GetResponse()));
+            /* Begin refresh */
+            if (OnHomeUpdate != null) {
+                OnHomeUpdate(this, HomeUpdateKind.BeginUpdate);
             }
-            /* Copy new piece */
-            int oldPieceCount = _pieces.Count;
-            _pieces = newPieces;
-            /* Make event if piece count changed */
-            if ((_onHomeUpdate != null) && (oldPieceCount != newPieces.Count)) {
-                _onHomeUpdate(HomeUpdateKind.RoomCountChanged);
-            }
-            /* Call delegates for light */
-            if ((lightUpdated.Count > 0) && (lightOnCount == 0)) {
-                /* All light switched to off */ 
-                if (_onHomeUpdate != null) _onHomeUpdate(HomeUpdateKind.SwitchOffAllRoomLight);
-            } else if ((lightUpdated.Count > 0) && (lightOnCount == haveLightCount)) {
-                /* All light switched to on */
-                if (_onHomeUpdate != null) _onHomeUpdate(HomeUpdateKind.SwitchOnAllRoomLight);
-            } else if (_onPieceUpdate != null) {
-                /* Call delegate for each Piece where light have been updated */
-                foreach (Piece p in lightUpdated) {
-                    _onPieceUpdate(p, (p.LumiereAllumer ? RoomUpdateKind.SwitchOnRoomLight : RoomUpdateKind.SwitchOffRoomLight));
-                }
-            }
-            /* Call delegates for door: same algo */
-            if ((doorUpdated.Count > 0) && (doorOpenCount == 0)) {
-                if (_onHomeUpdate != null) _onHomeUpdate(HomeUpdateKind.CloseAllDoor);
-            } else if ((doorUpdated.Count > 0) && (doorOpenCount == haveDoorCount)) {
-                if (_onHomeUpdate != null) _onHomeUpdate(HomeUpdateKind.OpenAllDoor);
-            } else if (_onPieceUpdate != null) {
-                foreach (Piece p in doorUpdated) {
-                    _onPieceUpdate(p, (p.PorteDeverrouiller ? RoomUpdateKind.OpenRoomDoor : RoomUpdateKind.CloseRoomDoor));
-                }
-            }
-            /* Call delegates for flap: same algo */
-            if ((flapUpdated.Count > 0) && (flapOpenCount == 0)) {
-                if (_onHomeUpdate != null) _onHomeUpdate(HomeUpdateKind.CloseAllFlap);
-            } else if ((flapUpdated.Count > 0) && (flapOpenCount == haveFlapCount)) {
-                if (_onHomeUpdate != null) _onHomeUpdate(HomeUpdateKind.OpenAllFlap);
-            } else if (_onPieceUpdate != null) {
-                foreach (Piece p in flapUpdated) {
-                    _onPieceUpdate(p, (p.VoletOuvert ? RoomUpdateKind.OpenRoomFlap : RoomUpdateKind.CloseRoomFlap));
-                }
+            /* Refresh rooms */
+            Pieces.Refresh(roomJSONRes);
+            /* Refresh alarm clocks */
+            Reveils.Refresh(alarmClockJSONRes);
+            /* Refresh hifi */
+            Hifi.Refresh(hifiRes.Data.Get("songs"));
+            /* Refresh actions */
+            Actions.Refresh(actionJSONRes);
+            /* End refresh */
+            if (OnHomeUpdate != null) {
+                OnHomeUpdate(this, HomeUpdateKind.EndUpdate);
             }
             /* Refresh update tick */
             if (RefreshFrequency > 0) {
                 _lastUpdateTick = System.Environment.TickCount;
             }
             /* Return server response */
-            return res;
+            return returnRes;
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        // Pieces
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Get the number of the room
-        /// </summary>
-        /// <returns>Room count</returns>
-        public int GetPieceCount() {
-            return _pieces.Count;
-        }
-        /// <summary>
-        /// Get a room by name
-        /// </summary>
-        /// <param name="name">Name of the desired room</param>
-        /// <returns>Room found Or null if no room found</returns>
-        public Piece GetPiece(string name) {
-            if (_pieces.ContainsKey(name)) {
-                return _pieces[name];
-            } else {
-                return null;
-            }
-        }
-        /// <summary>
-        /// Get a room by id
-        /// </summary>
-        /// <param name="id">Id of the desired room</param>
-        /// <returns>Room found Or null if no room found</returns>
-        public Piece GetPiece(int id) {
-            if ((id >= 0) && (id < _pieces.Count)) {
-                foreach (KeyValuePair<string, Piece> p in _pieces) {
-                    if (id == 0) {
-                        return p.Value;
-                    }
-                    id--;
-                }
-            }
-            return null;
-        }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
-        // Lumiere
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        /// <summary>
-        /// Switch on light of a room
-        /// </summary>
-        /// <param name="piece">Room name desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse AllumerLumiere(string piece) {
-            return ExecuteAction("lumiere", "allumer", piece);
-        }
-        /// <summary>
-        /// Switch off light of a room
-        /// </summary>
-        /// <param name="piece">Room name desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse EteindreLumiere(string piece) {
-            return ExecuteAction("lumiere", "eteindre", piece);
-        }
-        /// <summary>
-        /// Switch on light of a room
-        /// </summary>
-        /// <param name="piece">Room desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse AllumerLumiere(Piece piece) {
-            return ExecuteAction("lumiere", "allumer", piece.Nom);
-        }
-        /// <summary>
-        /// Switch off light of a room
-        /// </summary>
-        /// <param name="piece">Room desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse EteindreLumiere(Piece piece) {
-            return ExecuteAction("lumiere", "eteindre", piece.Nom);
-        }
-        /// <summary>
-        /// Switch on all light
-        /// </summary>
-        /// <returns>Home server response</returns>
-        public HomeResponse AllumerTout() {
-            return ExecuteAction("lumiere", "allumerTout");
-        }
-        /// <summary>
-        /// Switch off all light
-        /// </summary>
-        /// <returns>Home server response</returns>
-        public HomeResponse EteindreTout() {
-            return ExecuteAction("lumiere", "eteindreTout");
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        // Porte
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Lock the door of a room
-        /// </summary>
-        /// <param name="piece">Room name desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse VerrouillerPorte(string piece) {
-            return ExecuteAction("porte", "verrouiller", piece);
-        }
-        /// <summary>
-        /// Unlock the door of a room
-        /// </summary>
-        /// <param name="piece">Rom name desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse DeverrouillerPorte(string piece) {
-            return ExecuteAction("porte", "deverrouiller", piece);
-        }
-        /// <summary>
-        /// Lock the door of a room
-        /// </summary>
-        /// <param name="piece">Room desired</param>
-        /// <returns></returns>
-        public HomeResponse VerrouillerPorte(Piece piece) {
-            return ExecuteAction("porte", "verrouiller", piece.Nom);
-        }
-        /// <summary>
-        /// Unlock the door of a room
-        /// </summary>
-        /// <param name="piece">Rom desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse DeverrouillerPorte(Piece piece) {
-            return ExecuteAction("porte", "deverrouiller", piece.Nom);
-        }
-        /// <summary>
-        /// Lock all the door of home
-        /// </summary>
-        /// <returns>Home server response</returns>
-        public HomeResponse VerrouillerTout() {
-            return ExecuteAction("porte", "verrouillerTout");
-        }
-        /// <summary>
-        /// UnLock all the door of home
-        /// </summary>
-        /// <returns>Home server response</returns>
-        public HomeResponse DeverrouillerTout() {
-            return ExecuteAction("porte", "deverrouillerTout");
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        // Volet
-        ///////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Open flaps of a room
-        /// </summary>
-        /// <param name="piece">Room name desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse OuvrirVolet(string piece) {
-            return ExecuteAction("volet", "ouvrir", piece);
-        }
-        /// <summary>
-        /// Close flaps of a room
-        /// </summary>
-        /// <param name="piece">Room name desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse FermerVolet(string piece) {
-            return ExecuteAction("volet", "fermer", piece);
-        }
-        /// <summary>
-        /// Open flaps of a room
-        /// </summary>
-        /// <param name="piece">Room desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse OuvrirVolet(Piece piece) {
-            return ExecuteAction("volet", "ouvrir", piece.Nom);
-        }
-        /// <summary>
-        /// Close flaps of a room
-        /// </summary>
-        /// <param name="piece">Room desired</param>
-        /// <returns>Home server response</returns>
-        public HomeResponse FermerVolet(Piece piece) {
-            return ExecuteAction("volet", "fermer", piece.Nom);
-        }
-        /// <summary>
-        /// Open all flaps of home
-        /// </summary>
-        /// <returns>Home server response</returns>
-        public HomeResponse OuvrirTout() {
-            return ExecuteAction("volet", "ouvrirTout");
-        }
-        /// <summary>
-        /// Close all flaps of home
-        /// </summary>
-        /// <returns>Home server response</returns>
-        public HomeResponse FermerTout() {
-            return ExecuteAction("volet", "fermerTout");
-        }
-
-
-        ///////////////////////////////////////////////////////////////////////////////////////////
-        // Action functions
+        // Controller functions
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
@@ -507,11 +447,7 @@ namespace SmartHome
         /// <param name="action">Action desired</param>
         /// <returns>Home server response</returns>
         public HomeResponse ExecuteAction(string controller, string action) {
-            Message msg = new Message();
-            msg.Set("controller", controller)
-                .Set("action", action);
-            HTTPRequest r = new HTTPRequest(HomeURI, msg);
-            return HomeResponse.Create(new JSON(r.GetResponse()));
+            return _basicController.ExecuteAction(controller, action);
         }
         /// <summary>
         /// Execute an action to a controller of the home
@@ -522,13 +458,167 @@ namespace SmartHome
         /// <param name="piece">Room name desired</param>
         /// <returns>Home server response</returns>
         public HomeResponse ExecuteAction(string controller, string action, string piece) {
-            Message msg = new Message();
-            msg.Set("controller", controller)
-                .Set("action", action)
-                .Set("piece", piece);
-            HTTPRequest r = new HTTPRequest(HomeURI, msg);
-            return HomeResponse.Create(new JSON(r.GetResponse()));
+            return _basicController.ExecuteAction(controller, action);
         }
+
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // Event
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        // Register
+
+        /// <summary>
+        /// Register an update event for home
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when home have been update</param>
+        public void RegisterEvent(HomeUpdate update) {
+            RegisterHomeUpdateEvent(update);
+        }
+        /// <summary>
+        /// Register an update event for room
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when a room have been update</param>
+        public void RegisterEvent(RoomUpdate update) {
+            RegisterRoomUpdateEvent(update);
+        }
+        /// <summary>
+        /// Register an update event for alarm clock
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when an alarm clock is added/updated/removed</param>
+        public void RegisterEvent(AlarmClockUpdate update) {
+            RegisterAlarmClockUpdateEvent(update);
+        }
+        /// <summary>
+        /// Register an update event for hifi
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when an song is added/updated/removed</param>
+        public void RegisterEvent(HifiUpdate update) {
+            RegisterHifiUpdateEvent(update);
+        }
+        /// <summary>
+        /// Register an function called when Home receive an Action
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the home receive an action, all registered functions are called in order they were added.</remarks>
+        /// <param name="fun">Function to call when Home receive an Action</param>
+        public void RegisterEvent(ActionReceived fun) {
+            RegisterActionReceivedEvent(fun);
+        }
+        /// <summary>
+        /// Register an update event for home
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when home have been update</param>
+        public void RegisterHomeUpdateEvent(HomeUpdate update) {
+            if (OnHomeUpdate == null) {
+                OnHomeUpdate = new HomeUpdate(update);
+            } else {
+                OnHomeUpdate += update;
+            }
+        }
+        /// <summary>
+        /// Register an update event for room
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when a room have been update</param>
+        public void RegisterRoomUpdateEvent(RoomUpdate update) {
+            if (OnRoomUpdate == null) {
+                OnRoomUpdate = new RoomUpdate(update);
+            } else {
+                OnRoomUpdate += update;
+            }
+        }
+        /// <summary>
+        /// Register an update event for alarm clock
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when an alarm clock is added/updated/removed</param>
+        public void RegisterAlarmClockUpdateEvent(AlarmClockUpdate update) {
+            if (OnAlarmClockUpdate == null) {
+                OnAlarmClockUpdate = new AlarmClockUpdate(update);
+            } else {
+                OnAlarmClockUpdate += update;
+            }
+        }
+        /// <summary>
+        /// Register an update event for hifi
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+        /// <param name="update">Update function called when an song is added/updated/removed</param>
+        public void RegisterHifiUpdateEvent(HifiUpdate update) {
+            if (OnHifiUpdate == null) {
+                OnHifiUpdate = new HifiUpdate(update);
+            } else {
+                OnHifiUpdate += update;
+            }
+        }
+        /// <summary>
+        /// Register an function called when Home receive an Action
+        /// </summary>
+        /// <remarks>Multiple functions can be registered. When the home receive an action, all registered functions are called in order they were added.</remarks>
+        /// <param name="fun">Function to call when Home receive an Action</param>
+        public void RegisterActionReceivedEvent(ActionReceived fun) {
+            if (OnActionReceived == null) {
+                OnActionReceived = new ActionReceived(fun);
+            } else {
+                OnActionReceived += fun;
+            }
+        }
+
+
+
+        // Unregister
+
+        /// <summary>
+        /// Unregister an update event for home
+        /// </summary>
+        /// <param name="update">Update function to unregister</param>
+        public void UnregisterEvent(HomeUpdate update) {
+            if (OnHomeUpdate != null) {
+                OnHomeUpdate -= update;
+            }
+        }
+        /// <summary>
+        /// Unregister an update event for room
+        /// </summary>
+        /// <param name="update">Update function to unregister</param>
+        public void UnregisterEvent(RoomUpdate update) {
+            if (OnRoomUpdate != null) {
+                OnRoomUpdate -= update;
+            }
+        }
+        /// <summary>
+        /// Unregister an update event for home
+        /// </summary>
+        /// <param name="update">Update function to unregister</param>
+        public void UnregisterEvent(AlarmClockUpdate update) {
+            if (OnAlarmClockUpdate != null) {
+                OnAlarmClockUpdate -= update;
+            }
+        }
+        /// <summary>
+        /// Unregister an update event for home
+        /// </summary>
+        /// <param name="update">Update function to unregister</param>
+        public void UnregisterEvent(HifiUpdate update) {
+            if (OnHifiUpdate != null) {
+                OnHifiUpdate -= update;
+            }
+        }
+        /// <summary>
+        /// Unregister an event for home
+        /// </summary>
+        /// <param name="fun">Update function to unregister</param>
+        public void UnregisterEvent(ActionReceived fun) {
+            if (OnActionReceived != null) {
+                OnActionReceived -= fun;
+            }
+        }
+
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -540,16 +630,7 @@ namespace SmartHome
         /// </summary>
         /// <returns>String representation of this home</returns>
         override public string ToString() {
-            string m = "";
-            int id = 0;
-            foreach (KeyValuePair<string, Piece> p in _pieces) {
-                if (id > 0) {
-                    m += "\n";
-                }
-                m += p.Value.ToString();
-                id++;
-            }
-            return m;
+            return Pieces.ToString() + "\n" + Reveils.ToString() + "\n" + Hifi.ToString();
         }
 
     }

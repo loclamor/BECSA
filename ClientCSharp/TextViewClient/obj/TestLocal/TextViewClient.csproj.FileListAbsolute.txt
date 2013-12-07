@@ -1,0 +1,8 @@
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\bin\TestLocal\TextViewClient.exe.config
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\bin\TestLocal\TextViewClient.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\bin\TestLocal\TextViewClient.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\bin\TestLocal\SmartHome.dll
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\bin\TestLocal\SmartHome.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\bin\TestLocal\SmartHome.xml
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\obj\TestLocal\TextViewClient.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\TextViewClient\obj\TestLocal\TextViewClient.pdb

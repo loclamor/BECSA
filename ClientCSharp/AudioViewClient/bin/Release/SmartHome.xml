@@ -4,10 +4,1096 @@
         <name>SmartHome</name>
     </assembly>
     <members>
+        <member name="T:SmartHome.AbstractAction">
+            <summary>
+            Represent an generic action.
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.AbstractAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="T:SmartHome.ActionMapHelper">
+            <summary>
+            Helper class that manage action that home can do
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.ActionMapHelper._actions">
+            <summary>
+            Home's actions recognizable
+            </summary>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.#ctor">
+            <summary>
+            Initialize ActionMapHelper
+            </summary>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.Get(System.Int32)">
+            <summary>
+            Get an sentence by index
+            </summary>
+            <param name="index">Sentence index desired</param>
+            <returns>Sentence found or "" if not found</returns>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.GetAction(System.String,System.Int32)">
+            <summary>
+            Get vocal action by index of an sentence
+            </summary>
+            <param name="sentence">Sentence desired</param>
+            <param name="actionIndex">Vocal action index desired</param>
+            <returns>Vocal action found or null if not found</returns>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.Clear">
+            <summary>
+            Clear actions
+            </summary>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.Add(System.String,SmartHome.AbstractAction)">
+            <summary>
+            Map an action
+            </summary>
+            <param name="toSentence">Sentence to recognize</param>
+            <param name="action">Action to map with</param>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.Remove(System.String)">
+            <summary>
+            Remove an sentence
+            </summary>
+            <param name="sentence">Sentence desired</param>
+            <returns>True if sentence was present</returns>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.RemoveAction(System.String,System.Int32)">
+            <summary>
+            Remove an associated action of an sentence
+            </summary>
+            <param name="toSentence">Sentence desired</param>
+            <param name="actionIndex">Action index to remove</param>
+            <returns>True if the action was associated to the sentence</returns>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.ActionCount(System.String)">
+            <summary>
+            Number of action associated with an sentence
+            </summary>
+            <param name="ofSentence">Sentence desired</param>
+            <returns>Number of action associated with the sentence</returns>
+        </member>
+        <member name="M:SmartHome.ActionMapHelper.ExecuteAction(SmartHome.Home,System.String)">
+            <summary>
+            Execute all action of an sentence
+            </summary>
+            <param name="onHome"></param>
+            <param name="ofSentence"></param>
+            <returns></returns>
+        </member>
+        <member name="P:SmartHome.ActionMapHelper.Count">
+            <summary>
+            Number of sentence recognized
+            </summary>
+        </member>
+        <member name="T:SmartHome.AlarmClockAction">
+            <summary>
+            Action for alarm clock
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.AlarmClockAction.#ctor(SmartHome.AlarmClockAction.ActionType,System.Int32)">
+            <summary>
+            Initialize an alarm clock action
+            </summary>
+            <param name="act">Action to do with alarm clock</param>
+            <param name="alarmClockId">Alarm clock identifier number to control</param>
+        </member>
+        <member name="M:SmartHome.AlarmClockAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.AlarmClockAction.Action">
+            <summary>
+            Action to do on alarm clock
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClockAction.AlarmClockId">
+            <summary>
+            Can be <see cref="P:SmartHome.AlarmClock.Id"/> or -1.
+            </summary>
+            <remarks>-1 = All</remarks>
+        </member>
+        <member name="T:SmartHome.AlarmClockAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="T:SmartHome.EmergencyAction">
+            <summary>
+            Action for emergency mode
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.EmergencyAction.#ctor(SmartHome.EmergencyAction.ActionType)">
+            <summary>
+            Initialize an emergency action
+            </summary>
+            <param name="act">Action to do with emergency</param>
+        </member>
+        <member name="M:SmartHome.EmergencyAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.EmergencyAction.Action">
+            <summary>
+            Action to do on emergency
+            </summary>
+        </member>
+        <member name="T:SmartHome.EmergencyAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.EmergencyAction.ActionType.EMERGENCY_RESPONSE_OK">
+            <summary>
+            Signal that user have answered to one of the emergency questions
+            </summary>
+        </member>
+        <member name="T:SmartHome.ExtraAction">
+            <summary>
+            Extra actions availible for SmartHome. Contains all the actions not implemented in other Action helper class.
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.ExtraAction.#ctor(SmartHome.ExtraAction.ActionType)">
+            <summary>
+            Initialize an extra action
+            </summary>
+            <param name="act">Action to do</param>
+        </member>
+        <member name="M:SmartHome.ExtraAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.ExtraAction.Action">
+            <summary>
+            Action to do
+            </summary>
+        </member>
+        <member name="T:SmartHome.ExtraAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.ExtraAction.ActionType.SILENCE">
+            <summary>
+            Make speaker goto silence mode
+            </summary>
+        </member>
+        <member name="T:SmartHome.HifiAction">
+            <summary>
+            Action for Hifi
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.HifiAction.#ctor(SmartHome.HifiAction.ActionType,System.Int32)">
+            <summary>
+            Initialize an hifi action
+            </summary>
+            <param name="act">Action to do with hifi or song</param>
+            <param name="songId">Song identifier number to control</param>
+        </member>
+        <member name="M:SmartHome.HifiAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.HifiAction.Action">
+            <summary>
+            Action to do on Hifi or song
+            </summary>
+        </member>
+        <member name="P:SmartHome.HifiAction.SongId">
+            <summary>
+            Can be <see cref="P:SmartHome.Song.Id"/> or -1.
+            </summary>
+            <remarks>-1 = All</remarks>
+        </member>
+        <member name="T:SmartHome.HifiAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.HifiAction.ActionType.PLAY_RANDOM_SONG">
+            <summary>
+            Play an random song
+            </summary>
+        </member>
+        <member name="F:SmartHome.HifiAction.ActionType.PLAY_SONG">
+            <summary>
+            Play a specific song
+            </summary>
+        </member>
+        <member name="F:SmartHome.HifiAction.ActionType.NEXT_SONG">
+            <summary>
+            Next song
+            </summary>
+        </member>
+        <member name="F:SmartHome.HifiAction.ActionType.PREVIOUS_SONG">
+            <summary>
+            Previous song
+            </summary>
+        </member>
+        <member name="F:SmartHome.HifiAction.ActionType.STOP_ALL_SONG">
+            <summary>
+            Stop all songs
+            </summary>
+        </member>
+        <member name="F:SmartHome.HifiAction.ActionType.LIST_ALL_SONGS">
+            <summary>
+            List all songs
+            </summary>
+        </member>
+        <member name="T:SmartHome.MapAction">
+            <summary>
+            Action for map
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.MapAction.#ctor(SmartHome.MapAction.ActionType,System.Int32)">
+            <summary>
+            Initialize an map action
+            </summary>
+            <param name="act">Action to do with map</param>
+            <param name="locationId">Location identifier number desired</param>
+        </member>
+        <member name="M:SmartHome.MapAction.#ctor(SmartHome.MapAction.ActionType,System.String)">
+            <summary>
+            Initialize an map action
+            </summary>
+            <param name="act">Action to do with map</param>
+            <param name="location">Location desired</param>
+        </member>
+        <member name="M:SmartHome.MapAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.MapAction.Action">
+            <summary>
+            Action to do with map
+            </summary>
+        </member>
+        <member name="P:SmartHome.MapAction.LocationId">
+            <summary>
+            Desired location id. If -1 Then use <see cref="P:SmartHome.MapAction.Location">Location</see> text instead.
+            </summary>
+        </member>
+        <member name="P:SmartHome.MapAction.Location">
+            <summary>
+            Desired location used only when <see cref="P:SmartHome.MapAction.LocationId">LocationId</see> == -1
+            </summary>
+        </member>
+        <member name="T:SmartHome.MapAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.MapAction.ActionType.ROAD_TRAFFIC">
+            <summary>
+            Retrieve road traffic
+            </summary>
+        </member>
+        <member name="F:SmartHome.MapAction.ActionType.ROAD_DIRECTIONS">
+            <summary>
+            Retrieve directions for specific location
+            </summary>
+        </member>
+        <member name="T:SmartHome.RoomAction">
+            <summary>
+            Action for room
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.RoomAction.#ctor(SmartHome.RoomAction.ControllerType,SmartHome.RoomAction.ActionType,System.Int32)">
+            <summary>
+            Initialize a room action
+            </summary>
+            <param name="ctrl">Room element desired</param>
+            <param name="act">Action to do with the controller</param>
+            <param name="roomId">Room identifier number to control</param>
+        </member>
+        <member name="M:SmartHome.RoomAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.RoomAction.Controller">
+            <summary>
+            Element of room to control
+            </summary>
+        </member>
+        <member name="P:SmartHome.RoomAction.Action">
+            <summary>
+            Action to do on the controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.RoomAction.RoomId">
+            <summary>
+            Can be <see cref="P:SmartHome.Room.Id"/> or -1.
+            </summary>
+            <remarks>-1 = All</remarks>
+        </member>
+        <member name="T:SmartHome.RoomAction.ControllerType">
+            <summary>
+            Controller recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ControllerType.UNDEFINED">
+            <summary>
+            Undefined controller
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ControllerType.LUMIERE">
+            <summary>
+            Light controller
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ControllerType.PORTE">
+            <summary>
+            Door controller
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ControllerType.VOLET">
+            <summary>
+            Flap controller
+            </summary>
+        </member>
+        <member name="T:SmartHome.RoomAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ActionType.UNDEFINED">
+            <summary>
+            Undefined action
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ActionType.ON">
+            <summary>
+            On action, correspond to: Allumer, Ouvrir volet, Déverouiller porte, Lancer son, Activer reveil
+            </summary>
+        </member>
+        <member name="F:SmartHome.RoomAction.ActionType.OFF">
+            <summary>
+            Off action, correspond to: Eteindre, Fermer volet, Verouiller porte, Stoppper son, Désactiver reveil
+            </summary>
+        </member>
+        <member name="T:SmartHome.WeatherAction">
+            <summary>
+            Action for weather
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType)">
+            <summary>
+            Initialize an weather action
+            </summary>
+            <param name="act">Action to do with weather</param>
+        </member>
+        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType,System.Int32)">
+            <summary>
+            Initialize an weather action
+            </summary>
+            <param name="act">Action to do with weather</param>
+            <param name="weatherWeekDay">Week desired</param>
+        </member>
+        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType,System.DateTime)">
+            <summary>
+            Initialize an weather action
+            </summary>
+            <param name="act">Action to do with weather</param>
+            <param name="weatherDate">Date desired</param>
+        </member>
+        <member name="M:SmartHome.WeatherAction.Execute(SmartHome.Home)">
+            <summary>
+            Execute the action
+            </summary>
+            <param name="onHome">Home desired</param>
+            <returns>Home response</returns>
+        </member>
+        <member name="P:SmartHome.WeatherAction.Action">
+            <summary>
+            Action to do with weather
+            </summary>
+        </member>
+        <member name="P:SmartHome.WeatherAction.WeatherWeekDay">
+            <summary>
+            Desired week day: -1=Use <see cref="P:SmartHome.WeatherAction.WeatherDate">WeatherDate</see> instead of, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday, 7=Sunday
+            </summary>
+        </member>
+        <member name="P:SmartHome.WeatherAction.WeatherDate">
+            <summary>
+            Desired date used only if <see cref="P:SmartHome.WeatherAction.WeatherWeekDay">WeatherWeekDay</see> == -1
+            </summary>
+        </member>
+        <member name="T:SmartHome.WeatherAction.ActionType">
+            <summary>
+            Action recognized
+            </summary>
+        </member>
+        <member name="F:SmartHome.WeatherAction.ActionType.GET_WEATHER">
+            <summary>
+            Retrieve weather for a specific date
+            </summary>
+        </member>
+        <member name="T:SmartHome.ActionController">
+            <summary>
+            Home actions controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="T:SmartHome.Controller">
+            <summary>
+            Home basic controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.Controller._home">
+            <summary>
+            Home controlled
+            </summary>
+        </member>
+        <member name="M:SmartHome.Controller.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize a basic controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.Controller.ExecuteAction(System.String,System.String)">
+            <summary>
+            Execute an action to a controller of the home
+            </summary>
+            <remarks>For an expansive details of controller/action availaible cf. doc serveur web.pdf</remarks>
+            <param name="controller">Controller desired</param>
+            <param name="action">Action desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.Controller.ExecuteAction(System.String,System.String,SmartHome.Room)">
+            <summary>
+            Execute an action to a controller of a home room's
+            </summary>
+            <remarks>For an expansive details of controller/action availaible cf. doc serveur web.pdf</remarks>
+            <param name="controller">Controller desired</param>
+            <param name="action">Action desired</param>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="F:SmartHome.ActionController._actionsReceived">
+            <summary>
+            Private: List of all ids of action already received and treated
+            </summary>
+        </member>
+        <member name="M:SmartHome.ActionController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.ActionController.SendAction(System.String,System.String,System.String[])">
+            <summary>
+            Send an action
+            </summary>
+            <param name="dest">Identifier that will receive the action</param>
+            <param name="action">Action to send</param>
+            <param name="param">List of action parameters to send</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.ActionController.Refresh(SmartHome.JSON)">
+            <summary>
+            Retrieve all actions and triggered action received event.
+            </summary>
+            <remarks>
+            Will automatically fired action received event if configured (<see cref="M:SmartHome.Home.RegisterActionReceivedEvent(SmartHome.Home.ActionReceived)"/>). 
+            Action are not persisted, this means that if action received event is not configured then the actions cannot be retrieved after.
+            </remarks>
+            <param name="json">JSON to load, containing all actions</param>
+            <returns>True if refreshed without errors</returns>
+        </member>
+        <member name="T:SmartHome.AlarmClockController">
+            <summary>
+            Home alarm clocks controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.AlarmClockController._alarmClocks">
+            <summary>
+            Alarm clocks of home
+            </summary>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.CreateNewAlarmClock(System.String,System.Int32,System.Int32,SmartHome.AlarmClock.WeekDays,System.Int32)">
+            <summary>
+            Create an new alarm clock
+            </summary>
+            <remarks>To take in account the alarm clock creation you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="name">Name of the new alarm clock</param>
+            <param name="hour">Hour when alarm clock need to ring</param>
+            <param name="minute">Minute when alarm clock need to ring</param>
+            <param name="days">Days alarm clock have to rings</param>
+            <param name="weekCount">Number of weeks before the alarm clock goto off mode. If 0 Then alarm clock not activate Else If -1 Then infinite</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.Remove(SmartHome.AlarmClock)">
+            <summary>
+            Remove an alarm clock
+            </summary>
+            <remarks>To take in account the alarm clock deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="clock">Alarm clock to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.RemoveByIndex(System.Int32)">
+            <summary>
+            Remove an alarm clock by index
+            </summary>
+            <remarks>To take in account the alarm clock deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="index">Index of alarm clock to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.Remove(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Remove an alarm clock
+            </summary>
+            <remarks>To take in account the alarm clock deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="name">Name of alarm clock to remove</param>
+            <param name="ignoreCase">True to ignore case during seeking alarm clock</param>
+            <param name="ignoreAccent">True to ignore accent during seeking alarm clock</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.Remove(System.Int32)">
+            <summary>
+            Remove an alarm clock by identifier number
+            </summary>
+            <remarks>To take in account the alarm clock deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="identifier">Identifier number of alarm clock to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.ActiveAlarmClock(System.Int32,System.Boolean)">
+            <summary>
+            Activate/Desactivate an alarm clock by identifier number
+            </summary>
+            <param name="identifier">Identifier number of alarm clock to active/desactivate</param>
+            <param name="activeState">True to activate the alarm clock false to desactivate</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.ActiveAlarmClock(System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Activate/Desactivate an alarm clock by name
+            </summary>
+            <param name="name">Name of the alarm clock to active/desactivate</param>
+            <param name="ignoreCase">True to ignore case during seeking alarm clock</param>
+            <param name="ignoreAccent">True to ignore accent during seeking alarm clock</param>
+            <param name="activeState">True to activate the alarm clock false to desactivate</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.ActiveAlarmClock(SmartHome.AlarmClock,System.Boolean)">
+            <summary>
+            Activate/Desactivate an alarm clock by identifier number
+            </summary>
+            <param name="clock">Alarm clock to active/desactivate</param>
+            <param name="activeState">True to activate the alarm clock false to desactivate</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.Get(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Get an alarm clock by name
+            </summary>
+            <param name="name">Name of the desired alarm clock</param>
+            <param name="ignoreCase">True to ignore case during seeking alarm clock</param>
+            <param name="ignoreAccent">True to ignore accent during seeking alarm clock</param>
+            <returns>Alarm clock found Or null if no alarm clock found</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.GetByIndex(System.Int32)">
+            <summary>
+            Get an alarm clock by index
+            </summary>
+            <param name="index">Index of the desired alarm clock</param>
+            <returns>Alarm clock found Or null if no alarm clock found</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.Get(System.Int32)">
+            <summary>
+            Get an alarm clock by identifier number
+            </summary>
+            <param name="identifierNumber">Identifier number of the desired alarm clock</param>
+            <returns>Alarm clock found Or null if no alarm clock found</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClockController.Refresh(SmartHome.JSON)">
+            <summary>
+            Refresh list of alarm clocks and their status
+            </summary>
+            <remarks>Will automatically fired alarm clock update event if needed and configured (<see cref="M:SmartHome.Home.RegisterAlarmClockUpdateEvent(SmartHome.Home.AlarmClockUpdate)"/>)</remarks>
+            <param name="json">JSON to load, containing all alarm clocks datas</param>
+            <returns>True if refreshed without errors</returns> 
+        </member>
+        <member name="M:SmartHome.AlarmClockController.ToString">
+            <summary>
+            Convert alarm clocks into human-readable string
+            </summary>
+            <returns>String representation of all alarm clocks</returns>
+        </member>
+        <member name="P:SmartHome.AlarmClockController.Count">
+            <summary>
+            Get the number of the alarm clock
+            </summary>
+            <returns>Alarm clock count</returns>
+        </member>
+        <member name="T:SmartHome.DoorController">
+            <summary>
+            Home doors controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.DoorController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.DoorController.Verrouiller(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Lock the door of a room
+            </summary>
+            <param name="name">Room name desired</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.Deverrouiller(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Unlock the door of a room
+            </summary>
+            <param name="name">Room name desired</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.Verrouiller(System.Int32)">
+            <summary>
+            Lock the door of a room
+            </summary>
+            <param name="id">Room identifier desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.Deverrouiller(System.Int32)">
+            <summary>
+            Unlock the door of a room
+            </summary>
+            <param name="id">Room identifier desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.Verrouiller(SmartHome.Room)">
+            <summary>
+            Lock the door of a room
+            </summary>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.Deverrouiller(SmartHome.Room)">
+            <summary>
+            Unlock the door of a room
+            </summary>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.VerrouillerTout">
+            <summary>
+            Lock all the door of home
+            </summary>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.DoorController.DeverrouillerTout">
+            <summary>
+            UnLock all the door of home
+            </summary>
+            <returns>Home server response</returns>
+        </member>
+        <member name="T:SmartHome.FlapController">
+            <summary>
+            Home flaps controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.FlapController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.FlapController.Ouvrir(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Open flaps of a room
+            </summary>
+            <param name="name">Room name desired</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.Fermer(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Close flaps of a room
+            </summary>
+            <param name="name">Room name desired</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.Ouvrir(System.Int32)">
+            <summary>
+            Open flaps of a room
+            </summary>
+            <param name="id">Room identifier desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.Fermer(System.Int32)">
+            <summary>
+            Close flaps of a room
+            </summary>
+            <param name="id">Room identifier desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.Ouvrir(SmartHome.Room)">
+            <summary>
+            Open flaps of a room
+            </summary>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.Fermer(SmartHome.Room)">
+            <summary>
+            Close flaps of a room
+            </summary>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.OuvrirTout">
+            <summary>
+            Open all flaps of home
+            </summary>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.FlapController.FermerTout">
+            <summary>
+            Close all flaps of home
+            </summary>
+            <returns>Home server response</returns>
+        </member>
+        <member name="T:SmartHome.HifiController">
+            <summary>
+            Home hifi controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.HifiController._songs">
+            <summary>
+            Alarm clocks of home
+            </summary>
+        </member>
+        <member name="M:SmartHome.HifiController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.HifiController.AddSong(System.String,System.String)">
+            <summary>
+            Add a song
+            </summary>
+            <remarks>To take in account the song creation you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="title">Title of the song to add</param>
+            <param name="artist">Artist of the song to add</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.RemoveSong(SmartHome.Song)">
+            <summary>
+            Remove a song
+            </summary>
+            <remarks>To take in account the song deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="song">Song to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.RemoveSongByIndex(System.Int32)">
+            <summary>
+            Remove a song by index
+            </summary>
+            <remarks>To take in account the song deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="index">Index of song to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.RemoveSong(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Remove a song by title
+            </summary>
+            <remarks>To take in account the song deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="title">Title of song to remove</param>
+            <param name="ignoreCase">True to ignore case during seeking song by title</param>
+            <param name="ignoreAccent">True to ignore accent during seeking song by title</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.RemoveSong(System.Int32)">
+            <summary>
+            Remove a song by identifier number
+            </summary>
+            <remarks>To take in account the song deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="identifier">Identifier number of song to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.GetSong(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Get a song by title
+            </summary>
+            <remarks>This function return the first song found with corresponding title, since there can be song with identical name.</remarks>
+            <param name="title">Title of the desired song</param>
+            <param name="ignoreCase">True to ignore case during seeking song by title</param>
+            <param name="ignoreAccent">True to ignore accent during seeking song by title</param>
+            <returns>Song found Or null if no song found</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.GetSongByIndex(System.Int32)">
+            <summary>
+            Get a song by index
+            </summary>
+            <param name="index">Index of the desired song</param>
+            <returns>Song found Or null if no song found</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.GetSong(System.Int32)">
+            <summary>
+            Get a song by identifier number
+            </summary>
+            <param name="identifierNumber">Identifier number of the desired song</param>
+            <returns>Song found Or null if no song found</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.Refresh(SmartHome.JSON)">
+            <summary>
+            Refresh list of songs.
+            </summary>
+            <remarks>Will automatically fired hifi update event if needed and configured (<see cref="M:SmartHome.Home.RegisterHifiUpdateEvent(SmartHome.Home.HifiUpdate)"/>)</remarks>
+            <param name="json">JSON to load, containing all songs</param>
+            <returns>True if refreshed without errors</returns>
+        </member>
+        <member name="M:SmartHome.HifiController.ToString">
+            <summary>
+            Convert songs into human-readable string
+            </summary>
+            <returns>String representation of all song</returns>
+        </member>
+        <member name="P:SmartHome.HifiController.SongCount">
+            <summary>
+            Get the number of the songs
+            </summary>
+            <returns>Songs count</returns>
+        </member>
+        <member name="T:SmartHome.LightController">
+            <summary>
+            Home lights controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.LightController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.LightController.Allumer(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Switch on light of a room
+            </summary>
+            <param name="name">Room name desired</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.Eteindre(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Switch off light of a room
+            </summary>
+            <param name="name">Room name desired</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.Allumer(System.Int32)">
+            <summary>
+            Switch on light of a room
+            </summary>
+            <param name="id">Room identifier desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.Eteindre(System.Int32)">
+            <summary>
+            Switch off light of a room
+            </summary>
+            <param name="id">Room identifier desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.Allumer(SmartHome.Room)">
+            <summary>
+            Switch on light of a room
+            </summary>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.Eteindre(SmartHome.Room)">
+            <summary>
+            Switch off light of a room
+            </summary>
+            <param name="room">Room desired</param>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.AllumerTout">
+            <summary>
+            Switch on all light
+            </summary>
+            <returns>Home server response</returns>
+        </member>
+        <member name="M:SmartHome.LightController.EteindreTout">
+            <summary>
+            Switch off all light
+            </summary>
+            <returns>Home server response</returns>
+        </member>
+        <member name="T:SmartHome.RoomController">
+            <summary>
+            Home rooms controller
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.RoomController._rooms">
+            <summary>
+            Room availaible from home server
+            </summary>
+        </member>
+        <member name="M:SmartHome.RoomController.#ctor(SmartHome.Home)">
+            <summary>
+            Initialize controller
+            </summary>
+            <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.RoomController.CreateNewRoom(System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Create an new room
+            </summary>
+            <remarks>To take in account the room creation you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="name">Name of the new room</param>
+            <param name="haveLight">Indicate if the new room have light</param>
+            <param name="haveFlap">Indicate if the new room have flap</param>
+            <param name="haveDoor">Indicate if the new room have door</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.Remove(SmartHome.Room)">
+            <summary>
+            Remove an room
+            </summary>
+            <remarks>To take in account the room deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="room">Room to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.RemoveByIndex(System.Int32)">
+            <summary>
+            Remove a room by index
+            </summary>
+            <remarks>To take in account the room deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="index">Index of the room to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.Remove(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Remove a room
+            </summary>
+            <remarks>To take in account the room deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="name">Name of the room to remove</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.Remove(System.Int32)">
+            <summary>
+            Remove a room by identifier number
+            </summary>
+            <remarks>To take in account the room deletion you need to refresh home (<see cref="M:SmartHome.Home.Refresh"/>)</remarks>
+            <param name="identifier">Identier number of the room to remove</param>
+            <returns>Server response</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.Refresh(SmartHome.JSON)">
+            <summary>
+            Refresh list of rooms and status of each rooms.
+            </summary>
+            <remarks>
+            Will automatically fired room update and home update event if needed and configured 
+            (<see cref="M:SmartHome.Home.RegisterRoomUpdateEvent(SmartHome.Home.RoomUpdate)"/>, <see cref="M:SmartHome.Home.RegisterHomeUpdateEvent(SmartHome.Home.HomeUpdate)"/>)
+            </remarks>
+            <param name="json">JSON to load, containing all rooms datas</param>
+            <returns>True if refreshed without errors</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.Get(System.Int32)">
+            <summary>
+            Get a room by identifier
+            </summary>
+            <param name="id">Identifier of the desired room</param>
+            <returns>Room found Or null if no room found</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.Get(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Get a room by name
+            </summary>
+            <param name="name">Name of the desired room</param>
+            <param name="ignoreCase">True to ignore case during seeking room</param>
+            <param name="ignoreAccent">True to ignore accent during seeking room</param>
+            <returns>Room found Or null if no room found</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.GetByIndex(System.Int32)">
+            <summary>
+            Get a room by index
+            </summary>
+            <param name="index">Index of the desired room</param>
+            <returns>Room found Or null if no room found</returns>
+        </member>
+        <member name="M:SmartHome.RoomController.ToString">
+            <summary>
+            Convert home into human-readable string
+            </summary>
+            <returns>String representation of this home</returns>
+        </member>
+        <member name="P:SmartHome.RoomController.Count">
+            <summary>
+            Get the number of rooms
+            </summary>
+            <returns>Room count</returns>
+        </member>
         <member name="T:SmartHome.HomeResponse">
             <summary>
             Represent the server of Home response (cf. doc serveur web.pdf for more details)
             </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
         <member name="M:SmartHome.HomeResponse.Code">
             <summary>
@@ -27,6 +1113,12 @@
             </summary>
             <param name="json">JSON object to parse</param>
             <returns>The corresponding HomeResponse of JSON object</returns>
+        </member>
+        <member name="M:SmartHome.HomeResponse.ToString">
+            <summary>
+            Convert this Reponse into an human-readable string
+            </summary>
+            <returns>String representation of this song</returns>
         </member>
         <member name="P:SmartHome.HomeResponse.Status">
             <summary>
@@ -98,10 +1190,59 @@
             error échec, erreur indéterminée
             </summary>
         </member>
+        <member name="T:SmartHome.DateUtils">
+            <summary>
+            Date utils static functions
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.DateUtils.WeekDayToNumber">
+            <summary>
+            Convert Day of week into integer number.
+            </summary>
+            <returns>Integer number (1=Monday, 2=Tuesday, ..., 7=Sunday)</returns>
+        </member>
+        <member name="M:SmartHome.DateUtils.WeekDayToNumber(System.DateTime)">
+            <summary>
+            Convert Day of week into integer number.
+            </summary>
+            <param name="date">Date desired</param>
+            <returns>Integer number (1=Monday, 2=Tuesday, ..., 7=Sunday)</returns>
+        </member>
+        <member name="M:SmartHome.DateUtils.WeekDayToNumber(System.DayOfWeek)">
+            <summary>
+            Convert Day of week into integer number.
+            </summary>
+            <param name="dayOfWeek">Day of week desired</param>
+            <returns>Integer number (1=Monday, 2=Tuesday, ..., 7=Sunday)</returns>
+        </member>
+        <member name="M:SmartHome.DateUtils.WeekDayNumberToString(System.Int32)">
+            <summary>
+            Convery day of week number into french string
+            </summary>
+            <param name="dayNumber">Day of week number desired</param>
+            <returns>French day name</returns>
+        </member>
+        <member name="M:SmartHome.DateUtils.WeekDayOfInt(System.Int32)">
+            <summary>
+            Get valid day id (1..7) of an int
+            </summary>
+            <param name="dayNumber">Day int number desired</param>
+            <returns>Return valid day id (1..7)</returns>
+        </member>
+        <member name="M:SmartHome.DateUtils.WeekDayAdd(System.Int32,System.Int32)">
+            <summary>
+            Add to day of week number
+            </summary>
+            <param name="dayNumber">Day of week number desired</param>
+            <param name="dayCountToAdd">Count of day to add</param>
+            <returns>Valid day of week number after day addition</returns>
+        </member>
         <member name="T:SmartHome.HTTPRequest">
             <summary>
             Utils class that create HTTP request send it and retrieve response.
             </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
         <member name="F:SmartHome.HTTPRequest._request">
             <summary>
@@ -119,12 +1260,29 @@
             </summary>
             <param name="url">URL desired</param>
         </member>
-        <member name="M:SmartHome.HTTPRequest.#ctor(System.String,SmartHome.Message)">
+        <member name="M:SmartHome.HTTPRequest.#ctor(System.String,SmartHome.HomeRequest,SmartHome.HTTPRequest.Method)">
             <summary>
             Create and initialize the HTTP Request with a defined message
             </summary>
             <param name="url">URL desired</param>
             <param name="msg">Message to send</param>
+            <param name="method">Method to use</param>
+        </member>
+        <member name="M:SmartHome.HTTPRequest.#ctor(System.String,SmartHome.HomeRequest,SmartHome.HomeRequest)">
+            <summary>
+            Create and initialize the HTTP Request with a defined message
+            </summary>
+            <param name="url">URL desired</param>
+            <param name="msgGET">Message to send by GET method</param>
+            <param name="msgPOST">Message to send by POST method</param>
+        </member>
+        <member name="M:SmartHome.HTTPRequest.init(System.String,SmartHome.HomeRequest,SmartHome.HomeRequest)">
+            <summary>
+            Create and initialize the HTTP Request with a defined message
+            </summary>
+            <param name="url">URL desired</param>
+            <param name="msgGET">Message to send by GET method</param>
+            <param name="msgPOST">Message to send by POST method</param>
         </member>
         <member name="M:SmartHome.HTTPRequest.GetResponse">
             <summary>
@@ -142,93 +1300,504 @@
             HTTP response
             </summary>
         </member>
-        <member name="T:SmartHome.Piece">
+        <member name="T:SmartHome.HTTPRequest.Method">
+            <summary>
+            HTTP Request mode.
+            </summary>
+        </member>
+        <member name="F:SmartHome.HTTPRequest.Method.GET">
+            <summary>
+            Message data send by url. (cf. HTTP GET documentation)
+            </summary>
+        </member>
+        <member name="F:SmartHome.HTTPRequest.Method.POST">
+            <summary>
+            Message data incorporate in message data. (cf. HTTP POST documentation) 
+            </summary>
+        </member>
+        <member name="T:SmartHome.HomeAction">
+            <summary>
+            Represent an Action of the SmartHome
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.HomeAction._params">
+            <summary>
+            Parameters of this action
+            </summary>
+        </member>
+        <member name="M:SmartHome.HomeAction.#ctor">
+            <summary>
+            Private contrusctor used to initialize class members
+            </summary>
+        </member>
+        <member name="M:SmartHome.HomeAction.#ctor(SmartHome.JSON)">
+            <summary>
+            Create a action from a JSON Object. (cf. doc serveur web.pdf) 
+            </summary>
+            <param name="json">JSON object to read</param>
+        </member>
+        <member name="M:SmartHome.HomeAction.IsType(System.String,System.Boolean)">
+            <summary>
+            Check if it's a specific type
+            </summary>
+            <param name="type">Type desired</param>
+            <param name="ignoreCase">True to ignore case</param>
+            <returns>True if is desired type</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.IsTypeOneOf(System.String[])">
+            <summary>
+            Check if it's one of specific types
+            </summary>
+            <param name="types">Types desired</param>
+            <returns>True if is one of desired types</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.IsTypeOneOfIgnoringCase(System.String[])">
+            <summary>
+            Check if it's one of specific types
+            </summary>
+            <param name="types">Types desired</param>
+            <returns>True if is one of desired types</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.ContainsParam(System.Int32)">
+            <summary>
+            Check by id if this action have a parameter
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <returns>True if parameter present</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.GetParam(System.Int32,System.String)">
+            <summary>
+            Get parameter value by id
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <param name="defaultValue">Default value to return if parameter not found</param>
+            <returns>Parameter value if found otherwise defaultValue</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.GetIntParam(System.Int32,System.Int32)">
+            <summary>
+            Get parameter integer value by id
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <param name="defaultValue">Default value to return if parameter not found</param>
+            <returns>Parameter integer value if found otherwise defaultValue</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.GetDoubleParam(System.Int32,System.Double)">
+            <summary>
+            Get parameter double value by id
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <param name="defaultValue">Default value to return if parameter not found</param>
+            <returns>Parameter double value if found otherwise defaultValue</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.GetBoolParam(System.Int32,System.Boolean)">
+            <summary>
+            Get parameter boolean value by id
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <param name="defaultValue">Default value to return if parameter not found</param>
+            <returns>Parameter boolean value if found otherwise defaultValue</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.isEgalTo(SmartHome.HomeAction)">
+            <summary>
+            Compare this home action to another one, and check if there are identical.
+            </summary>
+            <param name="a">Action to compare to</param>
+            <returns>True if identical</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.ToString">
+            <summary>
+            Convert this action into an human-readable string
+            </summary>
+            <returns>String representation of this action</returns>
+        </member>
+        <member name="P:SmartHome.HomeAction.Id">
+            <summary>
+            Unique ID of this action
+            </summary>
+        </member>
+        <member name="P:SmartHome.HomeAction.Type">
+            <summary>
+            Action to do
+            </summary>
+        </member>
+        <member name="P:SmartHome.HomeAction.SendedDate">
+            <summary>
+            Sended date of the action
+            </summary>
+        </member>
+        <member name="P:SmartHome.HomeAction.SenderIdentifier">
+            <summary>
+            Name of the sender of this action. Reserved for future use
+            </summary>
+        </member>
+        <member name="P:SmartHome.HomeAction.SendedDateString">
+            <summary>
+            Convert Sended date to "yyyy-MM-dd"
+            </summary>
+        </member>
+        <member name="P:SmartHome.HomeAction.ParamCount">
+            <summary>
+            Get parameters count of this action
+            </summary>
+        </member>
+        <member name="T:SmartHome.Room">
             <summary>
             Represent a room of the SmartHome
             </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
-        <member name="M:SmartHome.Piece.#ctor(SmartHome.JSON)">
+        <member name="M:SmartHome.Room.#ctor">
+            <summary>
+            Private contrusctor used to initialize class members
+            </summary>
+        </member>
+        <member name="M:SmartHome.Room.#ctor(SmartHome.JSON)">
             <summary>
             Create a room from a JSON Object. (cf. doc serveur web.pdf) 
             </summary>
             <param name="json">JSON object to read</param>
         </member>
-        <member name="M:SmartHome.Piece.Refresh(SmartHome.JSON)">
+        <member name="M:SmartHome.Room.Refresh(SmartHome.JSON)">
             <summary>
-            Refresh the room from a JSON Object. (cf. doc serveur web.pdf)
+            Refresh this room from a JSON Object. (cf. doc serveur web.pdf)
             </summary>
             <param name="json">JSON object to read</param>
         </member>
-        <member name="M:SmartHome.Piece.ToString">
+        <member name="M:SmartHome.Room.isEgalTo(SmartHome.Room)">
+            <summary>
+            Compare this room to another one, and check if there are identical.
+            </summary>
+            <param name="r">Room to compare to</param>
+            <returns>True if identical</returns>
+        </member>
+        <member name="M:SmartHome.Room.ToString">
             <summary>
             Convert this room into an human-readable string
             </summary>
             <returns>String representation of this room</returns>
         </member>
-        <member name="P:SmartHome.Piece.Nom">
+        <member name="P:SmartHome.Room.Id">
             <summary>
-            Name of the Piece
+            Unique identifier of this room
             </summary>
         </member>
-        <member name="P:SmartHome.Piece.LumiereAllumer">
+        <member name="P:SmartHome.Room.Nom">
             <summary>
-            Light on/off state of the room
+            Name of this room
+            </summary>
+        </member>
+        <member name="P:SmartHome.Room.LumiereAllumer">
+            <summary>
+            Light on/off state of this room
             </summary>
             <remarks>Returns true if the light is on</remarks>
         </member>
-        <member name="P:SmartHome.Piece.PorteDeverrouiller">
+        <member name="P:SmartHome.Room.PorteDeverrouiller">
             <summary>
-            Door locked/unlocked state of the room
+            Door locked/unlocked state of this room
             </summary>
             <remarks>Returns true if the door is lock</remarks>
         </member>
-        <member name="P:SmartHome.Piece.VoletOuvert">
+        <member name="P:SmartHome.Room.VoletOuvert">
             <summary>
-            Flap opened/closed state of the room
+            Flap opened/closed state of this room
             </summary>
             <remarks>Returns true if the flap is open</remarks>
         </member>
-        <member name="P:SmartHome.Piece.ALumiere">
+        <member name="P:SmartHome.Room.ALumiere">
             <summary>
             Check if a light is present
             </summary>
             <remarks>Returns true if this room have lights</remarks>
         </member>
-        <member name="P:SmartHome.Piece.APorte">
+        <member name="P:SmartHome.Room.APorte">
             <summary>
             Check if a door is present
             </summary>
             <remarks>Returns true if this room have doors</remarks>
         </member>
-        <member name="P:SmartHome.Piece.AVolet">
+        <member name="P:SmartHome.Room.AVolet">
             <summary>
             Check if a flap is present
             </summary>
             <remarks>Returns true if this room have flap</remarks>
         </member>
+        <member name="P:SmartHome.Room.IsNewOne">
+            <summary>
+            Indicate that this home element have been just added
+            </summary>
+        </member>
+        <member name="T:SmartHome.AlarmClock">
+            <summary>
+            Represent an Alarm clock of the SmartHome
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="F:SmartHome.AlarmClock._isActive">
+            <summary>
+            Private: Indicate if alarm clock is activate. To know if the alarm clock is active use <see cref="P:SmartHome.AlarmClock.Active">Active property</see>
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock._isRinging">
+            <summary>
+            Private: Indicate if alarm clock is ringing. To know if the alarm clock is ringing use <see cref="P:SmartHome.AlarmClock.Ringing">Ringing property</see>
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock._ringingCounter">
+            <summary>
+            Private: Indicate the count of ring already done.
+            </summary>
+        </member>
+        <member name="M:SmartHome.AlarmClock.#ctor">
+            <summary>
+            Private contrusctor used to initialize class members
+            </summary>
+        </member>
+        <member name="M:SmartHome.AlarmClock.#ctor(SmartHome.JSON,System.Int32)">
+            <summary>
+            Create an alarm clock from a JSON Object. (cf. doc serveur web.pdf) 
+            </summary>
+            <param name="json">JSON object to read</param>
+            <param name="ringingCounter">Ringing counter to set (<see cref="M:SmartHome.AlarmClockController.Refresh(SmartHome.JSON)"/>)</param>
+        </member>
+        <member name="M:SmartHome.AlarmClock.Refresh(SmartHome.JSON)">
+            <summary>
+            Refresh this alarm clock from a JSON Object. (cf. doc serveur web.pdf)
+            </summary>
+            <param name="json">JSON object to read</param>
+        </member>
+        <member name="M:SmartHome.AlarmClock.isEgalTo(SmartHome.AlarmClock)">
+            <summary>
+            Compare this alarm clock to another one, and check if there are identical.
+            </summary>
+            <param name="a">AlarmClock to compare to</param>
+            <returns>True if identical</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClock.ToString">
+            <summary>
+            Convert this alarm clock into an human-readable string
+            </summary>
+            <returns>String representation of this alarm clock</returns>
+        </member>
+        <member name="M:SmartHome.AlarmClock.WeekDaysToString(SmartHome.AlarmClock.WeekDays,System.Boolean)">
+            <summary>
+            Convert days enum value into string understandable by home server
+            </summary>
+            <param name="days">Days desired</param>
+            <param name="useDayNameInsteadOfOneOrZero">
+            If false then will use 1 or 0 to indicate if <see cref="T:SmartHome.AlarmClock.WeekDays">WeekDays</see> present in days. 
+            If true then will use french day name (since it's a french project)
+            </param>
+            <returns>String understandable by home server</returns>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Id">
+            <summary>
+            Alarm clock identifier
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Name">
+            <summary>
+            Alarm clock name
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Hour">
+            <summary>
+            Hour part of the time when alarm clock will ring (<see cref="P:SmartHome.AlarmClock.Minute">Minute</see>, <see cref="P:SmartHome.AlarmClock.HourString">HourString</see>, <see cref="P:SmartHome.AlarmClock.HourDateTime">HourDateTime</see>)
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Minute">
+            <summary>
+            Minute part of the time when alarm clock will ring (<see cref="P:SmartHome.AlarmClock.Hour">Hour</see>)
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Days">
+            <summary>
+            Days alarm clock have to ring
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.WeekRepetition">
+            <summary>
+            Week count alarm clock have to ring
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.LastRing">
+            <summary>
+            Last date the alarm clock have rang.
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.IsNewOne">
+            <summary>
+            Indicate that this home element have been just added
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Active">
+            <summary>
+            Indicate if this alarm clock is active
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.Ringing">
+            <summary>
+            Indicate if this alarm clock is ringing
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.RingingCount">
+            <summary>
+            Indicate how many times the alarm clock have rang
+            </summary>
+            <remarks>This value is mainly used by AlarmClockController in order to make a only one ring. (<see cref="M:SmartHome.AlarmClockController.Refresh(SmartHome.JSON)"/>)</remarks>
+        </member>
+        <member name="P:SmartHome.AlarmClock.HourString">
+            <summary>
+            Convert Hour and Minute to HOUR:MINUTE (format HH:MM)
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.HourDateTime">
+            <summary>
+            Convert Hour and Minute into a DateTime object
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.LastRingString">
+            <summary>
+            Convert LastRing date to "yyyy-MM-dd"
+            </summary>
+        </member>
+        <member name="P:SmartHome.AlarmClock.DaysString">
+            <summary>
+            Convert Days to string
+            </summary>
+        </member>
+        <member name="T:SmartHome.AlarmClock.WeekDays">
+            <summary>
+            Day availaible for alarm clock.
+            </summary>
+            <remarks>Value are power of 2 in order to enable combinaison as: Days.Monday + Days.Sunday</remarks>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.None">
+            <summary>
+            No day defined
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Monday">
+            <summary>
+            Monday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Tuesday">
+            <summary>
+            Tuesday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Wednesday">
+            <summary>
+            Wednesday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Thursday">
+            <summary>
+            Thursday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Friday">
+            <summary>
+            Friday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Saturday">
+            <summary>
+            Saturday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Sunday">
+            <summary>
+            Sunday -- (Doc comment present only to avoid compiler doc warnings)
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.Week">
+            <summary>
+            Day of the week from Monday to Friday included
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.WeekEnd">
+            <summary>
+            Day of the weekend from Saturday to Sunday included
+            </summary>
+        </member>
+        <member name="F:SmartHome.AlarmClock.WeekDays.All">
+            <summary>
+            All the day
+            </summary>
+        </member>
+        <member name="T:SmartHome.Song">
+            <summary>
+            Represent a song of the SmartHome
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.Song.#ctor">
+            <summary>
+            Private contrusctor used to initialize class members
+            </summary>
+        </member>
+        <member name="M:SmartHome.Song.#ctor(SmartHome.JSON)">
+            <summary>
+            Create an song from a JSON Object. (cf. doc serveur web.pdf) 
+            </summary>
+            <param name="json">JSON object to read</param>
+        </member>
+        <member name="M:SmartHome.Song.Refresh(SmartHome.JSON)">
+            <summary>
+            Refresh this song from a JSON Object. (cf. doc serveur web.pdf)
+            </summary>
+            <param name="json">JSON object to read</param>
+        </member>
+        <member name="M:SmartHome.Song.isEgalTo(SmartHome.Song)">
+            <summary>
+            Compare this song to another one, and check if there are identical.
+            </summary>
+            <param name="s">Song to compare to</param>
+            <returns>True if identical</returns>
+        </member>
+        <member name="M:SmartHome.Song.ToString">
+            <summary>
+            Convert this song into an human-readable string
+            </summary>
+            <returns>String representation of this song</returns>
+        </member>
+        <member name="P:SmartHome.Song.Id">
+            <summary>
+            Unique identifier of this song
+            </summary>
+        </member>
+        <member name="P:SmartHome.Song.Artist">
+            <summary>
+            Artist name of this song
+            </summary>
+        </member>
+        <member name="P:SmartHome.Song.Title">
+            <summary>
+            Title of this song
+            </summary>
+        </member>
+        <member name="P:SmartHome.Song.IsNewOne">
+            <summary>
+            Indicate that this home element have been just added
+            </summary>
+        </member>
         <member name="T:SmartHome.Home">
             <summary>
             Home main controller which interact directly with the Home server
             </summary>
-        </member>
-        <member name="F:SmartHome.Home._pieces">
-            <summary>
-            Room availaible from home server
-            </summary>
-        </member>
-        <member name="F:SmartHome.Home._onPieceUpdate">
-            <summary>
-            Event called when a room have been updated
-            </summary>
-        </member>
-        <member name="F:SmartHome.Home._onHomeUpdate">
-            <summary>
-            Event called when home have been updated
-            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
         <member name="F:SmartHome.Home._lastUpdateTick">
             <summary>
             Last System.Environment.TickCount when a refresh was done
+            </summary>
+        </member>
+        <member name="F:SmartHome.Home._basicController">
+            <summary>
+            Basic home controller
             </summary>
         </member>
         <member name="M:SmartHome.Home.#ctor">
@@ -236,183 +1805,24 @@
             Initialize an empty Home. HomeURI need to be set after before using refresh.
             </summary>
         </member>
-        <member name="M:SmartHome.Home.#ctor(System.String,System.Int32)">
+        <member name="M:SmartHome.Home.#ctor(System.String,System.String,System.Int32)">
             <summary>
             Initialize Home with the location of the Home server set
             </summary>
             <param name="uri">URI of the Home server</param>
+            <param name="identifier">Identifier used by home server. Can be empty.</param>
             <param name="refreshFrequency">Frequency of refresh in milliseconds (set to 0 to have direct refresh)</param>
-        </member>
-        <member name="M:SmartHome.Home.RegisterPieceUpdateEvent(SmartHome.Home.PieceUpdate)">
-            <summary>
-            Register an update event for room
-            </summary>
-            <param name="update">Update function called when a room have been update</param>
-        </member>
-        <member name="M:SmartHome.Home.RegisterHomeUpdateEvent(SmartHome.Home.HomeUpdate)">
-            <summary>
-            Register an update event for home
-            </summary>
-            <param name="update">Update function called when home have been update</param>
-        </member>
-        <member name="M:SmartHome.Home.UnregisterPieceUpdateEvent(SmartHome.Home.PieceUpdate)">
-            <summary>
-            Unregister an update event for room
-            </summary>
-            <param name="update">Update function to unregister</param>
-        </member>
-        <member name="M:SmartHome.Home.UnregisterHomeUpdateEvent(SmartHome.Home.HomeUpdate)">
-            <summary>
-            Unregister an update event for home
-            </summary>
-            <param name="update">Update function to unregister</param>
         </member>
         <member name="M:SmartHome.Home.Refresh">
             <summary>
-            Refresh list of rooms and status of each rooms.
+            Synchronous refreshing of home state (<see cref="M:SmartHome.RoomController.Refresh(SmartHome.JSON)"/>, <see cref="M:SmartHome.AlarmClockController.Refresh(SmartHome.JSON)"/>, <see cref="M:SmartHome.HifiController.Refresh(SmartHome.JSON)"/>, <see cref="M:SmartHome.ActionController.Refresh(SmartHome.JSON)"/>)
             </summary>
-            <remarks>Will automatically fired room update and home update event if needed and configured (<see cref="M:SmartHome.Home.RegisterPieceUpdateEvent(SmartHome.Home.PieceUpdate)"/>, <see cref="M:SmartHome.Home.RegisterHomeUpdateEvent(SmartHome.Home.HomeUpdate)"/>)</remarks>
+            <remarks>
+            Will automatically fire all the registered events.
+            Will update also Hifi datas however if <see cref="P:SmartHome.Home.HomeIdentifier">HomeIdentifier</see> is set the home server response returned will be only the response of the request "getState" on "maison" (cf. doc serveur web for more details)
+            Nonetheless if Home identifier is not set then the response returned will be the response of "lister" on "pieces" controller (cf. doc serveur web)
+            </remarks>
             <returns>Response of the Home server</returns>
-        </member>
-        <member name="M:SmartHome.Home.GetPieceCount">
-            <summary>
-            Get the number of the room
-            </summary>
-            <returns>Room count</returns>
-        </member>
-        <member name="M:SmartHome.Home.GetPiece(System.String)">
-            <summary>
-            Get a room by name
-            </summary>
-            <param name="name">Name of the desired room</param>
-            <returns>Room found Or null if no room found</returns>
-        </member>
-        <member name="M:SmartHome.Home.GetPiece(System.Int32)">
-            <summary>
-            Get a room by id
-            </summary>
-            <param name="id">Id of the desired room</param>
-            <returns>Room found Or null if no room found</returns>
-        </member>
-        <member name="M:SmartHome.Home.AllumerLumiere(System.String)">
-            <summary>
-            Switch on light of a room
-            </summary>
-            <param name="piece">Room name desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.EteindreLumiere(System.String)">
-            <summary>
-            Switch off light of a room
-            </summary>
-            <param name="piece">Room name desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.AllumerLumiere(SmartHome.Piece)">
-            <summary>
-            Switch on light of a room
-            </summary>
-            <param name="piece">Room desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.EteindreLumiere(SmartHome.Piece)">
-            <summary>
-            Switch off light of a room
-            </summary>
-            <param name="piece">Room desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.AllumerTout">
-            <summary>
-            Switch on all light
-            </summary>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.EteindreTout">
-            <summary>
-            Switch off all light
-            </summary>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.VerrouillerPorte(System.String)">
-            <summary>
-            Lock the door of a room
-            </summary>
-            <param name="piece">Room name desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.DeverrouillerPorte(System.String)">
-            <summary>
-            Unlock the door of a room
-            </summary>
-            <param name="piece">Rom name desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.VerrouillerPorte(SmartHome.Piece)">
-            <summary>
-            Lock the door of a room
-            </summary>
-            <param name="piece">Room desired</param>
-            <returns></returns>
-        </member>
-        <member name="M:SmartHome.Home.DeverrouillerPorte(SmartHome.Piece)">
-            <summary>
-            Unlock the door of a room
-            </summary>
-            <param name="piece">Rom desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.VerrouillerTout">
-            <summary>
-            Lock all the door of home
-            </summary>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.DeverrouillerTout">
-            <summary>
-            UnLock all the door of home
-            </summary>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.OuvrirVolet(System.String)">
-            <summary>
-            Open flaps of a room
-            </summary>
-            <param name="piece">Room name desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.FermerVolet(System.String)">
-            <summary>
-            Close flaps of a room
-            </summary>
-            <param name="piece">Room name desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.OuvrirVolet(SmartHome.Piece)">
-            <summary>
-            Open flaps of a room
-            </summary>
-            <param name="piece">Room desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.FermerVolet(SmartHome.Piece)">
-            <summary>
-            Close flaps of a room
-            </summary>
-            <param name="piece">Room desired</param>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.OuvrirTout">
-            <summary>
-            Open all flaps of home
-            </summary>
-            <returns>Home server response</returns>
-        </member>
-        <member name="M:SmartHome.Home.FermerTout">
-            <summary>
-            Close all flaps of home
-            </summary>
-            <returns>Home server response</returns>
         </member>
         <member name="M:SmartHome.Home.ExecuteAction(System.String,System.String)">
             <summary>
@@ -433,6 +1843,106 @@
             <param name="piece">Room name desired</param>
             <returns>Home server response</returns>
         </member>
+        <member name="M:SmartHome.Home.RegisterEvent(SmartHome.Home.HomeUpdate)">
+            <summary>
+            Register an update event for home
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when home have been update</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterEvent(SmartHome.Home.RoomUpdate)">
+            <summary>
+            Register an update event for room
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when a room have been update</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterEvent(SmartHome.Home.AlarmClockUpdate)">
+            <summary>
+            Register an update event for alarm clock
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when an alarm clock is added/updated/removed</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterEvent(SmartHome.Home.HifiUpdate)">
+            <summary>
+            Register an update event for hifi
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when an song is added/updated/removed</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterEvent(SmartHome.Home.ActionReceived)">
+            <summary>
+            Register an function called when Home receive an Action
+            </summary>
+            <remarks>Multiple functions can be registered. When the home receive an action, all registered functions are called in order they were added.</remarks>
+            <param name="fun">Function to call when Home receive an Action</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterHomeUpdateEvent(SmartHome.Home.HomeUpdate)">
+            <summary>
+            Register an update event for home
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when home have been update</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterRoomUpdateEvent(SmartHome.Home.RoomUpdate)">
+            <summary>
+            Register an update event for room
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when a room have been update</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterAlarmClockUpdateEvent(SmartHome.Home.AlarmClockUpdate)">
+            <summary>
+            Register an update event for alarm clock
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when an alarm clock is added/updated/removed</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterHifiUpdateEvent(SmartHome.Home.HifiUpdate)">
+            <summary>
+            Register an update event for hifi
+            </summary>
+            <remarks>Multiple functions can be registered. When the event is triggered, all registered functions are called in order they were added.</remarks>
+            <param name="update">Update function called when an song is added/updated/removed</param>
+        </member>
+        <member name="M:SmartHome.Home.RegisterActionReceivedEvent(SmartHome.Home.ActionReceived)">
+            <summary>
+            Register an function called when Home receive an Action
+            </summary>
+            <remarks>Multiple functions can be registered. When the home receive an action, all registered functions are called in order they were added.</remarks>
+            <param name="fun">Function to call when Home receive an Action</param>
+        </member>
+        <member name="M:SmartHome.Home.UnregisterEvent(SmartHome.Home.HomeUpdate)">
+            <summary>
+            Unregister an update event for home
+            </summary>
+            <param name="update">Update function to unregister</param>
+        </member>
+        <member name="M:SmartHome.Home.UnregisterEvent(SmartHome.Home.RoomUpdate)">
+            <summary>
+            Unregister an update event for room
+            </summary>
+            <param name="update">Update function to unregister</param>
+        </member>
+        <member name="M:SmartHome.Home.UnregisterEvent(SmartHome.Home.AlarmClockUpdate)">
+            <summary>
+            Unregister an update event for home
+            </summary>
+            <param name="update">Update function to unregister</param>
+        </member>
+        <member name="M:SmartHome.Home.UnregisterEvent(SmartHome.Home.HifiUpdate)">
+            <summary>
+            Unregister an update event for home
+            </summary>
+            <param name="update">Update function to unregister</param>
+        </member>
+        <member name="M:SmartHome.Home.UnregisterEvent(SmartHome.Home.ActionReceived)">
+            <summary>
+            Unregister an event for home
+            </summary>
+            <param name="fun">Update function to unregister</param>
+        </member>
         <member name="M:SmartHome.Home.ToString">
             <summary>
             Convert home into human-readable string
@@ -444,14 +1954,79 @@
             Home server URI
             </summary>
         </member>
+        <member name="P:SmartHome.Home.HomeIdentifier">
+            <summary>
+            Identifier used by home to receive/send message
+            </summary>
+        </member>
         <member name="P:SmartHome.Home.RefreshFrequency">
             <summary>
             Frequency of refresh in milliseconds
             </summary>
         </member>
+        <member name="P:SmartHome.Home.OnRoomUpdate">
+            <summary>
+            Event called when a room have been updated
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.OnHomeUpdate">
+            <summary>
+            Event called when home have been updated
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.OnAlarmClockUpdate">
+            <summary>
+            Event called when an alarm clock is added/updated/removed
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.OnHifiUpdate">
+            <summary>
+            Event called when an song is added/updated/removed
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.OnActionReceived">
+            <summary>
+            Event called when an action have been received
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Pieces">
+            <summary>
+            Room controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Lumieres">
+            <summary>
+            Light controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Portes">
+            <summary>
+            Door controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Volets">
+            <summary>
+            Flap controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Reveils">
+            <summary>
+            Alarm clock controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Hifi">
+            <summary>
+            Hifi controller
+            </summary>
+        </member>
+        <member name="P:SmartHome.Home.Actions">
+            <summary>
+            Action controller
+            </summary>
+        </member>
         <member name="T:SmartHome.Home.RoomUpdateKind">
             <summary>
-            Action that an room can do
+            Room events handleable
             </summary>
         </member>
         <member name="F:SmartHome.Home.RoomUpdateKind.SwitchOnRoomLight">
@@ -484,9 +2059,40 @@
             Indicate that a room flap have been closed
             </summary>
         </member>
+        <member name="F:SmartHome.Home.RoomUpdateKind.NewRoomAdded">
+            <summary>
+            Indicate that a new room have been setted
+            </summary>
+            <remarks>
+                This event is triggered always after 
+                <see cref="F:SmartHome.Home.RoomUpdateKind.RoomRemoved">RoomRemoved</see> 
+                and before
+                <see cref="F:SmartHome.Home.HomeUpdateKind.RoomListChanged">RoomListChanged</see>
+            </remarks>
+        </member>
+        <member name="F:SmartHome.Home.RoomUpdateKind.RoomRemoved">
+            <summary>
+            Indicate that an room have been removed
+            </summary>
+            <remarks>
+                This event is triggered always before 
+                <see cref="F:SmartHome.Home.RoomUpdateKind.NewRoomAdded">NewRoomAdded</see> and 
+                <see cref="F:SmartHome.Home.HomeUpdateKind.RoomListChanged">RoomListChanged</see>
+            </remarks>
+        </member>
         <member name="T:SmartHome.Home.HomeUpdateKind">
             <summary>
-            Action that the home can do
+            Home events handleable
+            </summary>
+        </member>
+        <member name="F:SmartHome.Home.HomeUpdateKind.BeginUpdate">
+            <summary>
+            Update begin
+            </summary>
+        </member>
+        <member name="F:SmartHome.Home.HomeUpdateKind.EndUpdate">
+            <summary>
+            End of update
             </summary>
         </member>
         <member name="F:SmartHome.Home.HomeUpdateKind.SwitchOnAllRoomLight">
@@ -519,28 +2125,148 @@
             Indicate that all home flaps have been closed
             </summary>
         </member>
-        <member name="F:SmartHome.Home.HomeUpdateKind.RoomCountChanged">
+        <member name="F:SmartHome.Home.HomeUpdateKind.RoomListChanged">
             <summary>
             Indicate that some room(s) have been added or removed
             </summary>
+            <remarks>
+                This event is triggered always after 
+                <see cref="F:SmartHome.Home.RoomUpdateKind.NewRoomAdded">NewRoomAdded</see> and 
+                <see cref="F:SmartHome.Home.RoomUpdateKind.RoomRemoved">RoomRemoved</see>
+            </remarks>
         </member>
-        <member name="T:SmartHome.Home.PieceUpdate">
+        <member name="F:SmartHome.Home.HomeUpdateKind.AlarmClockListChanged">
             <summary>
-            Event function to detect when a Room have been updated
+            Indicate that some alarm clock(s) have been added or removed
             </summary>
-            <param name="p">Room updated</param>
+            <remarks>
+                This event is triggered always after 
+                <see cref="F:SmartHome.Home.AlarmClockUpdateKind.NewAlarmClockSet">NewAlarmClockSet</see> and 
+                <see cref="F:SmartHome.Home.AlarmClockUpdateKind.AlarmClockRemoved">AlarmClockRemoved</see>
+            </remarks>
+        </member>
+        <member name="F:SmartHome.Home.HomeUpdateKind.SongListChanged">
+            <summary>
+            Indicate that some song(s) have been added or removed
+            </summary>
+            <remarks>
+                This event is triggered always after 
+                <see cref="F:SmartHome.Home.HifiUpdateKind.NewSongAdded">NewSongAdded</see> and 
+                <see cref="F:SmartHome.Home.HifiUpdateKind.SongRemoved">SongRemoved</see>
+            </remarks>
+        </member>
+        <member name="T:SmartHome.Home.AlarmClockUpdateKind">
+            <summary>
+            Alarm clock events handleable
+            </summary>
+        </member>
+        <member name="F:SmartHome.Home.AlarmClockUpdateKind.AlarmClockRing">
+            <summary>
+            Indicate that an alarm clock ringing
+            </summary>
+        </member>
+        <member name="F:SmartHome.Home.AlarmClockUpdateKind.AlarmClockUpdated">
+            <summary>
+            Indicate that an alarm clock have been updated
+            </summary>
+            <remarks>On the event AlarmClock parameter is the old alarm clock. You can compare change by get new one by it's id, since event are fired after update done</remarks>
+        </member>
+        <member name="F:SmartHome.Home.AlarmClockUpdateKind.NewAlarmClockSet">
+            <summary>
+            Indicate that a new alarm clock have been setted
+            </summary>
+            <remarks>
+                This event is triggered always after 
+                <see cref="F:SmartHome.Home.AlarmClockUpdateKind.AlarmClockRemoved">AlarmClockRemoved</see> 
+                and before 
+                <see cref="F:SmartHome.Home.HomeUpdateKind.AlarmClockListChanged">AlarmClockListChanged</see>
+            </remarks>
+        </member>
+        <member name="F:SmartHome.Home.AlarmClockUpdateKind.AlarmClockRemoved">
+            <summary>
+            Indicate that an alarm clock have been removed
+            </summary>
+            <remarks>
+                This event is triggered always before 
+                <see cref="F:SmartHome.Home.AlarmClockUpdateKind.NewAlarmClockSet">NewAlarmClockSet</see> and 
+                <see cref="F:SmartHome.Home.HomeUpdateKind.AlarmClockListChanged">AlarmClockListChanged</see>
+            </remarks>
+        </member>
+        <member name="T:SmartHome.Home.HifiUpdateKind">
+            <summary>
+            Hifi events handleable
+            </summary>
+        </member>
+        <member name="F:SmartHome.Home.HifiUpdateKind.SongUpdated">
+            <summary>
+            Indicate that a song have been updated
+            </summary>
+            <remarks>On the event Song parameter is the old song. You can compare change by get new one by it's id, since event are fired after update done</remarks>
+        </member>
+        <member name="F:SmartHome.Home.HifiUpdateKind.NewSongAdded">
+            <summary>
+            Indicate that a new song is available
+            </summary>
+            <remarks>
+                This event is always triggered after 
+                <see cref="F:SmartHome.Home.HifiUpdateKind.SongRemoved">SongRemoved</see> 
+                and before 
+                <see cref="F:SmartHome.Home.HomeUpdateKind.SongListChanged">SongListChanged</see>
+            </remarks>
+        </member>
+        <member name="F:SmartHome.Home.HifiUpdateKind.SongRemoved">
+            <summary>
+            Indicate that a song have been removed
+            </summary>
+            <remarks>
+                This event is always triggered before 
+                <see cref="F:SmartHome.Home.HifiUpdateKind.NewSongAdded">NewSongAdded</see> and 
+                <see cref="F:SmartHome.Home.HomeUpdateKind.SongListChanged">SongListChanged</see>
+            </remarks>
+        </member>
+        <member name="T:SmartHome.Home.RoomUpdate">
+            <summary>
+            Delegate able to treat a room event
+            </summary>
+            <param name="h">Home</param>
+            <param name="r">Room updated</param>
             <param name="updateKind">Update kind</param>
         </member>
         <member name="T:SmartHome.Home.HomeUpdate">
             <summary>
-            Event function to detect when the homve have been updated
+            Delegate able to treat an home event
             </summary>
+            <param name="h">Home</param>
             <param name="updateKind">Update kind</param>
+        </member>
+        <member name="T:SmartHome.Home.AlarmClockUpdate">
+            <summary>
+            Delegate able to treat an alarm clock event
+            </summary>
+            <param name="h">Home</param>
+            <param name="a">Alarm clock updated</param>
+            <param name="updateKind">Update kind</param>
+        </member>
+        <member name="T:SmartHome.Home.HifiUpdate">
+            <summary>
+            Delegate able to treat an hifi event
+            </summary>
+            <param name="h">Home</param>
+            <param name="s">Song updated</param>
+            <param name="updateKind">Update kind</param>
+        </member>
+        <member name="T:SmartHome.Home.ActionReceived">
+            <summary>
+            Delegate able to treat an action received
+            </summary>
+            <param name="h">Home</param>
+            <param name="a">Action received</param>
         </member>
         <member name="T:SmartHome.JSON">
             <summary>
             JSON reader
             </summary>
+            <remarks>Authors: Dorian RODDE</remarks>
         </member>
         <member name="F:SmartHome.JSON._childs">
             <summary>
@@ -576,6 +2302,13 @@
             <remarks>Concern only JSON Object, since other type cannot have named child (cf. json specification)</remarks>
             <param name="name">Name of the desired child</param>
             <returns>Child in question Or this object if child not found.</returns>
+        </member>
+        <member name="M:SmartHome.JSON.Contains(System.String)">
+            <summary>
+            Check if this JSON object contains a child by name
+            </summary>
+            <param name="name">Name of the desired child</param>
+            <returns>True if child exist</returns>
         </member>
         <member name="M:SmartHome.JSON.GetBoolValue(System.Boolean)">
             <summary>
@@ -640,6 +2373,20 @@
             </summary>
             <param name="tabIndent">Indentation used for each new line</param>
             <returns>String representation of this JSON object</returns>
+        </member>
+        <member name="M:SmartHome.JSON.StringToDouble(System.String)">
+            <summary>
+            Convert a string into a double (take in account '.' and ',')
+            </summary>
+            <param name="str">String desired</param>
+            <returns>Double number of the string</returns>
+        </member>
+        <member name="M:SmartHome.JSON.StringToInt(System.String)">
+            <summary>
+            Convert a string into an integer (take in account '.' and ',')
+            </summary>
+            <param name="str">String desired</param>
+            <returns>Integer number of the string</returns>
         </member>
         <member name="M:SmartHome.JSON.NextToken(System.String,SmartHome.JSON.Token)">
             <summary>
@@ -796,46 +2543,48 @@
             Boolean JSON Object: true or false (cf. json.org :: value true, false)
             </summary>
         </member>
-        <member name="T:SmartHome.Message">
+        <member name="T:SmartHome.HomeRequest">
             <summary>
-            Message composer. Use user-defined parameters to produce a message ready to send
+            Home request composer. Use user-defined parameters to produce a message ready to send
             </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
-        <member name="F:SmartHome.Message._params">
+        <member name="F:SmartHome.HomeRequest._params">
             <summary>
             User-defined parameters
             </summary>
         </member>
-        <member name="M:SmartHome.Message.#ctor">
+        <member name="M:SmartHome.HomeRequest.#ctor">
             <summary>
             Create an empty message
             </summary>
         </member>
-        <member name="M:SmartHome.Message.#ctor(System.String)">
+        <member name="M:SmartHome.HomeRequest.#ctor(System.String)">
             <summary>
             Read a message from a string, formatted like URL parameters.
             </summary>
             <remarks></remarks>
-            <param name="message"></param>
+            <param name="request"></param>
         </member>
-        <member name="M:SmartHome.Message.IsEmpty">
+        <member name="M:SmartHome.HomeRequest.IsEmpty">
             <summary>
             Check if no parameters present
             </summary>
             <returns>True if no parameters found</returns>
         </member>
-        <member name="M:SmartHome.Message.IsNotEmpty">
+        <member name="M:SmartHome.HomeRequest.IsNotEmpty">
             <summary>
             Check if parameters present
             </summary>
             <returns>True if parameters found</returns>
         </member>
-        <member name="M:SmartHome.Message.Clear">
+        <member name="M:SmartHome.HomeRequest.Clear">
             <summary>
             Clear all parameters defined
             </summary>
+            <returns>This object to enable chained call (example: msg.Clear().Set("done","ok");)</returns>
         </member>
-        <member name="M:SmartHome.Message.Set(System.String,System.String)">
+        <member name="M:SmartHome.HomeRequest.Set(System.String,System.String)">
             <summary>
             Modify or Add an parameters
             </summary>
@@ -843,30 +2592,94 @@
             <param name="value">Value of the parameter</param>
             <returns>This object to enable chained call (example: msg.Set("test","42").Set("done","ok");)</returns>
         </member>
-        <member name="M:SmartHome.Message.Get(System.String)">
-            <summary>
-            Get a parameter value
-            </summary>
-            <param name="name">Name of the desired parameter</param>
-            <returns>Value of the parameter</returns>
-        </member>
-        <member name="M:SmartHome.Message.Remove(System.String)">
+        <member name="M:SmartHome.HomeRequest.Remove(System.String)">
             <summary>
             Remove a parameter
             </summary>
             <param name="name">Name of the desired parameter</param>
+            <returns>This object to enable chained call (example: msg.Remove("test").Set("done","ok");)</returns>
         </member>
-        <member name="M:SmartHome.Message.ToHTTPRequest">
+        <member name="M:SmartHome.HomeRequest.Get(System.String)">
+            <summary>
+            Get a parameter value by name
+            </summary>
+            <param name="name">Name of the desired parameter</param>
+            <returns>Value of the parameter</returns>
+        </member>
+        <member name="M:SmartHome.HomeRequest.Get(System.Int32)">
+            <summary>
+            Get a parameter value by id
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <returns>Value of the parameter</returns>
+        </member>
+        <member name="M:SmartHome.HomeRequest.GetName(System.Int32)">
+            <summary>
+            Get a parameter name
+            </summary>
+            <param name="id">Id of the desired parameter</param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartHome.HomeRequest.ToHTTPRequest">
             <summary>
             Retrieve all parameters formatted like URL parameters.
             </summary>
             <returns>Parameters list formatted like URL parameters.</returns>
         </member>
-        <member name="M:SmartHome.Message.ExplodeHTTPRequest(System.String)">
+        <member name="M:SmartHome.HomeRequest.ExplodeHTTPRequest(System.String)">
             <summary>
             Set parameters from string 
             </summary>
             <param name="request">Parameters list formatted like URL parameters.</param>
+        </member>
+        <member name="P:SmartHome.HomeRequest.Count">
+            <summary>
+            Get the number of parameters
+            </summary>
+        </member>
+        <member name="T:SmartHome.StringUtils">
+            <summary>
+            String utils static functions
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.StringUtils.UTF8ToASCII(System.String)">
+            <summary>
+            Convert a string encoded in UTF8 to ASCII. Example "Biblioth\u00e8que" -> "Bibliothèque"
+            </summary>
+            <param name="utf8EncodedString">UTF8 string to convert</param>
+            <returns>ASCII string</returns>
+        </member>
+        <member name="M:SmartHome.StringUtils.StringToDouble(System.String)">
+            <summary>
+            Convert a string into a double (take in account '.' and ',')
+            </summary>
+            <param name="str">String desired</param>
+            <returns>Double number of the string</returns>
+        </member>
+        <member name="M:SmartHome.StringUtils.StringToInt(System.String)">
+            <summary>
+            Convert a string into an integer (take in account '.' and ',')
+            </summary>
+            <param name="str">String desired</param>
+            <returns>Integer number of the string</returns>
+        </member>
+        <member name="M:SmartHome.StringUtils.IdenticalString(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Test if two string are identical
+            </summary>
+            <param name="str1">First string to compare</param>
+            <param name="str2">Second string to compare</param>
+            <param name="ignoreCase">True to ignore case during comparaison</param>
+            <param name="ignoreAccent">True to ignore accent during comparaison</param>
+            <returns>True if string identical</returns>
+        </member>
+        <member name="M:SmartHome.StringUtils.RemoveAccent(System.Char)">
+            <summary>
+            Convert accent char into corresponding non-accent char
+            </summary>
+            <param name="c">Char to convert</param>
+            <returns>Corresponding non-accent char</returns>
         </member>
     </members>
 </doc>

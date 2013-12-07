@@ -1,0 +1,9 @@
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\bin\LocalTest\HomeController.exe.config
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\bin\LocalTest\HomeController.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\bin\LocalTest\HomeController.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\bin\LocalTest\SmartHome.dll
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\bin\LocalTest\SmartHome.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\bin\LocalTest\SmartHome.xml
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\obj\TestLocal\HomeController.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\obj\TestLocal\HomeController.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\HomeController\obj\TestLocal\HomeController.pdb

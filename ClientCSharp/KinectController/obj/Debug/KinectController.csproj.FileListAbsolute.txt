@@ -1,0 +1,9 @@
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Debug\KinectController.exe.config
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Debug\KinectController.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Debug\KinectController.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Debug\SmartHome.dll
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Debug\SmartHome.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Debug\SmartHome.xml
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Debug\KinectController.csprojResolveAssemblyReference.cache
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Debug\KinectController.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Debug\KinectController.pdb

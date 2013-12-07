@@ -8,27 +8,38 @@ using SmartHome;
 using System.Speech;
 using System.Speech.Recognition;
 
-///
-/// TODO: Improve speech recognition
-///
 
 namespace HomeController
 {
-
+    /// <summary>
+    /// C# client of SmartHome, provide vocal control of home.
+    /// </summary>
     class Program
     {
+	
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Members
         ///////////////////////////////////////////////////////////////////////////////////////////
 
+#if TEST_LOCAL
         /// <summary>
         /// Server location
         /// </summary>
-        const string SERVER_URI = "http://becsa.mondophoto.fr/server/"; /*"http://becsa.mondophoto.fr/server/";*/
+        const string SERVER_URI = "http://127.0.0.1:80/csa/server/server.php";
+#else
+        /// <summary>
+        /// Server location
+        /// </summary>
+        const string SERVER_URI = "http://becsa.mondophoto.fr/server/";
+#endif
+        /// <summary>
+        /// Identifier used by server
+        /// </summary>
+        const string IDENTIFIER = "home_controller";
         /// <summary>
         /// Home refresh frequency
         /// </summary>
-        const int SERVER_REFRESH_FREQUENCY = 500;
+        const int SERVER_REFRESH_FREQUENCY = 5000;
         /// <summary>
         /// Home controller/viewer
         /// </summary>
@@ -41,24 +52,45 @@ namespace HomeController
         /// Used to recognize the speech of the user
         /// </summary>
         static private SpeechRecognitionEngine _engine;
-
         /// <summary>
         /// Home name
         /// </summary>
         static private string _homeName = "Maison";
         /// <summary>
-        /// Home's actions recognizable.
+        /// Home voice controller
         /// </summary>
-        static private string[] _actionList = {
-            //"Allumer lumiere", "Eteindre lumiere", "Allume lumiere", "Eteint lumiere",
-            "ouvrir volet", "fermer volet", "ouvre volet", "fermer volet",
-            "verrouiller porte", "déverrouiller porte", "verrouille porte", "déverrouille porte", 
-            "fermer porte", "ouvrir porte",  "ferme porte", "ouvre porte",
-            "allumer", "éteindre", "allume", "éteint",
-            "ouvrir", "fermer", "ouvre", "ferme", 
-            "verrouiller", "déverrouiller", "verrouille", "déverrouille" 
-        };
+        static private VoiceController _voiceController;
 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // VocalActions
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Initialize all vocal action follow an vocal mode
+        /// </summary>
+        static void InitVocalAction() {
+            /* Initialize */
+            Choices detector = new Choices(_homeName);
+            Choices actions = new Choices();
+            /* Append to choices all vocal actions */
+            for (int i = 0; i < _voiceController.Count; i++) {
+                actions.Add(_voiceController.Get(i));
+            }
+            /* Initialize grammar */
+            GrammarBuilder grammar = new GrammarBuilder();
+            grammar.Append(detector);
+            grammar.Append(actions);
+            /* Initialize Speech recognizer */
+            if (_engine != null) {
+                _engine.SpeechRecognized -= new EventHandler<SpeechRecognizedEventArgs>(SpeechRecognized);
+            }
+            _engine = new SpeechRecognitionEngine();
+            _engine.LoadGrammar(new Grammar(grammar));
+            _engine.SetInputToDefaultAudioDevice();
+            _engine.RecognizeAsync(RecognizeMode.Multiple);
+            _engine.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(SpeechRecognized);
+        }
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Home
@@ -70,195 +102,42 @@ namespace HomeController
         static void HomeThread() {
             while (running) {
                 home.Refresh();
+                Thread.Sleep(SERVER_REFRESH_FREQUENCY);
             }
         }
         /// <summary>
         /// Event fired when the home have been updated
         /// </summary>
+        /// <param name="h">Home updated</param>
         /// <param name="act">Update kind</param>
-        static void HomeUpdate(Home.HomeUpdateKind act) {
-            if (act == Home.HomeUpdateKind.RoomCountChanged) {
-                /* Add first controller */
-                Choices detector = new Choices(_homeName);
-                Choices controller = new Choices(_actionList);
-                /* Add all rooms */
-                Choices Rooms = new Choices("Toutes les lumieres", "Toutes les portes", "Tous les volets");
-                for (int i = 0, max = home.GetPieceCount(); i < max; i++) {
-                    Rooms.Add(home.GetPiece(i).Nom);
-                }
-                /* Initialize grammar */
-                GrammarBuilder grammar = new GrammarBuilder();
-                grammar.Append(detector);
-                grammar.Append(controller);
-                if (home.GetPieceCount() > 0) {
-                    grammar.Append(Rooms);
-                }
-                /* Initialize Speech recognizer */ 
-                _engine = new SpeechRecognitionEngine();
-                _engine.LoadGrammar(new Grammar(grammar));
-                _engine.SetInputToDefaultAudioDevice();
-                _engine.RecognizeAsync(RecognizeMode.Multiple);
-                _engine.SpeechRecognized += new EventHandler<SpeechRecognizedEventArgs>(SpeechRecognized);
+        static void HomeUpdate(Home h, Home.HomeUpdateKind act) {
+            if ((act == Home.HomeUpdateKind.RoomListChanged) || (act == Home.HomeUpdateKind.AlarmClockListChanged) || (act == Home.HomeUpdateKind.SongListChanged)) {
+                _voiceController.Refresh(home);
+                InitVocalAction();
             }
         }
+        /// <summary>
+        /// Event fired when an action have been received
+        /// </summary>
+        /// <param name="h">Home updated</param>
+        /// <param name="a">Action received</param>
+        static void ActionReceived(Home h, HomeAction a) {
+            if (a.IsType("change_mode")) {
+                if (string.Compare(a.GetParam(0), "emergency") == 0) {
+                    _voiceController.ChangeVocalMode(VoiceController.VocalModeType.EmergencyVocalMode, home);
+                } else {
+                    _voiceController.ChangeVocalMode(VoiceController.VocalModeType.DefaultVocalMode, home);
+                }
+                InitVocalAction();
+            }
+            System.Console.WriteLine(a.ToString());
+        }
+
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
-        // Home
+        // Speech recognized
         ///////////////////////////////////////////////////////////////////////////////////////////
-
-        /// <summary>
-        /// Controller recognized
-        /// </summary>
-        private enum Controller
-        {
-            /// <summary>
-            /// Undefined controller
-            /// </summary>
-            UNDEFINED,
-            /// <summary>
-            /// All light "controller"
-            /// </summary>
-            ALL_LUMIERE,
-            /// <summary>
-            /// All door "controller"
-            /// </summary>
-            ALL_PORTE,
-            /// <summary>
-            ///  All flap "controller"
-            /// </summary>
-            ALL_VOLET,
-            /// <summary>
-            /// Light controller
-            /// </summary>
-            LUMIERE,
-            /// <summary>
-            /// Door controller
-            /// </summary>
-            PORTE,
-            /// <summary>
-            /// Flap controller
-            /// </summary>
-            VOLET
-        }
-        /// <summary>
-        /// Action recognized
-        /// </summary>
-        private enum Action
-        {
-            /// <summary>
-            /// Undefined action
-            /// </summary>
-            UNDEFINED,
-            /// <summary>
-            /// On action
-            /// </summary>
-            ON,
-            /// <summary>
-            /// Off action
-            /// </summary>
-            OFF
-        }
-
-        /// <summary>
-        /// Retrieve controller recognized
-        /// </summary>
-        /// <param name="result">Recognition result</param>
-        /// <returns>Controller found</returns>
-        static private Controller RetrieveController(RecognitionResult result) {
-            if (result.Text.IndexOf(" lumières", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.ALL_LUMIERE;
-            } else if (result.Text.IndexOf(" portes", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.ALL_PORTE;
-            } else if (result.Text.IndexOf(" volets", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.ALL_VOLET;
-            /* Lumiere */
-            } else if (result.Text.IndexOf(" lumières ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.LUMIERE;
-            } else if (result.Text.IndexOf(" allumer ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.LUMIERE;
-            } else if (result.Text.IndexOf(" allume ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.LUMIERE;
-            } else if (result.Text.IndexOf(" éteindre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.LUMIERE;
-            } else if (result.Text.IndexOf(" éteint ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.LUMIERE;
-            /* Porte */ 
-            } else if (result.Text.IndexOf(" porte ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" ouvre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" ouvrir ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" fermer ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" ferme ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" verrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" verrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" déverrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            } else if (result.Text.IndexOf(" déverrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.PORTE;
-            /* Volet */ 
-            } else if (result.Text.IndexOf(" volet ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Controller.VOLET;
-            } else {
-                return Controller.UNDEFINED;
-            }
-        }
-        /// <summary>
-        /// Retrieve action recognized
-        /// </summary>
-        /// <param name="result">Recognition result</param>
-        /// <returns>Controller found</returns>
-        static private Action RetrieveAction(RecognitionResult result) {
-            if (result.Text.IndexOf(" ouvrir ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.ON;
-            } else if (result.Text.IndexOf(" ouvre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.ON;
-            } else if (result.Text.IndexOf(" allumer ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.ON;
-            } else if (result.Text.IndexOf(" allume ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.ON;
-            } else if (result.Text.IndexOf(" déverrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.ON;
-            } else if (result.Text.IndexOf(" déverrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.ON;
-            } else if (result.Text.IndexOf(" fermer ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.OFF;
-            } else if (result.Text.IndexOf(" ferme ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.OFF;
-            } else if (result.Text.IndexOf(" éteindre ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.OFF;
-            } else if (result.Text.IndexOf(" éteint ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.OFF;
-            } else if (result.Text.IndexOf(" verrouiller ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.OFF;
-            } else if (result.Text.IndexOf(" verrouille ", StringComparison.CurrentCultureIgnoreCase) != -1) {
-                return Action.OFF;
-            } else {
-                return Action.UNDEFINED;
-            }
-
-        }
-        /// <summary>
-        /// Retrieve controller recognized
-        /// </summary>
-        /// <param name="result">Recognition result</param>
-        /// <returns>Room recognized</returns>
-        static string RetrieveRoomName(RecognitionResult result) {
-            foreach (string s in _actionList) {
-                if ((result.Text.Length - _homeName.Length - 1 >= s.Length) && 
-                    (string.Compare(s, result.Text.Substring(_homeName.Length + 1, s.Length)) == 0)) {
-                    return result.Text.Substring(s.Length + _homeName.Length + 2);
-                }
-            }
-            return "";
-        }
-
         
         /// <summary>
         /// Analyse user speech
@@ -266,61 +145,9 @@ namespace HomeController
         /// <param name="sender">Event sender</param>
         /// <param name="e">Event arguments</param>
         static void SpeechRecognized(object sender, SpeechRecognizedEventArgs e) {
-            if ((e.Result.Words.Count > 0) && (string.Compare(e.Result.Words[0].Text, "maison", true) == 0)) {
+            if ((e.Result.Words.Count > 0) && (e.Result.Words[0].Confidence > 0.7) && (string.Compare(e.Result.Words[0].Text, "maison", true) == 0)) {
                 System.Console.WriteLine("<" + e.Result.Text + ">");
-                /* Analyse Controller */
-                string roomName = "";
-                switch (RetrieveController(e.Result)) {
-                    /* All lumières,portes,volets */
-                    case Controller.ALL_LUMIERE:
-                        switch (RetrieveAction(e.Result)) {
-                            case Action.ON: home.AllumerTout(); break;
-                            case Action.OFF: home.EteindreTout(); break;
-                        }
-                        break;
-                    case Controller.ALL_PORTE:
-                        switch (RetrieveAction(e.Result)) {
-                            case Action.ON: home.DeverrouillerTout(); break;
-                            case Action.OFF: home.VerrouillerTout(); break;
-                        }
-                        break;
-                    case Controller.ALL_VOLET:
-                        switch (RetrieveAction(e.Result)) {
-                            case Action.ON: home.OuvrirTout(); break;
-                            case Action.OFF: home.FermerTout(); break;
-                        }
-                        break;
-                    /* Lumière */ 
-                    case Controller.LUMIERE:
-                        roomName = RetrieveRoomName(e.Result);
-                        if (roomName.Length > 0) {
-                            switch (RetrieveAction(e.Result)) {
-                                case Action.ON: home.AllumerLumiere(roomName); break;
-                                case Action.OFF: home.EteindreLumiere(roomName); break;
-                            }
-                        }
-                        break;
-                    /* Porte */
-                    case Controller.PORTE:
-                        roomName = RetrieveRoomName(e.Result);
-                        if (roomName.Length > 0) {
-                            switch (RetrieveAction(e.Result)) {
-                                case Action.ON: home.DeverrouillerPorte(roomName); break;
-                                case Action.OFF: home.VerrouillerPorte(roomName); break;
-                            }
-                        }
-                        break;
-                    /* Volet */
-                    case Controller.VOLET:
-                        roomName = RetrieveRoomName(e.Result);
-                        if (roomName.Length > 0) {
-                            switch (RetrieveAction(e.Result)) {
-                                case Action.ON: home.OuvrirVolet(roomName); break;
-                                case Action.OFF: home.FermerVolet(roomName); break;
-                            }
-                        }
-                        break;
-                }
+                _voiceController.ExecuteAction(home, e.Result.Text.Substring(_homeName.Length + 1));
             }
         }
 
@@ -329,10 +156,17 @@ namespace HomeController
         // Main
         ///////////////////////////////////////////////////////////////////////////////////////////
 
+        /// <summary>
+        /// Entry points
+        /// </summary>
+        /// <param name="args">List of arguments passed to the program</param>
         static void Main(string[] args) {
+            /* Initialize general */
+            _voiceController = new VoiceController();
             /* Initialize Home */
-            home = new Home(SERVER_URI, SERVER_REFRESH_FREQUENCY);
+            home = new Home(SERVER_URI, IDENTIFIER, SERVER_REFRESH_FREQUENCY);
             home.RegisterHomeUpdateEvent(HomeUpdate);
+            home.RegisterEvent(ActionReceived);
             home.Refresh();
             running = true;
             /* Run Home thread */
@@ -340,10 +174,12 @@ namespace HomeController
             homeThread.Start();
             /* Run a loop that wait User action */
             System.Console.WriteLine(">> Dites une phrase pour contrôler la maison");
-            System.Console.WriteLine(">> Pour quitter appuyer sur n'importe quelle touche");
+            System.Console.WriteLine(">> Pour quitter appuyer sur 'q'");
             while (running) {
                 ConsoleKeyInfo key = System.Console.ReadKey();
-                running = false;
+                if ((key.KeyChar == 'q') || (key.KeyChar == 'Q')) {
+                    running = false;
+                }
             }
         }
 

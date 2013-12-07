@@ -7,6 +7,7 @@ namespace SmartHome
     /// <summary>
     /// Represent the server of Home response (cf. doc serveur web.pdf for more details)
     /// </summary>
+    /// <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
     public class HomeResponse
     {
         
@@ -123,7 +124,18 @@ namespace SmartHome
         public static HomeResponse Create(JSON json) {
             return new HomeResponse(json);
         }
- 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // ToString 
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Convert this Reponse into an human-readable string
+        /// </summary>
+        /// <returns>String representation of this song</returns>
+        override public string ToString() {
+            return Data.ToString();
+        }
 
 
     }

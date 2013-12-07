@@ -1,0 +1,4 @@
+E:\fac\csa\Projet_Truillet\ClientCSharp\Core\bin\LocalTest\SmartHome.dll
+E:\fac\csa\Projet_Truillet\ClientCSharp\Core\bin\LocalTest\SmartHome.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\Core\obj\TestLocal\SmartHome.dll
+E:\fac\csa\Projet_Truillet\ClientCSharp\Core\obj\TestLocal\SmartHome.pdb

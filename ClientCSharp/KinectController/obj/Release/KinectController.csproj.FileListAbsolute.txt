@@ -1,0 +1,9 @@
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\KinectController.exe.config
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\KinectController.XML
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\KinectController.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\KinectController.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\SmartHome.dll
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\SmartHome.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\SmartHome.xml
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Release\KinectController.exe
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Release\KinectController.pdb
