@@ -1,3 +1,5 @@
+var lastMeteoData = null;
+
 function meteo() {
     $("#fctTitle").html("Météo");
     var body = initBodyPage('meteo');
@@ -16,11 +18,14 @@ function meteo() {
 		sunset: true,
 		forecast: true,
 		link: false
-	},translate());
+	},translate(), function (data) {
+		lastMeteoData = data;
+		$("body").trigger("meteo.retrieved");
+	});
 });
 }
 
 
 function translate(){
-    
+
 }

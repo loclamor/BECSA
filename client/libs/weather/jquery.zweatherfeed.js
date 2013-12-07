@@ -24,7 +24,8 @@
 
 (function($){
 
-	$.fn.weatherfeed = function(locations, options, fn) {	
+	$.fn.weatherfeed = function(locations, options, fn
+								/* !!!!! Follow code is not part of the library !!!!! */, fnData/* !!!!! End of extra code !!!!! */) {	
 	
 		// Set plugin defaults
 		var defaults = {
@@ -93,11 +94,17 @@
 							
 								// Create weather feed item
 								_process(e, data.query.results.channel[i], options);
+									
+								
 							}
 						} else {
 
 							// Single location only
 							_process(e, data.query.results.channel, options);
+							/* !!!!! Follow code is not part of the library !!!!! */	
+							if ($.isFunction(fnData)) fnData.call(this,data.query.results.channel);
+							/* !!!!! End of extra code !!!!! */
+							
 						}
 
 						// Optional user callback function
@@ -111,7 +118,6 @@
 					if (options.showerror) $e.html('<p>La requête des données météorologiques a échouée</p>');
 				}
 			});
-
 			// Function to each feed item
 			var _process = function(e, feed, options) {
 				var $e = $(e);
