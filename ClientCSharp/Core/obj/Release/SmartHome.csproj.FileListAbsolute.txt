@@ -1,5 +1,0 @@
-E:\fac\csa\Projet_Truillet\ClientCSharp\Core\obj\Release\SmartHome.dll
-E:\fac\csa\Projet_Truillet\ClientCSharp\Core\obj\Release\SmartHome.pdb
-E:\fac\csa\Projet_Truillet\ClientCSharp\SmartHome.dll
-E:\fac\csa\Projet_Truillet\ClientCSharp\SmartHome.pdb
-E:\fac\csa\Projet_Truillet\ClientCSharp\SmartHome.XML

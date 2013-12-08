@@ -1,4 +1,0 @@
-E:\fac\csa\Projet_Truillet\ClientCSharp\Core\bin\Debug\SmartHome.dll
-E:\fac\csa\Projet_Truillet\ClientCSharp\Core\bin\Debug\SmartHome.pdb
-E:\fac\csa\Projet_Truillet\ClientCSharp\Core\obj\Debug\SmartHome.dll
-E:\fac\csa\Projet_Truillet\ClientCSharp\Core\obj\Debug\SmartHome.pdb
