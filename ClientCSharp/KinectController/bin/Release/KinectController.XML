@@ -19,6 +19,16 @@
             Skeletons detected
             </summary>
         </member>
+        <member name="F:KinectController.KinectController._running">
+            <summary>
+            Indicate if the kinect controller is still running
+            </summary>
+        </member>
+        <member name="F:KinectController.KinectController._thread">
+            <summary>
+            Thread to simulated kinect action
+            </summary>
+        </member>
         <member name="F:KinectController.KinectController._currentScenario">
             <summary>
             Private: Current scenario
@@ -51,6 +61,11 @@
             </summary>
             <param name="sender">Object that send the event</param>
             <param name="e">Event data</param>
+        </member>
+        <member name="M:KinectController.KinectController.KinectSimulatorThread">
+            <summary>
+            Used to replace Kinect sensor.
+            </summary>
         </member>
         <member name="P:KinectController.KinectController.SkeleteDetectedCount">
             <summary>

@@ -102,39 +102,30 @@ namespace KinectController
             scenario1 = new Scenario1(home, kinect);
             scenario2 = new Scenario2(home, kinect);
             /* Run a loop that wait User action */
-            if (kinect.Start()) {
-                System.Console.WriteLine(">> Ce controller detect la présence et effectue des actions en conséquences.");
-                System.Console.WriteLine(">> Scénarios disponible:");
-                System.Console.WriteLine("\t1. Controle de la lumiere et des volets suivant la présence");
-                System.Console.WriteLine("\t2. Allumage des lumières à l’entré dans une pièce et extinction après la sortie");
-                System.Console.WriteLine("\t3. La maison reconnait les secours et ouvre automatiquement la porte");
-                System.Console.WriteLine("\t4. Quitter ou appuyer sur 'q'");
-                System.Console.WriteLine(">> Votre choix> ");
-                while (running) {
-                    int m = System.Console.ReadKey().KeyChar;
-                    switch (m) {
-                        case '1':
-                            kinect.CurrentScenario = scenario0;
-                            break;
-                        case '2':
-                            kinect.CurrentScenario = scenario1;
-                            break;
-                        case '3':
-                            kinect.CurrentScenario = scenario2;
-                            break;
-                        case '4': case 'q': case 'Q':
-                            running = false;
-                            break;
-                    }
+            System.Console.WriteLine(">> Ce controller detect la présence et effectue des actions en conséquences.");
+            System.Console.WriteLine(">> Scénarios disponible:");
+            System.Console.WriteLine("\t1. Controle de la lumiere et des volets suivant la présence");
+            System.Console.WriteLine("\t2. Allumage des lumières à l’entré dans une pièce et extinction après la sortie");
+            System.Console.WriteLine("\t3. La maison reconnait les secours et ouvre automatiquement la porte");
+            System.Console.WriteLine("\t4. Quitter ou appuyer sur 'q'");
+            System.Console.WriteLine(">> Votre choix> ");
+            kinect.Start();
+            while (running) {
+                int m = System.Console.ReadKey().KeyChar;
+                switch (m) {
+                    case '1':
+                        kinect.CurrentScenario = scenario0;
+                        break;
+                    case '2':
+                        kinect.CurrentScenario = scenario1;
+                        break;
+                    case '3':
+                        kinect.CurrentScenario = scenario2;
+                        break;
+                    case '4': case 'q': case 'Q':
+                        running = false;
+                        break;
                 }
-            } else {
-				System.Console.WriteLine(">> Pour quitter appuyer sur 'q'");
-				while (running) {
-					ConsoleKeyInfo key = System.Console.ReadKey();
-					if ((key.KeyChar == 'q') || (key.KeyChar == 'Q')) {
-						running = false;
-					}
-				}
             }
             /* Finalize */ 
             kinect.Stop();

@@ -7,3 +7,4 @@ E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\SmartHome.p
 E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\bin\Release\SmartHome.xml
 E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Release\KinectController.exe
 E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Release\KinectController.pdb
+E:\fac\csa\Projet_Truillet\ClientCSharp\KinectController\obj\Release\KinectController.csprojResolveAssemblyReference.cache

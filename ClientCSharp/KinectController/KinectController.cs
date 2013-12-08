@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Kinect;
 using System.IO;
+using System.Threading;
+
 
 namespace KinectController
 {
@@ -30,9 +32,18 @@ namespace KinectController
         /// </summary>
         public int SkeleteDetectedCount { get; protected set; }
         /// <summary>
+        /// Indicate if the kinect controller is still running
+        /// </summary>
+        private bool _running;
+        /// <summary>
+        /// Thread to simulated kinect action
+        /// </summary>
+        private Thread _thread;
+        /// <summary>
         /// Private: Current scenario
         /// </summary>
         private Scenario _currentScenario;
+
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Property
@@ -64,10 +75,10 @@ namespace KinectController
         /// </summary>
         public KinectController() {
             SkeleteDetectedCount = 0;
+            _running = true;
             try {
                 sensor = KinectSensor.KinectSensors.FirstOrDefault(s => s.Status == KinectStatus.Connected);
                 if (sensor == null) {
-                    System.Console.WriteLine(">> ERREUR: Ce client nécessite Kinect pour fonctionner, aucune kinect détecter.");
                 } else {
                     sensor.SkeletonStream.Enable();
                     sensor.SkeletonFrameReady += new EventHandler<SkeletonFrameReadyEventArgs>(kinect_SkeletonFrameReady);
@@ -75,6 +86,11 @@ namespace KinectController
                 }
             } catch (IOException) {
                 sensor = null;
+            }
+            if (sensor == null) {
+                System.Console.WriteLine(">> WARNING: Ce client nécessite Kinect pour fonctionner correctement.");
+                System.Console.WriteLine(">> Tapez 'e' (enter) pour simuler l'entré d'une personne.");
+                System.Console.WriteLine(">> Tapez 'l' (leave) pour simuler la sortie d'une personne.");
             }
         }
 
@@ -101,7 +117,10 @@ namespace KinectController
                     return false;
                 }
             } else {
-                return false;
+                _running = true;
+                _thread = new Thread(KinectSimulatorThread);
+                _thread.Start();
+                return true;
             }
         }
 
@@ -123,6 +142,7 @@ namespace KinectController
                     ;
                 }
             }
+            _running = false;
         }
 
 
@@ -158,6 +178,31 @@ namespace KinectController
             }
         }
 
+
+        ///////////////////////////////////////////////////////////////////////////////////////////
+        // Kinect simulation
+        ///////////////////////////////////////////////////////////////////////////////////////////
+
+        /// <summary>
+        /// Used to replace Kinect sensor.
+        /// </summary>
+        private void KinectSimulatorThread() {
+            while (_running) {
+                ConsoleKeyInfo key = System.Console.ReadKey();
+                if ((key.KeyChar == 'e') || (key.KeyChar == 'E')) {
+                    /* Enter */
+                    if (SkeleteDetectedCount < 0) SkeleteDetectedCount = 0;
+                    SkeleteDetectedCount++;
+                    CurrentScenario.OnSkeleteCountChanged(SkeleteDetectedCount);
+                } else if ((key.KeyChar == 'l') || (key.KeyChar == 'L')) {
+                    /* Leave */
+                    if (SkeleteDetectedCount > 0) {
+                        SkeleteDetectedCount = SkeleteDetectedCount - 1;
+                        CurrentScenario.OnSkeleteCountChanged(SkeleteDetectedCount);
+                    }
+                }
+            }
+        }
     
 
 
