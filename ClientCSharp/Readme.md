@@ -194,7 +194,9 @@ Controller:
 				. Maison, ferme tout les volets et allume la lumiere.
 			Ferme les volets et allume la lumiere de la pièce "courante" (en réalité la pièce est celle qui à pour Id 1):
 				. Maison, ferme les volets et allume la lumiere.
-				
+			
+			Couper net la synthese vocale + la musique:
+				. Maison, silence.
 
 
 
