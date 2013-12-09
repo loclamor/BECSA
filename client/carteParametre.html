@@ -42,7 +42,7 @@ function computeItineraire() {
 function getLocation() {
 	geolocation(function(location) {
 		retrieveAdress(location, function(adresse){
-			saveAdress(adresse);
+			changeHome(adresse,'FR');
 		});
 	});
 }
