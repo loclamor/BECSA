@@ -110,7 +110,27 @@ var dictionnaireJSON = {
 				"réveil"
 			],
 			"suite" : ['all']
-		}
+		},
+		"MUSIQUE" : {
+			"mots" : [
+				"musique",
+				"morceaux",
+				"piste",
+				"lire",
+				"lecture",
+				"lancer"
+			],
+			"suite" : ['piste']
+		},
+		"MUSIQUE OFF" : {
+			"mots" : [
+				"pause",
+				"stop",
+				"arreter"
+			],
+			"suite" : ['all']
+		},
+		
 	},
 	"porteOuVolet" : {
 		"PORTE" : {
@@ -143,6 +163,28 @@ var dictionnaireJSON = {
 			],
 			"suite" : ['all']
 		}
+	},
+	"piste" : {
+		"NEXT" : {
+			"mots" :[
+				"suivante",
+				"après"
+			],
+			"suite" : ['all']
+		},
+		"PREV" : {
+			"mots" :[
+				"précédente",
+				"avant"
+			],
+			"suite" : ['all']
+		},
+		"OFF" : {
+			"mots" :[
+				"pause"
+			],
+			"suite" : ['all']
+		},
 	}
 };
 
@@ -308,6 +350,20 @@ function commandeVocale( phrase ) {
 			$.post( getControllerActionUrl("reveil","creer"), postData, function(data) {console.log(data);});
 		}
 	}	
+	else if(commande.indexOf('MUSIQUE') > -1) {
+		if(commande.indexOf('OFF') > -1) {
+			moteurEtAction({action : "pauseSong"});
+		}
+		else if(commande.indexOf('NEXT') > -1) {
+			moteurEtAction({action : "nextSong"});
+		}
+		else if(commande.indexOf('PREV') > -1) {
+			moteurEtAction({action : "previousSong"});
+		}
+		else {
+			moteurEtAction({action : "playSong"});
+		}
+	}
 	else {
 		commandeVocalePiece(commande, parametresCommande);
 	}
