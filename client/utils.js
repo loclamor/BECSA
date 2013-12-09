@@ -131,7 +131,7 @@ function addOnOffSwitcher( elt, eltId, text, textOn, textOff, urlOn, urlOff, sta
  * @returns {void}
  */
 function notify( type, message, title, timeout ) {
-    var _timeout = 0;
+    var _timeout = 4321; //default value for timeout
     var _title = "";
     var notifbar = $("#notif-row");
     if( timeout )
