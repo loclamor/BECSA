@@ -40,19 +40,27 @@ $(document).ready(function(){
     });
     
     
-    setInterval( function(){
-        $.getJSON( getControllerActionUrl("maison", "getState")+"&dest=webapp", function( data ){
+    var stateUrl = getControllerActionUrl("maison", "getState")+"&dest=webapp";
+    function getHouseState() {
+        $.getJSON( stateUrl, function( data ){
             if( data.code < 300 ){
-                state = data.state;
-                $("body").trigger("maison.refreshed");
-                console.log( "maison.refreshed emmited" );
+                if( data.code != 204 ) {
+                    state = data.state;
+                    $("body").trigger("maison.refreshed");
+                    console.log( "maison.refreshed emmited" );
+                }
+                stateUrl = getControllerActionUrl("maison", "getState")+"&dest=webapp&timestamp="+data.timestamp;
             }
             else {
                 console.error( data.message );
             }
-        });
-    }, 1000 );
-    
+            getHouseState()
+        }).fail(function() {
+            console.log( "An error occured while getting house state" );
+            getHouseState();
+          });
+    }
+    getHouseState();
     /**
      * clic sur une fonction
      */

@@ -81,6 +81,7 @@ class Entite {
 	 * @return true/falsein case of update, depending update success ; in case of first save (SQL Insert), return the new ID
 	 */
 	public function enregistrer($toUpdate = null) {
+        $return = null;
 		if(!is_null($this->id)) {
 			//update
 			if(is_null($toUpdate)) {
@@ -101,7 +102,7 @@ class Entite {
 			$requete .= implode(',',$toSet);
 			$requete .= ' WHERE '.$this->DB_equiv['id'].' = '.$this->id;
 			SQL::getInstance()->exec2($requete);
-			return true;
+			$return = true;
 		}
 		else {
 			//insert
@@ -126,8 +127,16 @@ class Entite {
             if(array_key_exists('id', $this->DB_equiv)){
 				$this->loadFromDB($this->DB_equiv['id'],$this->id);
 			}
-			return $insertID;
+			$return = $insertID;
 		}
+        /**
+         * SPECIAL FOR LONG POLLING : update lastUpdate timestamp file
+         */
+        $timeFile = fopen('lastUpdate.time', 'w+');
+        fputs($timeFile, time() );
+        fclose($timeFile);
+        
+        return $return;
 	}
 	
 	/**
