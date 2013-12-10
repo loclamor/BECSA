@@ -141,10 +141,10 @@ function newDestination(adress, stateCode, callBack) {
 					try {
 						var distance = result.routes[0].legs[0].distance.text;
 						var duree = result.routes[0].legs[0].duration.text;
-						notify('info',"Temps de trajet : " + duree + "<BR>Distance du trajet : " + distance);
+						notify('info',"Temps de trajet : " + duree + "<BR>Distance du trajet : " + distance,"",3000);
 					}
 					catch(e) {
-						notify('info',"Informations sur le trajet indisponibles.");
+						notify('info',"Informations sur le trajet indisponibles.","",3000);
 					}
 				}
 			});
@@ -162,12 +162,12 @@ function geolocation(callback) {
 				callback({lat : position.coords.latitude, lng : position.coords.longitude});
 			}
 			else {
-				notify('error' ,"Impossible de retrouver votre position.");
+				notify('error' ,"Impossible de retrouver votre position.","",3000);
 			}
 		});
 	}
 	else{
-		notify('error' ,"Geolocalisation impossible sur votre navigateur.");
+		notify('error' ,"Geolocalisation impossible sur votre navigateur.","",3000);
 	}	
 }
 
@@ -196,11 +196,11 @@ function retrieveAdress(location, callback) {
 		console.log('Adresse :');
 		console.log(data);
 		if(data.status == "OK") {
-			notify('info' , "Adresse mise à jour.");
+			notify('info' , "Adresse mise à jour.","",3000);
 			callback(data.results[0].formatted_address);
 		}
 		else {
-			notify('error' ,"Impossible de retrouver votre adresse.");
+			notify('error' ,"Impossible de retrouver votre adresse.","",3000);
 		}
 	});
 }

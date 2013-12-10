@@ -42,6 +42,7 @@ function computeItineraire() {
 function getLocation() {
 	geolocation(function(location) {
 		retrieveAdress(location, function(adresse){
+			$('#adresseMaison').val(adresse);
 			changeHome(adresse,'FR');
 		});
 	});
