@@ -87,6 +87,18 @@ class Controller_Maison extends Controller {
                     }
                 }
             }
+            
+            if( isset($_GET['hifi']) ){
+                $songs = Gestionnaire::getGestionnaire('hifi')->getAll();
+                $state['songs'] = array();
+                if( $songs ) {
+                    foreach ( $songs as $r ) {
+                        if( $r instanceof Model_Hifi ){
+                            $state['songs'][] = $r->getState();
+                        }
+                    }
+                }
+            }
 
             $this->code = 202;
             $this->state = $state;
