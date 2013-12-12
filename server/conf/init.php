@@ -25,7 +25,7 @@ if(APPLICATION_ENV == 'dev') {//on est en local
 //mysql
 	define('MYSQL_SERVER','127.0.0.1');
 	define('MYSQL_USER','root');
-	define('MYSQL_PWD','');
+	define('MYSQL_PWD','mysqlroot');
 	define('MYSQL_DB','csa');
 	
 	define('FORCE_DEBUG', TRUE);

@@ -44,20 +44,17 @@ $(document).ready(function(){
     function getHouseState() {
         $.getJSON( stateUrl, function( data ){
             if( data.code < 300 ){
-                if( data.code != 204 ) {
-                    state = data.state;
-                    $("body").trigger("maison.refreshed");
-                    console.log( "maison.refreshed emmited" );
-                }
-                stateUrl = getControllerActionUrl("maison", "getState")+"&dest=webapp&timestamp="+data.timestamp;
+                state = data.state;
+                $("body").trigger("maison.refreshed");
+                console.log( "maison.refreshed emmited" );
             }
             else {
                 console.error( data.message );
             }
-            getHouseState()
+            setTimeout(function(){getHouseState();}, 1000);
         }).fail(function() {
             console.log( "An error occured while getting house state" );
-            getHouseState();
+            setTimeout(function(){getHouseState();}, 1000);
           });
     }
     getHouseState();
