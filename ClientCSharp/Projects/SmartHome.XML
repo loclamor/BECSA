@@ -2454,7 +2454,7 @@
         </member>
         <member name="T:SmartHome.JSON.TokenType">
             <summary>
-            Type of token availible
+            Type of token available
             </summary>
         </member>
         <member name="F:SmartHome.JSON.TokenType.TOK_WORD">
@@ -2485,7 +2485,7 @@
         </member>
         <member name="T:SmartHome.JSON.Token">
             <summary>
-            Structure representing a Token used by inter alia <see cref="M:SmartHome.JSON.NextToken(System.String,SmartHome.JSON.Token)">NextToken</see>
+            Structure representing a Token used by <see cref="M:SmartHome.JSON.NextToken(System.String,SmartHome.JSON.Token)">NextToken</see>
             </summary>
         </member>
         <member name="F:SmartHome.JSON.Token.type">
@@ -2510,7 +2510,7 @@
         </member>
         <member name="T:SmartHome.JSON.ValueType">
             <summary>
-            Value availible in JSON
+            Value available in JSON
             </summary>
         </member>
         <member name="F:SmartHome.JSON.ValueType.EMPTY">
