@@ -16,7 +16,7 @@ namespace SmartHome
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Type of token availible
+        /// Type of token available
         /// </summary>
         protected enum TokenType
         {
@@ -43,7 +43,7 @@ namespace SmartHome
             TOK_EOF
         }
         /// <summary>
-        /// Structure representing a Token used by inter alia <see cref="NextToken(string, Token)">NextToken</see>
+        /// Structure representing a Token used by <see cref="NextToken(string, Token)">NextToken</see>
         /// </summary>
         protected class Token
         {
@@ -70,7 +70,7 @@ namespace SmartHome
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Value availible in JSON
+        /// Value available in JSON
         /// </summary>
         public enum ValueType
         {

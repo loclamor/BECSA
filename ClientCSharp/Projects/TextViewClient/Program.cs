@@ -85,7 +85,9 @@ namespace TextViewClient
             } else if (act == Home.RoomUpdateKind.RoomRemoved) {
                 s = "Room removed : " + p.ToString();
             }
-            System.Console.WriteLine(s);
+            if (s.Length > 0) {
+                System.Console.WriteLine(s);
+            }
         }
         /// <summary>
         /// Event fired when the home have been updated
@@ -117,7 +119,9 @@ namespace TextViewClient
                 s = "La liste des chansons à changé";
                 s2 = h.Hifi.ToString();
             }
-            System.Console.WriteLine(s);
+            if (s.Length > 0) {
+                System.Console.WriteLine(s);
+            }
             if (s2.Length > 0) {
                 System.Console.WriteLine(s2);
             }
@@ -139,7 +143,9 @@ namespace TextViewClient
             } else if (act == Home.AlarmClockUpdateKind.AlarmClockRemoved) {
                 s = "Reveils removed : " + a.ToString();
             }
-            System.Console.WriteLine(s);
+            if (s.Length > 0) {
+                System.Console.WriteLine(s);
+            }
         }
         /// <summary>
         /// Event fired when a song is updated
@@ -156,7 +162,9 @@ namespace TextViewClient
             } else if (act == Home.HifiUpdateKind.SongRemoved) {
                 s = "Son removed : " + o.ToString();
             }
-            System.Console.WriteLine(s);
+            if (s.Length > 0) {
+                System.Console.WriteLine(s);
+            }
         }
         /// <summary>
         /// Event fired when an action have been received
