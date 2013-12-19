@@ -212,7 +212,7 @@ namespace SmartHome
         ///////////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
-        /// Compare this home action to another one, and check if there are identical.
+        /// Compare this home action to another one, and check if there are perfectly identical.
         /// </summary>
         /// <param name="a">Action to compare to</param>
         /// <returns>True if identical</returns>
@@ -229,6 +229,24 @@ namespace SmartHome
                 return false;
             }
         }
+		/// <summary>
+		/// Compare this home action to another one, and check if there are identical.
+		/// </summary>
+		/// <param name="a">Action to compare to</param>
+		/// <returns>True if identical</returns>
+		public bool isIdenticalTo(HomeAction a) {
+			if ((string.Compare(Type, a.Type) == 0)
+				&& (SendedDate.CompareTo(a.SendedDate) == 0)
+				&& (string.Compare(SenderIdentifier, a.SenderIdentifier) == 0) && (_params.Count == a._params.Count)) {
+				/* Compare all parameters */
+				for (int i = 0; i < _params.Count; i++) {
+					if (string.Compare(_params[i], a._params[i]) != 0) return false;
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // ToString 

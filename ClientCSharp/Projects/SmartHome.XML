@@ -509,11 +509,33 @@
             Private: List of all ids of action already received and treated
             </summary>
         </member>
+        <member name="F:SmartHome.ActionController._avoidDuplicateActions">
+            <summary>
+            Private: Indicate if duplicate action are avoided
+            </summary>
+        </member>
+        <member name="F:SmartHome.ActionController._avoidDuplicateActionFrequency">
+            <summary>
+            Private: Frequency for refreshing the list used to avoid duplicate action
+            </summary>
+        </member>
+        <member name="F:SmartHome.ActionController._avoidDuplicateActionTick">
+            <summary>
+            Private: Last tick when the list used to avoid duplicate action was cleared
+            </summary>
+        </member>
         <member name="M:SmartHome.ActionController.#ctor(SmartHome.Home)">
             <summary>
             Initialize controller
             </summary>
             <param name="home">Home to control</param>
+        </member>
+        <member name="M:SmartHome.ActionController.AvoidDuplicateAction(System.Boolean,System.Int32)">
+            <summary>
+            Enable/Disable avoiding duplicate action
+            </summary>
+            <param name="activate">If true Then avoid duplicate action</param>
+            <param name="frequency">Frequency used to refresh the list used to avoid duplicate action</param>
         </member>
         <member name="M:SmartHome.ActionController.SendAction(System.String,System.String,System.String[])">
             <summary>
@@ -534,6 +556,23 @@
             </remarks>
             <param name="json">JSON to load, containing all actions</param>
             <returns>True if refreshed without errors</returns>
+        </member>
+        <member name="M:SmartHome.ActionController.isDuplicatedAction(SmartHome.HomeAction)">
+            <summary>
+            Check if the action is an duplicate action
+            </summary>
+            <param name="act">Action to test</param>
+            <returns>True if the action is an duplicate action</returns>
+        </member>
+        <member name="P:SmartHome.ActionController.AvoidingDuplicateAction">
+            <summary>
+            Indicate if duplicate action are avoided
+            </summary>
+        </member>
+        <member name="P:SmartHome.ActionController.AvoidingDuplicateActionFrequency">
+            <summary>
+            Frequency for refreshing the list used to avoid duplicate action
+            </summary>
         </member>
         <member name="T:SmartHome.AlarmClockController">
             <summary>
@@ -1399,6 +1438,13 @@
             <returns>Parameter boolean value if found otherwise defaultValue</returns>
         </member>
         <member name="M:SmartHome.HomeAction.isEgalTo(SmartHome.HomeAction)">
+            <summary>
+            Compare this home action to another one, and check if there are perfectly identical.
+            </summary>
+            <param name="a">Action to compare to</param>
+            <returns>True if identical</returns>
+        </member>
+        <member name="M:SmartHome.HomeAction.isIdenticalTo(SmartHome.HomeAction)">
             <summary>
             Compare this home action to another one, and check if there are identical.
             </summary>

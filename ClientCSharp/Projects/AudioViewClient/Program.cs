@@ -474,6 +474,7 @@ namespace AudioViewClient
             Directions.Add("allez a l'hopital", 5);
             /* Initialize Home */
             home = new Home(SERVER_URI, IDENTIFIER, SERVER_REFRESH_FREQUENCY);
+			home.Actions.AvoidDuplicateAction(true, 5000);
             home.Refresh();
             home.RegisterEvent(HomeUpdate);
             home.RegisterEvent(RoomUpdate);
