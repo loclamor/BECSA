@@ -33,8 +33,14 @@ namespace SmartHome
 		/// Private: Last tick when the list used to avoid duplicate action was cleared
 		/// </summary>
 		private int _avoidDuplicateActionTick;
+		/// <summary>
+		/// Private: List of action used to know if an action are duplicate or not
+		/// </summary>
 		private List<HomeAction> _previousActions;
-
+		/// <summary>
+		/// Private: List of type of action allowed to be duplicated
+		/// </summary>
+		private HashSet<string> _actionTypeDuplicateException;
 
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Contructors
@@ -52,6 +58,7 @@ namespace SmartHome
 			_avoidDuplicateActionFrequency = 0;
 			_avoidDuplicateActionTick = 0;
 			_previousActions = new List<HomeAction>();
+			_actionTypeDuplicateException = new HashSet<string>();
         }
 
 
@@ -62,6 +69,7 @@ namespace SmartHome
 		/// <summary>
 		/// Enable/Disable avoiding duplicate action
 		/// </summary>
+		/// <remarks><see cref="SetDuplicateActionException"/> allow to let some action to be duplicated</remarks>
 		/// <param name="activate">If true Then avoid duplicate action</param>
 		/// <param name="frequency">Frequency used to refresh the list used to avoid duplicate action</param>
 		public void AvoidDuplicateAction(bool activate, int frequency = 1000) {
@@ -90,6 +98,58 @@ namespace SmartHome
 			}
 		}
 
+		/// <summary>
+		/// Clear list of duplicate action type exception
+		/// </summary>
+		public void ClearDuplicateActionException() {
+			_actionTypeDuplicateException.Clear();
+		}
+		/// <summary>
+		/// Clear and set new duplicate action type exception
+		/// </summary>
+		/// <param name="actionTypes">Type of actions allowed to be duplicate</param>
+		public void SetDuplicateActionException(params string[] actionTypes) {
+			_actionTypeDuplicateException.Clear();
+			foreach (string s in actionTypes) {
+				if (!(_actionTypeDuplicateException.Contains(s))) {
+					_actionTypeDuplicateException.Add(s);
+				}
+			}
+		}
+		/// <summary>
+		/// Number of duplicate action exception
+		/// </summary>
+		public int DuplicateActionExceptionCount {
+			get {
+				return _actionTypeDuplicateException.Count;
+			}
+		}
+		/// <summary>
+		/// Get a duplicate action exception at a gived index
+		/// </summary>
+		/// <param name="index">Index desired</param>
+		/// <returns>Action types allowed to be duplicate Or "" if index not found</returns>
+		public string GetDuplicateActionException(int index) {
+			if ((index >= 0) && (index < _actionTypeDuplicateException.Count)) {
+				foreach (string s in _actionTypeDuplicateException) {
+					if (index == 0) {
+						return s;
+					}
+					index--;
+				}
+			}
+			return "";
+		}
+		/// <summary>
+		/// Test if have an action type allowed to be duplicate
+		/// </summary>
+		/// <param name="actionType">Action type desired</param>
+		/// <returns>True if allowed, false otherwise</returns>
+		public bool HaveDuplicateActionException(string actionType) {
+			return (_actionTypeDuplicateException.Contains(actionType));
+		}
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Send
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -113,10 +173,14 @@ namespace SmartHome
                 msgPOST.Set("param" + i.ToString(), param[i]);
             }
 			/* Clear duplicate action */
-			_previousActions = null;
+			_previousActions.Clear();
             /* Execute */
             HTTPRequest r = new HTTPRequest(_home.HomeURI, msgGET, msgPOST);
-            return HomeResponse.Create(new JSON(r.GetResponse()));
+			if (r.Execute()) {
+				return HomeResponse.Create(new JSON(r.GetResponse()));
+			} else {
+				return new HomeResponse();
+			}
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -137,7 +201,7 @@ namespace SmartHome
             if ((json == null) || (_home.OnActionReceived == null)) return true;
 			/* Check if need to refresh avoid duplication list */
 			if (_avoidDuplicateActions) {
-				if ((System.Environment.TickCount - _avoidDuplicateActionTick) < _avoidDuplicateActionFrequency) {
+				if ((System.Environment.TickCount - _avoidDuplicateActionTick) >= _avoidDuplicateActionFrequency) {
 					_previousActions.Clear();
 					_avoidDuplicateActionTick = System.Environment.TickCount;
 				}
@@ -147,11 +211,13 @@ namespace SmartHome
                 JSON jsonAct = ((json.Type == JSON.ValueType.ARRAY) ? json.Get(i) : json);
                 if (!(_actionsReceived.Contains(jsonAct.Get("id").GetIntValue()))) {
                     HomeAction a = new HomeAction(jsonAct);
-					if (!(isDuplicatedAction(a))) {
-						_home.OnActionReceived(_home, a);
-					}
-					if (_avoidDuplicateActions) {
+					bool doRecvAct = true;
+					if ((_avoidDuplicateActions) && (!(_actionTypeDuplicateException.Contains(a.Type)))) { 
+						doRecvAct = (!(isDuplicatedAction(a)));
 						_previousActions.Add(a);
+					}
+					if (doRecvAct) {
+						_home.OnActionReceived(_home, a);
 					}
 					_actionsReceived.Add(a.Id);
                 }
@@ -172,10 +238,8 @@ namespace SmartHome
 		/// <param name="act">Action to test</param>
 		/// <returns>True if the action is an duplicate action</returns>
 		private bool isDuplicatedAction(HomeAction act) {
-			if (_avoidDuplicateActions) {
-				foreach (HomeAction a in _previousActions) {
-					if (act.isIdenticalTo(a)) return true;
-				}
+			foreach (HomeAction a in _previousActions) {
+				if (act.isIdenticalTo(a)) return true;
 			}
 			return false;
 		}

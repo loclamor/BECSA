@@ -475,6 +475,7 @@ namespace AudioViewClient
             /* Initialize Home */
             home = new Home(SERVER_URI, IDENTIFIER, SERVER_REFRESH_FREQUENCY);
 			home.Actions.AvoidDuplicateAction(true, 5000);
+			home.Actions.SetDuplicateActionException("silence", "mute", "unmute");
             home.Refresh();
             home.RegisterEvent(HomeUpdate);
             home.RegisterEvent(RoomUpdate);

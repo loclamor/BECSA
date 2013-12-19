@@ -129,34 +129,42 @@ namespace SmartHome
             }
         }
 
-
+		/// <summary>
+		/// Retrieve response of the HTTP Request
+		/// </summary>
+		/// <returns>True if retrieved, False if any error</returns>
+		public bool Execute() {
+			/* Retrieve Response */
+			if (!_responseRetrieved) {
+				try {
+					/* Retrieve Response & Status */
+					WebResponse res = _request.GetResponse();
+					Status = ((HttpWebResponse)res).StatusDescription;
+					/* Get Response content */
+					Stream resStream = res.GetResponseStream();
+					StreamReader s = new StreamReader(resStream);
+					Response = s.ReadToEnd();
+					/* Close streams */
+					s.Close();
+					resStream.Close();
+					res.Close();
+					_responseRetrieved = true;
+				} catch {
+					Response = "";
+					Status = "ERROR";
+					_responseRetrieved = false;
+				}
+			}
+			/* Return last status */
+			return _responseRetrieved;
+		}
         /// <summary>
-        /// Retrieve response of the HTTP Request
+        /// Get response of the HTTP Request
         /// </summary>
         /// <returns>HTTP response</returns>
         public string GetResponse() {
-            /* Retrieve Response */
-            if (!_responseRetrieved) {
-                try {
-                    /* Retrieve Response & Status */
-                    WebResponse res = _request.GetResponse();
-                    Status = ((HttpWebResponse)res).StatusDescription;
-                    /* Get Response content */
-                    Stream resStream = res.GetResponseStream();
-                    StreamReader s = new StreamReader(resStream);
-                    Response = s.ReadToEnd();
-                    /* Close streams */
-                    s.Close();
-                    resStream.Close();
-                    res.Close();
-                    _responseRetrieved = true;
-                } catch {
-                    Status = "ERROR";
-                    _responseRetrieved = true;
-                }
-            }
-            /* Return response */
-            return Response;
+			Execute();
+			return Response;
         }
 
     }

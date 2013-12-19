@@ -19,6 +19,10 @@ namespace SmartHome
         /// Home serveur status (cf. doc serveur web.pdf)
         /// </summary>
         public enum StatusType {
+			/// <summary>
+			/// Connexion error, response not retrieved
+			/// </summary>
+			ConnectionError = -1,
             /// <summary>
             /// Wait code response
             /// </summary>
@@ -77,6 +81,21 @@ namespace SmartHome
         /// JSON object returned by server
         /// </summary>
         public JSON Data { get; protected set; }
+
+
+		///////////////////////////////////////////////////////////////////////////////////////////
+		// Constructor
+		///////////////////////////////////////////////////////////////////////////////////////////
+
+		/// <summary>
+		/// Default construtor
+		/// </summary>
+		public HomeResponse() {
+			Status = StatusType.ConnectionError;
+			OK = false;
+			Message = "";
+			Data = new JSON();
+		}
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////

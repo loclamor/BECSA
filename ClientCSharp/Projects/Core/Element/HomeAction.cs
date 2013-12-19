@@ -236,7 +236,6 @@ namespace SmartHome
 		/// <returns>True if identical</returns>
 		public bool isIdenticalTo(HomeAction a) {
 			if ((string.Compare(Type, a.Type) == 0)
-				&& (SendedDate.CompareTo(a.SendedDate) == 0)
 				&& (string.Compare(SenderIdentifier, a.SenderIdentifier) == 0) && (_params.Count == a._params.Count)) {
 				/* Compare all parameters */
 				for (int i = 0; i < _params.Count; i++) {

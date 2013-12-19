@@ -524,6 +524,16 @@
             Private: Last tick when the list used to avoid duplicate action was cleared
             </summary>
         </member>
+        <member name="F:SmartHome.ActionController._previousActions">
+            <summary>
+            Private: List of action used to know if an action are duplicate or not
+            </summary>
+        </member>
+        <member name="F:SmartHome.ActionController._actionTypeDuplicateException">
+            <summary>
+            Private: List of type of action allowed to be duplicated
+            </summary>
+        </member>
         <member name="M:SmartHome.ActionController.#ctor(SmartHome.Home)">
             <summary>
             Initialize controller
@@ -534,8 +544,34 @@
             <summary>
             Enable/Disable avoiding duplicate action
             </summary>
+            <remarks><see cref="M:SmartHome.ActionController.SetDuplicateActionException(System.String[])"/> allow to let some action to be duplicated</remarks>
             <param name="activate">If true Then avoid duplicate action</param>
             <param name="frequency">Frequency used to refresh the list used to avoid duplicate action</param>
+        </member>
+        <member name="M:SmartHome.ActionController.ClearDuplicateActionException">
+            <summary>
+            Clear list of duplicate action type exception
+            </summary>
+        </member>
+        <member name="M:SmartHome.ActionController.SetDuplicateActionException(System.String[])">
+            <summary>
+            Clear and set new duplicate action type exception
+            </summary>
+            <param name="actionTypes">Type of actions allowed to be duplicate</param>
+        </member>
+        <member name="M:SmartHome.ActionController.GetDuplicateActionException(System.Int32)">
+            <summary>
+            Get a duplicate action exception at a gived index
+            </summary>
+            <param name="index">Index desired</param>
+            <returns>Action types allowed to be duplicate Or "" if index not found</returns>
+        </member>
+        <member name="M:SmartHome.ActionController.HaveDuplicateActionException(System.String)">
+            <summary>
+            Test if have an action type allowed to be duplicate
+            </summary>
+            <param name="actionType">Action type desired</param>
+            <returns>True if allowed, false otherwise</returns>
         </member>
         <member name="M:SmartHome.ActionController.SendAction(System.String,System.String,System.String[])">
             <summary>
@@ -572,6 +608,11 @@
         <member name="P:SmartHome.ActionController.AvoidingDuplicateActionFrequency">
             <summary>
             Frequency for refreshing the list used to avoid duplicate action
+            </summary>
+        </member>
+        <member name="P:SmartHome.ActionController.DuplicateActionExceptionCount">
+            <summary>
+            Number of duplicate action exception
             </summary>
         </member>
         <member name="T:SmartHome.AlarmClockController">
@@ -1134,6 +1175,11 @@
             </summary>
             <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
+        <member name="M:SmartHome.HomeResponse.#ctor">
+            <summary>
+            Default construtor
+            </summary>
+        </member>
         <member name="M:SmartHome.HomeResponse.Code">
             <summary>
             Retrieve code of the response from Status
@@ -1182,6 +1228,11 @@
         <member name="T:SmartHome.HomeResponse.StatusType">
             <summary>
             Home serveur status (cf. doc serveur web.pdf)
+            </summary>
+        </member>
+        <member name="F:SmartHome.HomeResponse.StatusType.ConnectionError">
+            <summary>
+            Connexion error, response not retrieved
             </summary>
         </member>
         <member name="F:SmartHome.HomeResponse.StatusType.Pending">
@@ -1323,9 +1374,15 @@
             <param name="msgGET">Message to send by GET method</param>
             <param name="msgPOST">Message to send by POST method</param>
         </member>
-        <member name="M:SmartHome.HTTPRequest.GetResponse">
+        <member name="M:SmartHome.HTTPRequest.Execute">
             <summary>
             Retrieve response of the HTTP Request
+            </summary>
+            <returns>True if retrieved, False if any error</returns>
+        </member>
+        <member name="M:SmartHome.HTTPRequest.GetResponse">
+            <summary>
+            Get response of the HTTP Request
             </summary>
             <returns>HTTP response</returns>
         </member>

@@ -385,6 +385,7 @@ namespace SmartHome
                 /* Get Home state from server by "maison" controller */
                 msg.Set("controller", "maison").Set("action", "getState").Set("dest", HomeIdentifier).Set("hifi");
                 request = new HTTPRequest(HomeURI, msg);
+				if (!(request.Execute())) return new HomeResponse();
                 HomeResponse homeStateRes = HomeResponse.Create(new JSON(request.GetResponse()));
                 JSON stateJSON = homeStateRes.Data.Get("state");
                 roomJSONRes = stateJSON.Get("pieces");
@@ -396,7 +397,8 @@ namespace SmartHome
                 } else {
                     /* Get Hifi state from server */
                     msg.Clear().Set("controller", "hifi").Set("action", "lister");
-                    request = new HTTPRequest(HomeURI, msg);
+					request = new HTTPRequest(HomeURI, msg);
+					if (!(request.Execute())) return new HomeResponse();
                     HomeResponse hifiRes = HomeResponse.Create(new JSON(request.GetResponse()));
                     hifiJSONRes = hifiRes.Data.Get("songs");
                 }
@@ -405,12 +407,14 @@ namespace SmartHome
             } else {
                 /* Get Room state from server */
                 msg.Set("controller", "pieces").Set("action", "lister");
-                request = new HTTPRequest(HomeURI, msg);
+				request = new HTTPRequest(HomeURI, msg);
+				if (!(request.Execute())) return new HomeResponse();
                 HomeResponse roomRes = HomeResponse.Create(new JSON(request.GetResponse()));
                 roomJSONRes = roomRes.Data.Get("pieces");
                 /* Get Alarm clocks state from server */
                 msg.Set("controller", "reveil").Set("action", "lister");
-                request = new HTTPRequest(HomeURI, msg);
+				request = new HTTPRequest(HomeURI, msg);
+				if (!(request.Execute())) return new HomeResponse();
                 HomeResponse alarmClockRes = HomeResponse.Create(new JSON(request.GetResponse()));
                 alarmClockJSONRes = alarmClockRes.Data.Get("reveils");
                 /* Set return response */

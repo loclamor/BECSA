@@ -34,11 +34,6 @@ namespace KinectController
             {
                 "chambre",
                 "salon",
-                "bibliotheque",
-                "couloir de la cave",
-                "cave",
-                "salle a manger",
-                "arriere cuisine",
                 "cuisine"
             };
 
