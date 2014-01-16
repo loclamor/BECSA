@@ -271,19 +271,27 @@
             </summary>
             <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
         </member>
-        <member name="M:SmartHome.MapAction.#ctor(SmartHome.MapAction.ActionType,System.Int32)">
+        <member name="M:SmartHome.MapAction.#ctor(SmartHome.MapAction.ActionType,System.Int32,System.Int32)">
             <summary>
             Initialize an map action
             </summary>
             <param name="act">Action to do with map</param>
             <param name="locationId">Location identifier number desired</param>
+            <param name="uniqueRequestId">
+            Unique request identifier desired <see cref="P:SmartHome.MapAction.UniqueRequestId">UniqueRequestId</see>. 
+            Default: -1 use an computed one <see cref="M:SmartHome.Home.ComputeLastRequestUniqueId"/>.
+            </param>
         </member>
-        <member name="M:SmartHome.MapAction.#ctor(SmartHome.MapAction.ActionType,System.String)">
+        <member name="M:SmartHome.MapAction.#ctor(SmartHome.MapAction.ActionType,System.String,System.Int32)">
             <summary>
             Initialize an map action
             </summary>
             <param name="act">Action to do with map</param>
             <param name="location">Location desired</param>
+            <param name="uniqueRequestId">
+            Unique request identifier desired <see cref="P:SmartHome.MapAction.UniqueRequestId">UniqueRequestId</see>. 
+            Default: -1 use an computed one <see cref="M:SmartHome.Home.ComputeLastRequestUniqueId"/>.
+            </param>
         </member>
         <member name="M:SmartHome.MapAction.Execute(SmartHome.Home)">
             <summary>
@@ -305,6 +313,11 @@
         <member name="P:SmartHome.MapAction.Location">
             <summary>
             Desired location used only when <see cref="P:SmartHome.MapAction.LocationId">LocationId</see> == -1
+            </summary>
+        </member>
+        <member name="P:SmartHome.MapAction.UniqueRequestId">
+            <summary>
+            Enable to avoid interpreting multi-response if many webapp runned (cf. doc serveur web). Default: -1 use an computed one <see cref="M:SmartHome.Home.ComputeLastRequestUniqueId"/>.
             </summary>
         </member>
         <member name="T:SmartHome.MapAction.ActionType">
@@ -416,19 +429,27 @@
             </summary>
             <param name="act">Action to do with weather</param>
         </member>
-        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType,System.Int32)">
+        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType,System.Int32,System.Int32)">
             <summary>
             Initialize an weather action
             </summary>
             <param name="act">Action to do with weather</param>
             <param name="weatherWeekDay">Week desired</param>
+            <param name="uniqueRequestId">
+            Unique request identifier desired <see cref="P:SmartHome.WeatherAction.UniqueRequestId">UniqueRequestId</see>. 
+            Default: -1 use an computed one <see cref="M:SmartHome.Home.ComputeLastRequestUniqueId"/>.
+            </param>
         </member>
-        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType,System.DateTime)">
+        <member name="M:SmartHome.WeatherAction.#ctor(SmartHome.WeatherAction.ActionType,System.DateTime,System.Int32)">
             <summary>
             Initialize an weather action
             </summary>
             <param name="act">Action to do with weather</param>
             <param name="weatherDate">Date desired</param>
+            <param name="uniqueRequestId">
+            Unique request identifier desired <see cref="P:SmartHome.WeatherAction.UniqueRequestId">UniqueRequestId</see>. 
+            Default: -1 use an computed one <see cref="M:SmartHome.Home.ComputeLastRequestUniqueId"/>.
+            </param>
         </member>
         <member name="M:SmartHome.WeatherAction.Execute(SmartHome.Home)">
             <summary>
@@ -450,6 +471,11 @@
         <member name="P:SmartHome.WeatherAction.WeatherDate">
             <summary>
             Desired date used only if <see cref="P:SmartHome.WeatherAction.WeatherWeekDay">WeatherWeekDay</see> == -1
+            </summary>
+        </member>
+        <member name="P:SmartHome.WeatherAction.UniqueRequestId">
+            <summary>
+            Enable to avoid interpreting multi-response if many webapp runned (cf. doc serveur web). Default: -1 use an computed one <see cref="M:SmartHome.Home.ComputeLastRequestUniqueId"/>.
             </summary>
         </member>
         <member name="T:SmartHome.WeatherAction.ActionType">
@@ -1328,6 +1354,19 @@
             <param name="dayCountToAdd">Count of day to add</param>
             <returns>Valid day of week number after day addition</returns>
         </member>
+        <member name="T:SmartHome.FileUtils">
+            <summary>
+            File utils static functions
+            </summary>
+            <remarks>Authors: Dorian RODDE, Vivian RODDE</remarks>
+        </member>
+        <member name="M:SmartHome.FileUtils.GetFileContent(System.String)">
+            <summary>
+            Retrieve file content
+            </summary>
+            <param name="path">File desired</param>
+            <returns>Return file content or empty string if error</returns>
+        </member>
         <member name="T:SmartHome.HTTPRequest">
             <summary>
             Utils class that create HTTP request send it and retrieve response.
@@ -1903,6 +1942,13 @@
             Basic home controller
             </summary>
         </member>
+        <member name="F:SmartHome.Home._lastRequestUniqueId">
+            <summary>
+            Request unique Id used to avoid duplicate treat of action response in synthese client.
+            Firstly initialized with current TickCount.
+            On each action where unique request id are required this value is used and incremented.
+            </summary>
+        </member>
         <member name="M:SmartHome.Home.#ctor">
             <summary>
             Initialize an empty Home. HomeURI need to be set after before using refresh.
@@ -1926,6 +1972,12 @@
             Nonetheless if Home identifier is not set then the response returned will be the response of "lister" on "pieces" controller (cf. doc serveur web)
             </remarks>
             <returns>Response of the Home server</returns>
+        </member>
+        <member name="M:SmartHome.Home.ComputeLastRequestUniqueId">
+            <summary>
+            Compute and return the last request unique id. <see cref="T:SmartHome.MapAction"/>, <see cref="T:SmartHome.WeatherAction"/>.
+            </summary>
+            <returns>Last request unique id usable for action</returns>
         </member>
         <member name="M:SmartHome.Home.ExecuteAction(System.String,System.String)">
             <summary>

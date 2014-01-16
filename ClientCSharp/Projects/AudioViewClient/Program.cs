@@ -167,6 +167,17 @@ namespace AudioViewClient
             "présence d'averses orageuses isolée", // isolated thundershowers
         };
 
+		/// <summary>
+		/// Contains all RequestUniqueId already received and treated
+		/// </summary>
+		static private HashSet<int> _uniqueRequestIdTreats = new HashSet<int>();
+		/// <summary>
+		/// Used to reset all unique request id after 10 minute without received action that use unique request id
+		/// </summary>
+		static private int _lastUniqueRequestIdResetTick = 0;
+		
+
+
         ///////////////////////////////////////////////////////////////////////////////////////////
         // Home
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -374,10 +385,18 @@ namespace AudioViewClient
                     h.Actions.SendAction(a.GetParam(1), "sayOK", a.GetParam(2));
                 }
             } else if ((a.IsType("meteoReponse")) && (a.ParamCount > 0)) {
-                /* meteoReponse(<int> dayId, <int> temperature, <int> maxTemperature, <int> minTemperature, <int> cloudyState) */
+				/* meteoReponse(<int> dayId, <int> temperature, <int> maxTemperature, <int> minTemperature, <int> cloudyState, [<int> requestUniqueId]) */
                 int currentWeekDay = DateUtils.WeekDayToNumber();
                 string s = "";
-                int p1 = a.GetIntParam(0, 1);
+				int p1 = a.GetIntParam(0, 1);
+				/* Manage UniqueRequestId */
+				if ((a.ParamCount >= 6) && (IsUniqueRequestIdTreated(a.GetIntParam(5,-1)))) {
+					/* Already treated */
+					return;
+				} else if ((a.ParamCount == 2) && (IsUniqueRequestIdTreated(a.GetIntParam(1, -1)))) {
+					/* Already treated */
+					return;
+				}
                 /* Get Day name */                  
                 if ((p1 >= 1) && (p1 <= WeatherDayId.Length)) {
                     /* Check day */
@@ -390,7 +409,7 @@ namespace AudioViewClient
                     }
                 }
                 /* Write weather data */
-                if (a.ParamCount == 5) {
+                if (a.ParamCount >= 5) {
                     int p5 = a.GetIntParam(4, -1);
                     if ((p5 >= 0) && (p5 < WeatherSentence.Length)) {
                         s += " " + WeatherSentence[p5];
@@ -403,15 +422,21 @@ namespace AudioViewClient
                     s += " la météo est non disponible.";
                 }
                 /* Read it */
-                s += ". Pour plus de prévisions la météo à été préparer et est affiché sur votre tablette.";
+                s += " Pour plus de prévisions la météo à été préparer et est affiché sur votre tablette.";
                 SpeakAsyncText(s);
 
             } else if (a.IsType("traficReponse")) {
-                /* traficReponse(<int> destLocationId, <int> percent) */
+                /* traficReponse(<int> destLocationId, <int> percent, [<int> requestUniqueId]) */
                 int p1 = a.GetIntParam(0, -1);
                 int p2 = (int)(((a.GetDoubleParam(1, 0)/100.0) * (double)(TraficPercentSentence.Length)));
                 if (p2 < 0) p2 = 0;
-                if (p2 >= TraficPercentSentence.Length) p2 = TraficPercentSentence.Length-1;
+				if (p2 >= TraficPercentSentence.Length) p2 = TraficPercentSentence.Length - 1;
+				/* Manage UniqueRequestId */
+				if ((a.ParamCount >= 3) && (IsUniqueRequestIdTreated(a.GetIntParam(2,-1)))) {
+					/* Already treated */
+					return;
+				}
+				/* Manage response */
                 foreach (KeyValuePair<string, int> pair in Directions) {
                     if (pair.Value == p1) {
                         SpeakAsyncText("Le traffic pour " + pair.Key + " est " + TraficPercentSentence[p2] + ".");
@@ -419,8 +444,14 @@ namespace AudioViewClient
                     }
                 }
             } else if (a.IsType("itineraireReponse")) {
-                /* itinairaireReponse(<int> destLocationId) */
-                int p1 = a.GetIntParam(0,-1);
+				/* itinairaireReponse(<int> destLocationId, [<int> requestUniqueId]) */
+				int p1 = a.GetIntParam(0, -1);
+				/* Manage UniqueRequestId */
+				if ((a.ParamCount >= 2) && (IsUniqueRequestIdTreated(a.GetIntParam(1,-1)))) {
+					/* Already treated */
+					return;
+				}
+				/* Manage response */
                 foreach (KeyValuePair<string, int> pair in Directions) {
                     if (pair.Value == p1) {
                         SpeakAsyncText("L'itineraire pour " + pair.Key + " à était préparé et est disponible sur votre téléphone.");
@@ -454,6 +485,31 @@ namespace AudioViewClient
             System.Console.WriteLine(a.ToString());
         }
 
+		/// <summary>
+		/// Check if the action have not been already treated
+		/// </summary>
+		/// <param name="uniqueRequestId">Unique request id received</param>
+		/// <returns>True if action have been already treated, false otherwise</returns>
+		static private bool IsUniqueRequestIdTreated(int uniqueRequestId) {
+			/* Check if unique request id treated */
+			if (uniqueRequestId != -1) {
+				/* Reset request id treats list if necessary: reset after 10 minutes */
+				if ((System.Environment.TickCount - _lastUniqueRequestIdResetTick) >= 600000) {
+					/* Reset */
+					_uniqueRequestIdTreats.Clear();
+					_lastUniqueRequestIdResetTick = System.Environment.TickCount;
+				}
+				/* Check if request id present in treated id */
+				if (_uniqueRequestIdTreats.Contains(uniqueRequestId)) {
+					/* Return: action already treated */
+					return true;
+				} else {
+					_uniqueRequestIdTreats.Add(uniqueRequestId);
+				}
+			}
+			/* Return false - action not treated */
+			return false;
+		}
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -473,9 +529,15 @@ namespace AudioViewClient
             Directions.Add("allez chez le veterinaire", 4);
             Directions.Add("allez a l'hopital", 5);
             /* Initialize Home */
-            home = new Home(SERVER_URI, IDENTIFIER, SERVER_REFRESH_FREQUENCY);
-			home.Actions.AvoidDuplicateAction(true, 5000);
-			home.Actions.SetDuplicateActionException("silence", "mute", "unmute");
+			JSON jsonConfig = new JSON(FileUtils.GetFileContent("config.json"));
+			string serverURI = (jsonConfig.Contains("server") ? jsonConfig.Get("server").GetStringValue(SERVER_URI) : SERVER_URI);
+			int serverRefreshFreq = (jsonConfig.Contains("refresh_frequency") ? jsonConfig.Get("refresh_frequency").GetIntValue(SERVER_REFRESH_FREQUENCY) : SERVER_REFRESH_FREQUENCY);
+			if (serverRefreshFreq < 0) serverRefreshFreq = SERVER_REFRESH_FREQUENCY;
+			System.Console.WriteLine("Server: " + serverURI);
+			System.Console.WriteLine("RefreshFrequency:" + serverRefreshFreq.ToString() + "ms");
+			home = new Home(serverURI, IDENTIFIER, serverRefreshFreq);
+			//home.Actions.AvoidDuplicateAction(true, 5000);
+			//home.Actions.SetDuplicateActionException("silence", "mute", "unmute");
             home.Refresh();
             home.RegisterEvent(HomeUpdate);
             home.RegisterEvent(RoomUpdate);

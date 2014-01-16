@@ -163,8 +163,14 @@ namespace HomeController
         static void Main(string[] args) {
             /* Initialize general */
             _voiceController = new VoiceController();
-            /* Initialize Home */
-            home = new Home(SERVER_URI, IDENTIFIER, SERVER_REFRESH_FREQUENCY);
+			/* Initialize Home */
+			JSON jsonConfig = new JSON(FileUtils.GetFileContent("config.json"));
+			string serverURI = (jsonConfig.Contains("server") ? jsonConfig.Get("server").GetStringValue(SERVER_URI) : SERVER_URI);
+			int serverRefreshFreq = (jsonConfig.Contains("refresh_frequency") ? jsonConfig.Get("refresh_frequency").GetIntValue(SERVER_REFRESH_FREQUENCY) : SERVER_REFRESH_FREQUENCY);
+			if (serverRefreshFreq < 0) serverRefreshFreq = SERVER_REFRESH_FREQUENCY;
+			System.Console.WriteLine("Server: " + serverURI);
+			System.Console.WriteLine("RefreshFrequency:" + serverRefreshFreq.ToString() + "ms");
+			home = new Home(serverURI, IDENTIFIER, serverRefreshFreq);
             home.RegisterHomeUpdateEvent(HomeUpdate);
             home.RegisterEvent(ActionReceived);
             home.Refresh();

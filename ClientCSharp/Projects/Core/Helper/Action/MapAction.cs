@@ -46,7 +46,11 @@ namespace SmartHome
         /// <summary>
         /// Desired location used only when <see cref="LocationId">LocationId</see> == -1
         /// </summary>
-        public string Location { get; protected set; }
+		public string Location { get; protected set; }
+		/// <summary>
+		/// Enable to avoid interpreting multi-response if many webapp runned (cf. doc serveur web). Default: -1 use an computed one <see cref="Home.ComputeLastRequestUniqueId"/>.
+		/// </summary>
+		public int UniqueRequestId { get; protected set; }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -57,22 +61,32 @@ namespace SmartHome
         /// Initialize an map action
         /// </summary>
         /// <param name="act">Action to do with map</param>
-        /// <param name="locationId">Location identifier number desired</param>
-        public MapAction(ActionType act, int locationId) {
+		/// <param name="locationId">Location identifier number desired</param>
+		/// <param name="uniqueRequestId">
+		/// Unique request identifier desired <see cref="UniqueRequestId">UniqueRequestId</see>. 
+		/// Default: -1 use an computed one <see cref="Home.ComputeLastRequestUniqueId"/>.
+		/// </param>
+		public MapAction(ActionType act, int locationId, int uniqueRequestId = -1) {
             Action = act;
             LocationId = locationId;
             Location = "";
+			UniqueRequestId = uniqueRequestId;
         }
 
         /// <summary>
         /// Initialize an map action
         /// </summary>
         /// <param name="act">Action to do with map</param>
-        /// <param name="location">Location desired</param>
-        public MapAction(ActionType act, string location = "") {
+		/// <param name="location">Location desired</param>
+		/// <param name="uniqueRequestId">
+		/// Unique request identifier desired <see cref="UniqueRequestId">UniqueRequestId</see>. 
+		/// Default: -1 use an computed one <see cref="Home.ComputeLastRequestUniqueId"/>.
+		/// </param>
+		public MapAction(ActionType act, string location = "", int uniqueRequestId = -1) {
             Action = act;
             LocationId = -1;
-            Location = location;
+			Location = location;
+			UniqueRequestId = uniqueRequestId;
         }
 
 
@@ -86,17 +100,19 @@ namespace SmartHome
         /// <param name="onHome">Home desired</param>
         /// <returns>Home response</returns>
         public override HomeResponse Execute(Home onHome) {
-            if (Action == ActionType.ROAD_TRAFFIC) {
+			if (Action == ActionType.ROAD_TRAFFIC) {
+				int uRequestId = ((UniqueRequestId == -1) ? onHome.ComputeLastRequestUniqueId() : UniqueRequestId);
                 if (LocationId != -1) {
-                    return onHome.Actions.SendAction("webapp", "trafic", LocationId.ToString());
+					return onHome.Actions.SendAction("webapp", "trafic", LocationId.ToString(), uRequestId.ToString());
                 } else {
-                    return onHome.Actions.SendAction("webapp", "trafic", Location);
+					return onHome.Actions.SendAction("webapp", "trafic", Location, uRequestId.ToString());
                 }
-            } else if (Action == ActionType.ROAD_DIRECTIONS) {
+			} else if (Action == ActionType.ROAD_DIRECTIONS) {
+				int uRequestId = ((UniqueRequestId == -1) ? onHome.ComputeLastRequestUniqueId() : UniqueRequestId);
                 if (LocationId != -1) {
-                    return onHome.Actions.SendAction("webapp", "itineraire", LocationId.ToString());
+					return onHome.Actions.SendAction("webapp", "itineraire", LocationId.ToString(), uRequestId.ToString());
                 } else {
-                    return onHome.Actions.SendAction("webapp", "itineraire", Location);
+					return onHome.Actions.SendAction("webapp", "itineraire", Location, uRequestId.ToString());
                 }
             } else {
                 return null;

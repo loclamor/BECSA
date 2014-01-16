@@ -42,7 +42,11 @@ namespace SmartHome
         /// <summary>
         /// Desired date used only if <see cref="WeatherWeekDay">WeatherWeekDay</see> == -1
         /// </summary>
-        public DateTime WeatherDate { get; protected set; }
+		public DateTime WeatherDate { get; protected set; }
+		/// <summary>
+		/// Enable to avoid interpreting multi-response if many webapp runned (cf. doc serveur web). Default: -1 use an computed one <see cref="Home.ComputeLastRequestUniqueId"/>.
+		/// </summary>
+		public int UniqueRequestId { get; protected set; }
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -52,31 +56,42 @@ namespace SmartHome
         /// <summary>
         /// Initialize an weather action
         /// </summary>
-        /// <param name="act">Action to do with weather</param>
-        public WeatherAction(ActionType act) {
+		/// <param name="act">Action to do with weather</param>
+		public WeatherAction(ActionType act) {
             Action = act;
             WeatherWeekDay = -1;
-            WeatherDate = DateTime.Now;
+			WeatherDate = DateTime.Now;
+			UniqueRequestId = -1;
         }
         /// <summary>
         /// Initialize an weather action
         /// </summary>
         /// <param name="act">Action to do with weather</param>
-        /// <param name="weatherWeekDay">Week desired</param>
-        public WeatherAction(ActionType act, int weatherWeekDay) {
+		/// <param name="weatherWeekDay">Week desired</param>
+		/// <param name="uniqueRequestId">
+		/// Unique request identifier desired <see cref="UniqueRequestId">UniqueRequestId</see>. 
+		/// Default: -1 use an computed one <see cref="Home.ComputeLastRequestUniqueId"/>.
+		/// </param>
+		public WeatherAction(ActionType act, int weatherWeekDay, int uniqueRequestId = -1) {
             Action = act;
             WeatherWeekDay = DateUtils.WeekDayOfInt(weatherWeekDay);
-            WeatherDate = DateTime.Now;
+			WeatherDate = DateTime.Now;
+			UniqueRequestId = uniqueRequestId;
         }
         /// <summary>
         /// Initialize an weather action
         /// </summary>
         /// <param name="act">Action to do with weather</param>
-        /// <param name="weatherDate">Date desired</param>
-        public WeatherAction(ActionType act, DateTime weatherDate) {
+		/// <param name="weatherDate">Date desired</param>
+		/// <param name="uniqueRequestId">
+		/// Unique request identifier desired <see cref="UniqueRequestId">UniqueRequestId</see>. 
+		/// Default: -1 use an computed one <see cref="Home.ComputeLastRequestUniqueId"/>.
+		/// </param>
+		public WeatherAction(ActionType act, DateTime weatherDate, int uniqueRequestId = -1) {
             Action = act;
             WeatherWeekDay = -1;
-            WeatherDate = weatherDate;
+			WeatherDate = weatherDate;
+			UniqueRequestId = uniqueRequestId;
         }
 
 
@@ -91,10 +106,11 @@ namespace SmartHome
         /// <returns>Home response</returns>
         public override HomeResponse Execute(Home onHome) {
             if (Action == ActionType.GET_WEATHER) {
+				int uRequestId = ((UniqueRequestId == -1) ? onHome.ComputeLastRequestUniqueId() : UniqueRequestId);
                 if (WeatherWeekDay != -1) {
-                    return onHome.Actions.SendAction("webapp", "meteo", WeatherWeekDay.ToString());
+					return onHome.Actions.SendAction("webapp", "meteo", WeatherWeekDay.ToString(), uRequestId.ToString());
                 } else {
-                    return onHome.Actions.SendAction("webapp", "getWeather", WeatherDate.ToString("yyyy-MM-dd HH:mm:ss"));
+					return onHome.Actions.SendAction("webapp", "getWeather", WeatherDate.ToString("yyyy-MM-dd HH:mm:ss"), uRequestId.ToString());
                 }
             } else {
                 return null;

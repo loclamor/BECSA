@@ -63,11 +63,12 @@ function moteurEtAction( action ) {
 					if (dayId == 0) {
 						/* Current day: send weather */ 
 						sendAction({action: "meteoReponse", dest: "synthese", 
-									/* DayId */ 		param0: action.params[0],
-									/* Temperature */ 	param1: lastMeteoData.item.condition.temp, 
-									/* Maximal */		param2: lastMeteoData.item.forecast[0].high,
-									/* Minimal */		param3: lastMeteoData.item.forecast[0].low,
-									/* Code */			param4: lastMeteoData.item.forecast[0].code
+									/* DayId */ 			param0: action.params[0],
+									/* Temperature */ 		param1: lastMeteoData.item.condition.temp, 
+									/* Maximal */			param2: lastMeteoData.item.forecast[0].high,
+									/* Minimal */			param3: lastMeteoData.item.forecast[0].low,
+									/* Code */				param4: lastMeteoData.item.forecast[0].code,
+									/* UniqueRequestId */ 	param5: action.params[1] 
 									});
 					} else if ((dayId >= 1) && (dayId < lastMeteoData.item.forecast.length)) {
 						/* Day found: send weather */
@@ -76,11 +77,12 @@ function moteurEtAction( action ) {
 									parseInt(lastMeteoData.item.forecast[dayId].low))/2
 								); 
 						sendAction({action: "meteoReponse", dest: "synthese", 
-									/* DayId */ 		param0: action.params[0],
-									/* Temperature */ 	param1: temp, 
-									/* Maximal */		param2: lastMeteoData.item.forecast[dayId].high,
-									/* Minimal */		param3: lastMeteoData.item.forecast[dayId].low,
-									/* Code */			param4: lastMeteoData.item.forecast[dayId].code
+									/* DayId */ 			param0: action.params[0],
+									/* Temperature */ 		param1: temp, 
+									/* Maximal */			param2: lastMeteoData.item.forecast[dayId].high,
+									/* Minimal */			param3: lastMeteoData.item.forecast[dayId].low,
+									/* Code */				param4: lastMeteoData.item.forecast[dayId].code,
+									/* UniqueRequestId */ 	param5: action.params[1] 
 									});
 						
 					} else {
@@ -88,7 +90,8 @@ function moteurEtAction( action ) {
 						sendAction({
 							action: "meteoReponse", 
 							dest: "synthese", 
-							param0: action.params[0]
+							param0: action.params[0],
+							param1: action.params[1] /* UniqueRequestId */
 						});
 						
 					}
@@ -101,7 +104,8 @@ function moteurEtAction( action ) {
 				action: "traficReponse", 
 				dest: "synthese", 
 				param0: action.params[0], 
-				param1: randomFromInterval(0,100)
+				param1: randomFromInterval(0,100),
+				param2: action.params[1] /* UniqueRequestId */
 			});
 		break;
 		case "itineraire":
@@ -115,7 +119,8 @@ function moteurEtAction( action ) {
 				sendAction({
 					action: "itineraireReponse", 
 					dest: "synthese", 
-					param0: action.params[0]
+					param0: action.params[0],
+					param1: action.params[1] /* UniqueRequestId */
 				});
 			//});
 			// </TODO>

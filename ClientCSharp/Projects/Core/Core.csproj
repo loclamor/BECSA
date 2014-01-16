@@ -87,6 +87,7 @@
     <Compile Include="Core\HomeResponse.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Utils\DateUtils.cs" />
+    <Compile Include="Utils\FileUtils.cs" />
     <Compile Include="Utils\HTTPRequest.cs" />
     <Compile Include="Element\HomeAction.cs" />
     <Compile Include="Element\Room.cs" />

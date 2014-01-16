@@ -282,6 +282,13 @@ namespace SmartHome
         /// Basic home controller
         /// </summary>
         private Controller _basicController;
+		/// <summary>
+		/// Request unique Id used to avoid duplicate treat of action response in synthese client.
+		/// Firstly initialized with current TickCount.
+		/// On each action where unique request id are required this value is used and incremented.
+		/// </summary>
+		private int _lastRequestUniqueId;
+
 
         // Controllers
         /// <summary>
@@ -329,6 +336,7 @@ namespace SmartHome
             /* Private members */ 
             _lastUpdateTick = 0;
             _basicController = new Controller(this);
+			_lastRequestUniqueId = System.Environment.TickCount;
             /* Controllers */
             Pieces = new RoomController(this);
             Lumieres = new LightController(this);
@@ -444,6 +452,22 @@ namespace SmartHome
             return returnRes;
         }
 
+
+		///////////////////////////////////////////////////////////////////////////////////////////
+		// Properties
+		///////////////////////////////////////////////////////////////////////////////////////////
+
+		/// <summary>
+		/// Compute and return the last request unique id. <see cref="MapAction"/>, <see cref="WeatherAction"/>.
+		/// </summary>
+		/// <returns>Last request unique id usable for action</returns>
+		public int ComputeLastRequestUniqueId() {
+			if (_lastRequestUniqueId > 40000000) {
+				_lastRequestUniqueId = 0;
+			}
+			_lastRequestUniqueId++;
+			return _lastRequestUniqueId;
+		}
 
 
         ///////////////////////////////////////////////////////////////////////////////////////////
